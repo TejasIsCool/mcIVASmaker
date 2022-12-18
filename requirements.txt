@@ -1,0 +1,5 @@
+Pillow
+mcschematic
+numpy
+future
+ffmpeg-python
