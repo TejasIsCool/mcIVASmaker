@@ -19,7 +19,7 @@ The image tab allows you to convert your selected image, into either
 You can convert your image to all possible minecraft blocks, or you can restrict your selection, to only a certain blocks.
 <br>
 You can also convert your image to a redstone lamps display, again in either image, or schematic form
-<br>
+
 ###### Working
 To convert an image into minecraft blocks, this program basically reads every rgb pixel value of an image(Using Pillow), 
 finds the closest Minecraft block approximate to that pixel, and it a new image, paste the selected minecraft block at the same location.
@@ -35,13 +35,14 @@ It compares the average color of every minecraft block to every pixel on the ima
 I have tried to add a few optimizations too.
 <br>- There is a cache function, which uses a cached result, when a same rgb color is found. Very useful for images with a small colour range.
 <br>- It uses Numpy to paste blocks in the new image, as it is faster than standard Pillow paste.
+
 #### Video Tab
 The video tab allows you to do exactly what the image tab does, but to an entire video(Except for making schematics).
 <br><br>
 In its options, you are able to do pretty much what you can do for images, except cropping.  
 You can however also change the frame rate of the video.  
 There are also advance options, to set how many processes you can use, to speed up the minecraft blocks video creation.
-<br><br>
+
 ###### Working
 To convert a video into minecraft blocks, it firstly uses ffmpeg to convert the video into sequence of images.
 <br>Then it uses the image to blocks converter to convert every single frame to minecraft blocks.
@@ -62,7 +63,7 @@ FFmpeg does not support a really high resolution video(32k+ resolution), and it 
 <br>So it is advisable to set the output resolution to a low enough resolution.
 
 
-#### Running the Program
+### Running the Program
 Go to the src folder.<br>
 Run<br>
 ```python main.py```
