@@ -22,6 +22,20 @@ vid_cache_folder_m4a = assets_path + "\\audio_cache\\"
 
 vid_processed_folder = assets_path + "\\img_process_cache\\"
 
+# Create the paths if they don't exist (Git doesnot recognize empty folders)
+if not os.path.exists(vid_cache_folder_jpg):
+    os.makedirs(vid_cache_folder_jpg)
+
+if not os.path.exists(vid_cache_folder_png):
+    os.makedirs(vid_cache_folder_png)
+
+if not os.path.exists(vid_cache_folder_m4a):
+    os.makedirs(vid_cache_folder_m4a)
+
+if not os.path.exists(vid_processed_folder):
+    os.makedirs(vid_processed_folder)
+
+
 THREAD_KEY = '-Vid_Thread-'
 
 
