@@ -15952,5 +15952,554 @@
             ]
         },
         "extra": []
+    },
+    "bamboo_block": {
+        "top": {
+            "file": "bamboo_block_top.png",
+            "color": [
+                139,
+                142,
+                62,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "bamboo_block_top.png",
+            "color": [
+                139,
+                142,
+                62,
+                255
+            ]
+        },
+        "front": {
+            "file": "bamboo_block.png",
+            "color": [
+                127,
+                144,
+                58,
+                255
+            ]
+        },
+        "back": {
+            "file": "bamboo_block.png",
+            "color": [
+                127,
+                144,
+                58,
+                255
+            ]
+        },
+        "side": {
+            "file": "bamboo_block.png",
+            "color": [
+                127,
+                144,
+                58,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "bamboo_mosaic": {
+        "top": {
+            "file": "bamboo_mosaic.png",
+            "color": [
+                190,
+                170,
+                78,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "bamboo_mosaic.png",
+            "color": [
+                190,
+                170,
+                78,
+                255
+            ]
+        },
+        "front": {
+            "file": "bamboo_mosaic.png",
+            "color": [
+                190,
+                170,
+                78,
+                255
+            ]
+        },
+        "back": {
+            "file": "bamboo_mosaic.png",
+            "color": [
+                190,
+                170,
+                78,
+                255
+            ]
+        },
+        "side": {
+            "file": "bamboo_mosaic.png",
+            "color": [
+                190,
+                170,
+                78,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "bamboo_planks": {
+        "top": {
+            "file": "bamboo_planks.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "bamboo_planks.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "front": {
+            "file": "bamboo_planks.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "back": {
+            "file": "bamboo_planks.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "side": {
+            "file": "bamboo_planks.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "calibrated_sculk_sensor": {
+        "top": {
+            "file": "calibrated_sculk_sensor_top.png",
+            "color": [
+                28,
+                79,
+                101,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "sculk_sensor_bottom.png",
+            "color": [
+                13,
+                28,
+                34,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "cherry_log": {
+        "top": {
+            "file": "cherry_log_top.png",
+            "color": [
+                185,
+                141,
+                137,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "cherry_log_top.png",
+            "color": [
+                185,
+                141,
+                137,
+                255
+            ]
+        },
+        "front": {
+            "file": "cherry_log.png",
+            "color": [
+                55,
+                33,
+                44,
+                255
+            ]
+        },
+        "back": {
+            "file": "cherry_log.png",
+            "color": [
+                55,
+                33,
+                44,
+                255
+            ]
+        },
+        "side": {
+            "file": "cherry_log.png",
+            "color": [
+                55,
+                33,
+                44,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "cherry_planks": {
+        "top": {
+            "file": "cherry_planks.png",
+            "color": [
+                227,
+                179,
+                173,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "cherry_planks.png",
+            "color": [
+                227,
+                179,
+                173,
+                255
+            ]
+        },
+        "front": {
+            "file": "cherry_planks.png",
+            "color": [
+                227,
+                179,
+                173,
+                255
+            ]
+        },
+        "back": {
+            "file": "cherry_planks.png",
+            "color": [
+                227,
+                179,
+                173,
+                255
+            ]
+        },
+        "side": {
+            "file": "cherry_planks.png",
+            "color": [
+                227,
+                179,
+                173,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "chiseled_bookshelf_occupied": {
+        "top": {
+            "file": "chiseled_bookshelf_top.png",
+            "color": [
+                178,
+                145,
+                89,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "front": {
+            "file": "chiseled_bookshelf_occupied.png",
+            "color": [
+                121,
+                94,
+                70,
+                255
+            ]
+        },
+        "back": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "side": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "chiseled_bookshelf": {
+        "top": {
+            "file": "chiseled_bookshelf_top.png",
+            "color": [
+                178,
+                145,
+                89,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "front": {
+            "file": "chiseled_bookshelf_empty.png",
+            "color": [
+                90,
+                71,
+                42,
+                255
+            ]
+        },
+        "back": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "side": {
+            "file": "chiseled_bookshelf_side.png",
+            "color": [
+                175,
+                142,
+                86,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "stripped_bamboo_block": {
+        "top": {
+            "file": "stripped_bamboo_block_top.png",
+            "color": [
+                178,
+                159,
+                73,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "stripped_bamboo_block_top.png",
+            "color": [
+                178,
+                159,
+                73,
+                255
+            ]
+        },
+        "front": {
+            "file": "stripped_bamboo_block.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "back": {
+            "file": "stripped_bamboo_block.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "side": {
+            "file": "stripped_bamboo_block.png",
+            "color": [
+                193,
+                173,
+                80,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "stripped_cherry_log": {
+        "top": {
+            "file": "stripped_cherry_log_top.png",
+            "color": [
+                221,
+                165,
+                158,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "stripped_cherry_log_top.png",
+            "color": [
+                221,
+                165,
+                158,
+                255
+            ]
+        },
+        "front": {
+            "file": "stripped_cherry_log.png",
+            "color": [
+                215,
+                145,
+                149,
+                255
+            ]
+        },
+        "back": {
+            "file": "stripped_cherry_log.png",
+            "color": [
+                215,
+                145,
+                149,
+                255
+            ]
+        },
+        "side": {
+            "file": "stripped_cherry_log.png",
+            "color": [
+                215,
+                145,
+                149,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "suspicious_gravel": {
+        "top": {
+            "file": "suspicious_gravel.png",
+            "color": [
+                130,
+                125,
+                124,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "suspicious_gravel.png",
+            "color": [
+                130,
+                125,
+                124,
+                255
+            ]
+        },
+        "front": {
+            "file": "suspicious_gravel.png",
+            "color": [
+                130,
+                125,
+                124,
+                255
+            ]
+        },
+        "back": {
+            "file": "suspicious_gravel.png",
+            "color": [
+                130,
+                125,
+                124,
+                255
+            ]
+        },
+        "side": {
+            "file": "suspicious_gravel.png",
+            "color": [
+                130,
+                125,
+                124,
+                255
+            ]
+        },
+        "extra": []
+    },
+    "suspicious_sand": {
+        "top": {
+            "file": "suspicious_sand.png",
+            "color": [
+                218,
+                204,
+                159,
+                255
+            ]
+        },
+        "bottom": {
+            "file": "suspicious_sand.png",
+            "color": [
+                218,
+                204,
+                159,
+                255
+            ]
+        },
+        "front": {
+            "file": "suspicious_sand.png",
+            "color": [
+                218,
+                204,
+                159,
+                255
+            ]
+        },
+        "back": {
+            "file": "suspicious_sand.png",
+            "color": [
+                218,
+                204,
+                159,
+                255
+            ]
+        },
+        "side": {
+            "file": "suspicious_sand.png",
+            "color": [
+                218,
+                204,
+                159,
+                255
+            ]
+        },
+        "extra": []
     }
 }

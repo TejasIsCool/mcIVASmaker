@@ -1,22 +1,277 @@
 #!/usr/bin/python3
-# UNOFFICIALLY EDITED BY TEJASISAMAZING, IDK IF IT BREAKS STUFF BUT ILL JUST SEND IT!!!!
-# Two wm_overrideredirect have been commmented by me
-version = __version__ = "4.60.5"
+
+version = __version__ = "4.60.4.107 Unreleased"
 
 _change_log = """
-    Changelog since 4.60.0 released to PyPI on 8-May-2022.  These are "Dot" releases....
-
-    4.60.1
-        A "dot-release" / patch for crash that occurs if the horizontal_scroll parm is set in Listbox element
-            Was created when the ttk scrollbars were added
-    4.60.2
-        A "dot-release" for Mac 12.3+ "Invisible window" problem. Adds option in Mac control panel to set Alpha to 0.99 as default
-    4.60.3
-        Another shot at the 12.3+ Mac OS problem.  Had bug in the version check code
-    4.60.4
-        Dot release to quickly fix the Trinket detection which stopped working recently
-    4.60.5
-        Fix for the Mac.  If running MacOS Ventura 13.2.1 then windows with no titlebar had problems with Input elements. Added support for the Upgrade Service.
+    Changelog since 4.60.0 released to PyPI on 8-May-2022
+    
+    4.60.0.1
+        main_open_github_issue - prefill the "Details" using the platform module (thank you macdeport!)
+            Fills Mac, Windows and Linux with details
+    4.60.0.2
+        Fix for the "jumping window problem on Linux".  Major credit to Chr0nic for his amazing "stick with it" work on this problem!
+    4.60.0.3
+        Removed the previous fix attempt for jumping window on linux
+        Added ability for Mac users to specify file_type in Browse and popup_get_file
+            This feature must be ENABLED by the user in the Mac control panel that can be found in the PySimpleGUI Global Settings
+            The default is this feature is OFF
+    4.60.0.4
+        New location parameter option for Windows. Setting location=None tells PySimpleGUI to not set any location when window is created. It's up to the OS to decide.
+            The docstring for Window has been changed, but not all the other places (like popup). Want to make sure this works before making all those changes.            
+    4.60.0.5
+        Added check for None invalid values parm when creating a Listbox element
+    4.60.0.6
+        Column docstring changed to add reminder to call contents_changed if changing the contents of a scrollable column
+    4.60.0.7
+        Fixed crash when horizontal_scroll=True for Listbox element
+    4.60.0.8
+        Added readonly to Input.update
+    4.60.0.9
+        Added Window.set_resizable - can change the X and Y axis resizing after window is created
+    4.60.0.10
+        Added wrap parameter to Spin element - if True, wraps back to the first value when at the end
+        Temp test code added for a new verification feature
+    4.60.0.11
+        Fixed Spin Element docstring - readonly was not correct
+    4.60.0.12
+        Output element - addition of wrap_lines and horizontal_scroll parameters
+        Multiline element -  addition of wrap_lines parameter
+    4.60.0.13
+        Added Window.unbind
+    4.60.0.14
+        Added (None, None) to the Window docstring
+    4.60.0.15
+        Fix for continuous Graph element mouse up events when reading with a timeout=0. Big thank you to @davesmivers (THANKS DAVE!!) for finding and fixing
+    4.60.0.16
+        Added platform (Windows, Mac, Linux) and platform version information to the get_versions function
+    4.60.0.17
+        Added a fix for the file_types Mac problem that doesn't require the system settings to be used... let's give it a go!
+    4.60.0.18
+        Added ubiquitious Edit Me to the right click menu
+    4.60.0.19
+        PySimpleGUI Anniversary sale on Udemy course coupon 
+    4.60.0.20
+        Fix for bind_return_key - if a button has been disabled, then the event shouldn't be generated for the return key being pressed
+    4.60.0.21
+        Added cols_justification for Table element - list or tuple of strings that indicates how each column should be justified
+    4.60.0.22
+        Better error handling for table element's new justification list. If a bad value is found, will use the default value
+    4.60.0.23
+        Additional mac filetype testing.... added more combinations that specify 
+    4.60.0.24
+        Added * *.* to the Mac filetypes to check for
+    4.60.0.25
+        New logic for checking for the * case for Mac filetypes
+    4.60.0.26
+        Docstring update - TabGroup visible parameter marked as deprecated .  Use a Column element to make a TabGroup invisible
+    4.60.0.27
+        Docstring update for the pin helper function that describes the shrinking of the container that it helps provide.  
+        Also added explanation that it's the elements you want to make visible/invisible that are what you want to pin
+    4.60.0.28
+        Applied same Mac file_types fix to popup_get_file
+        Removed filetypes setting from Mac Feature Control Panel
+    4.60.0.29
+        Addition of enable_window_config_events to the Window object. This will cause a EVENT_WIMDOW_CONFIG event to be returned
+            if the window is moved or resized.
+    4.60.0.30
+        Made upgrade from GitHub window resizable so can screencapture the entire session
+    4.60.0.31
+        Added new constant TKINTER_CURSORS which contains a list of the standard tkinter cursor names
+    4.60.0.32
+        Added erase_all parameter to cprint (like the Debug Print already has)
+    4.60.0.33
+        Fix popup_scrolled - was only adding the Sizegrip when there was no titlebar.  It should be added to all windows
+            unless the no_sizegrip parameter is set.
+        popup_scrolled - added no_buttons option. If True then there will not be a row at the bottom where the buttons normally are.
+            User will have to close the window with the "X"
+    4.60.0.34
+        popup_scrolled - added button_justification parameter. Wanted to make scrolled popups consistent with other popups which have left justified
+            buttons.  But since they've been right justified in the past, want to give users the ability to retain that look. 
+            Since the Sizegrip works correctly now, it increases the changes of accidently clicking a button if it's right justified.
+    4.60.0.35
+        Added default_color to ColorChooser button
+    4.60.0.36
+        Added to Button element error message that images must be in PNG or GIF format
+    4.60.0.37
+        Added exapnd_x and expand_y to all of the "lazy buttons" and Chooser buttons
+    4.60.0.38
+        Column element - added horizontal_scroll_only parameter (fingers crossed on this one....)
+    4.60.0.39
+        New signature testing
+    4.60.0.40
+        Exposed the Table Element's ttk style using member variable TABLE.table_ttk_style_name
+    4.60.0.41
+        New signature format
+    4.60.0.42
+        Backed out the changes from 4.60.0.38 (horizontal_scroll_only parameter).  Those changes broke code in the scrollable columns.  Need to make time to work on this feature more.
+    4.60.0.43
+        Added a print if get an exception trying to set the alpha channel after a window is created (troubleshooting a Mac problem)
+    4.60.0.44
+        Updated Menubar docstring to clarify the Menubar iself cannot have colors changed, only the submenus. Use MenubarCustom if you want full control
+        Format of file-signature changed
+    4.60.0.45
+        Further refinement of Menubar docstring
+    4.60.0.46
+        Added suggestion of using the Demo Browser to the checklist item of "Look for Demo Programs similar to your problem"
+    4.60.0.47
+        Testing some importing methods
+        Delay rerouting stdout and stderr in Output and Multiline elements until window is being built instead of when element is initialized
+    4.60.0.48
+        Additional window movement capability. If Control+Mouse movement feature is enabled, then Control+Arrow key will move the window 1 pixel
+            in the indicated direction
+    4.60.0.49
+        Added Window.set_size to match the other settings that are performed through method calls. There is also the Window.size property, but
+            since PySimpleGUI rarely uses properties, it makes sense to include a method as well as a property
+    4.60.0.50
+        Fix for ColorChooser button filling in a None value when cancel from color choise dialog box.  Nothing will be filled in target if dialog cancelled
+    4.60.0.51
+        vtop, vcenter, vbottom helper functions gets background_color parameter
+        vcenter and vbottom - added USING the expand_x and expand_y parms that were already defined.  (HOPE NOTHING BREAKS!)
+    4.60.0.52
+        justification parameter added to Listbox (default is left.. can be right and center now too)
+    4.60.0.53
+        Made settings dictionary multiline in test harness write-only.  New coupon code                
+    4.60.0.54
+        alpha_channel added to set_options.  This sets the default value for the alpha_channel for all windows both user generated and PySimpleGUI generated (such as popups).
+    4.60.0.55
+        Allow Browse/Chooser buttons (that have a target) to indicate a target key that is a tuple.
+    4.60.1.55
+        While not actually correct.... 4.60.1 was released in the middle of the development above... I'm changing the version to look as
+            if this release is based on 4.60.1.  This code DOES have the same code that's in 4.60.1 so it's more a matter of symantics.
+            Hoping this clears up confusion.  Sorry for the dot-release causing so much confusion.
+    4.60.1.56
+        Fix for Window.extend_layout.  Was not picking up the background color of the container that the rows were being added to.
+    4.60.1.57
+        Fixed Text element's update method docstring to indicate that value can be "Any" type not just strings
+    4.60.1.58
+        Addition of without_titlebar paramter to Window.current_location.  Defaults to False.  If True, then the location of the main portion of the window
+            will be returned (i.e. will not have the titlebar)
+    4.60.1.59
+        Fix for crash if COLOR_SYSTEM_DEFAULT specified in parameter disabled_readonly_background_color or disabled_readonly_text_color for Input Element.
+        Also applied similar fix for Tab element's focus color
+    4.60.1.60
+        Addition of set_option parameter hide_window_when_creating. If set to False then window will not be hidden while creating and moving
+    4.60.1.61
+        Changed the documentation location to PySimpleGUI.org (updated some comments as well as the SDK Reference Window's links)
+        New coupon code.  Make the Udemy button in the test harness now include the coupon code automatically
+    4.60.1.62
+        Removed the "NOT avoilable on the MAC" from file_types parameter in the docstrings
+        Use Withdraw to hide window during creation
+    4.60.1.63
+        Addition of checklist item when logging new issue to  GitHub - upgraded to latest version of PySimpleGUI on PyPI
+        Listbox justification parameter found to not be implemented on some early verions of tkinter so had to protect this situation. This new feature crached on the Pi for example
+    4.60.1.64
+        Allow set_options(window_location=None) to indicate the OS should provide the window location.  
+            This will stop the Alpha channel being set to 0 when the window is created
+    4.60.1.65
+        Addition of new Mac Control Panel option and emergency patch for MacOS version 12.3+
+            If MacOS version 12.3 or greater than option is ON by default
+            When ON, the default Alpha channel for all windows is set to 0.99. 
+            This can either be turned off, or can be overridden by calling set_options in your application
+    4.60.2.65
+        Bumping version number to avoid confusion.  An emergency 4.60.2 release was posted to PyPI. This change was added to this current GitHub version of PySimpleGUI.  
+    4.60.3.66
+        Fixed bug in checking Mac OS version number that is being released as 4.60.3
+    4.60.3.67
+        Correctly check for Mac 12.3+ AND 13+ this time.
+    4.60.3.68
+        Roll in the changes being released to PyPI as 4.60.3
+    4.60.3.69
+        Test to see if the additional pack of Notebook in Tab code was causing expansion problems        
+    4.60.3.70
+        Debug Print - fix for bug caused by no_button being set with non_blocking... a lesson in thorough testing... assumption was either blocking OR no_button (or else app would
+            close without seeing the output... unless something else blocked. (DOH)
+    4.60.3.71
+        "Window closed" check added to update methods for elements. This will prevent a crash and instead show an error popup
+            Will be helpful for users that forget to check for closed window event in their event loop and try to call update after window closed. 
+    4.60.3.72
+        Output element now automatically sets auto_refresh to True.   Should this not be desired, switch to using the Multiline element.  There will likely be
+            no impact to this change as it seems like the windows are alredy refreshing OK, but adding it just to be sure.
+    4.60.3.73
+        Addition of Window.key_is_good(key) method.  Returns True if key is used in the window. Saves from having to understand the window's key dictionary.
+            Makes for easier code completion versus writing  "if key in window.key_dict"
+    4.60.3.74
+        Combo - if readonly, then set the select colors to be "transparent" (text=text color, background=background color)
+    4.60.3.75
+        Better description of bar_color parm for the ProgressMeter element and the one_line_progress_meter function
+        Combo element - addition of select parameter to enable easier selection of the contents of clearing of the selection of the contents.
+    4.60.3.76
+        Changed the _this_elements_window_closed to use a flag "quick_check" for cheking is the window is closed.  Found that calling tkinter.update takes over 500ms sometimes!
+            For appllications that call update frequently, this caused a catestrophic slowdown for complex windows.
+    4.60.3.77
+        New Window method - get_scaling - gets the scaling value from tkinter.  Returns DEFAULT_SCALING if error.
+    4.60.3.78
+        Custom Titlebar - Support added to Window.minimize, Window.maximize, and Window.normal
+    4.60.3.79
+        Fix for Mulitline showing constant error messages after a Window is closed. 
+        Fix for correctly restoring stdout, stderr after they've been rerouted. THIS CODE IS NOT YET COMPLETE! Shooting for this weekend to get it done!
+        Image element - more speicific with tkinter when chaning to a new image so that pypy would stop crashing due to garbage collect not running. 
+            This change didn't fix the pypy problem but it also didn't hurt the code to have it
+    4.60.3.80
+        Quick and dirty addition of Alt-shortcuts for Buttons (like exists for Menus)
+            For backward compatablity, must be enabled using set_options with use_button_shortcuts=True
+        Fixed docstring errors in set_options docstring
+    4.60.3.81
+        Completed restoration of stdout & stderr
+            If an Output Element is used or a Multline element to reroute stdout and/or stderr, then this hasn't worked quite right in the past
+            Hopefuly now, it does.  A LIFO list (stack) is used to keep track of the current output device and is scrubbed for closed windows and restored if one is closed
+    4.60.3.82
+        Addition of Style Names for horizontaland vertical ttk scrollbars - hsb_style_name and vsb_style_name so that scrollbar colors can be changed in user code
+    4.60.3.83
+        Output element - now automatically reroutes cprint to here as well. Assumption is that you want stuff to go here without
+            needing to specify each thing.  If want more control, then use the Multiline directly
+    4.60.3.84
+        Output element - updated docstring
+    4.60.3.85
+        Combo Element - new parameter enable_per_char_events.  When True will get an event when individual characters are entered.
+    4.60.3.86
+        Added path to the interpreter to the get_versions information for better debugging
+    4.60.3.87
+        Dark Gray 16 theme added
+    4.60.3.88
+        New batch of Emojis!
+    4.60.3.89
+        Addition of TITLEBAR_TEXT_KEY to provide access to custom titlebar titles
+    4.60.3.90
+        Implemented the visible parameter for TabGroup.  Was not being honored when creating element. Added TabGroup.update so it can be made visible.
+    4.60.3.91
+        Added support for Custom Titlebar to the Window.set_title method
+    4.60.3.92
+        Addition of starting_row_number parameter to the Table element.  Sets the value for the first row in the table.
+    4.60.3.93
+        Added 2 parameters to popup - drop_whitespace is passed to the wraptext.fill method. right_justify_buttons will "push" buttons to
+            the right side if set to True
+    4.60.3.94
+        Added Element.save_element_screenshot_to_disk - uses the same PIL integration that the save window screenshot to disk uses but applied to a single element
+    4.60.3.95
+        Changed popup again - replaced right_justify_buttons with button_justification.  Also removed the extra padding that was being added to the buttons.  This
+            matches a changed made to popup_scrolled earlier
+    4.60.3.96
+        More emojis?  Yes... more emojis...
+    4.60.3.97
+        The main test harness now shows the python interpreter used to launch the test harness to make clearer what's running
+    4.60.3.98
+        Better alignment of text in test harness
+        Fixed mispelling in SystemTray.show_message - crashed if an int was passed in as the time value
+    4.60.3.99
+        popup_get_text - Addition of history feature to bring up to same level as other popup_get_ functions.
+    4.60.3.100
+        Set the "Active" foreground and background colors for Menu and ButtonMenu items.  Automatically uses the swapped foreground and background colors.
+            This impacts both inside the menus themseleves as well as the ButtonMenus so that when they are used in a MenubarCustom they mouseover nicely now.
+    4.60.3.101
+        Added Window.is_hidden method.  Returns True if the window is currently hidden
+    4.60.3.102
+        Fixed error in the main test harness "not modal" popup test.  Was setting the "Force Modal" setting to true after the popup test. 
+    4.60.3.103
+        Trinket is detected using a new mechansim now.  The previous one was waayyy too simnple and as a result has broken in the past week.  
+    4.60.4.104
+        Version bump to keep up with the PyPI emergency 4.60.4 release 
+    4.60.4.105
+        Added SYMBOL_BULLET character
+    4.60.4.106
+        Neon Green, Blue, Yellow themes... was writing some tests using them and thought why not start a new theme color category... "neon"
+    4.60.4.107
+        Fixed an unreported problem perhaps...  Added saving new menu into the Menu.Widget memeber variable in the Menu.update method.
     """
 
 __version__ = version.split()[0]  # For PEP 396 and PEP 345
@@ -89,13 +344,26 @@ port = 'PySimpleGUI'
     In addition to the normal publishing requirements of LGPL3+, these also apply:
     1. These and all comments are to remain in the source code
     2. The "Official" version of PySimpleGUI and the associated documentation lives on two (and **only** two) places:
-           1. GitHub - (http://www.PySimpleGUI.com) currently pointing at:
-              https://github.com/PySimpleGUI/PySimpleGUI
-           2. PyPI - pip install PySimpleGUI is the customary way of obtaining the latest release
-
-           THE official documentation location is:
-              Read the Docs (via http://www.PySimpleGUI.org).  Currently is pointed at: 
-              https://pysimplegui.readthedocs.io/en/latest/
+       1. GitHub - (http://www.PySimpleGUI.com) currently pointing at:
+          https://github.com/PySimpleGUI/PySimpleGUI
+       2. PyPI - pip install PySimpleGUI is the customary way of obtaining the latest release
+    
+       THE official documentation location is:
+          https://www.PySimpleGUI.org - Main documentation
+       There are also a lot of subdomains... many of which you can guess..
+          https://SDK.PySimpleGUI.org - The SDK Reference tab
+          https://Calls.PySimpleGUI.org - The SDK Reference tab
+          https://Cookbook.PySimpleGUI.org - The Cookbook tab
+          https://eCookbook.PySimpleGUI.org - The eCookbook located on Trinket
+          https://Anncouncements.PySimpleGUI.org - The Announcements Issue on GitHub
+          https://Install.PySimpleGUI.org - The "How to install" section of the docs
+          https://Upgrading.PySimpleGUI.org - The "How to upgrade" section of the docs
+          https://Udemy.PySimpleGUI.org - The Udemy course
+          https://GitHub.PySimpleGUI.org - The PySimpleGUI GitHub (also the located at PySimpleGUI.com)
+          https://Issues.PySimpleGUI.org - Open a new issue on GitHub
+          https://Bugs.PySimpleGUI.org - Open a new issue on GitHub
+          etc.....
+                
        If you've obtained this software in any other way, then those listed here, then SUPPORT WILL NOT BE PROVIDED.
     3. If you use PySimpleGUI in your project/product, a notice of its use needs to be displayed in your readme file as per the license agreement
 
@@ -110,7 +378,7 @@ port = 'PySimpleGUI'
     If you're thinking of filing an Issue or posting a problem, Upgrade your software first
     There are constantly something new and interesting coming out of this project so stay current if you can 
 
-    The FASTEST WAY to learn PySimpleGUI is to begin to play with it, and to read the documentation.
+    The FASTEST WAY to learn PySimpleGUI is to begin to use it in conjunction with the materials provided by the project.
     http://www.PySimpleGUI.org
     http://Calls.PySimpleGUI.org
     http://Cookbook.PySimpleGUI.org
@@ -134,25 +402,28 @@ port = 'PySimpleGUI'
 
     "Thank you" has fueled this project. I'm incredibly grateful to have users that are in turn grateful. It's a feedback loop of gratitude. What a fantastic thing!
 """
-
 # all of the tkinter involved imports
 import tkinter as tk
+from tkinter import filedialog
+from tkinter.colorchooser import askcolor
+from tkinter import ttk
 # import tkinter.scrolledtext as tkst
 import tkinter.font
-from tkinter import filedialog
-from tkinter import ttk
-from tkinter.colorchooser import askcolor
+from uuid import uuid4
 
 # end of tkinter specific imports
 # get the tkinter detailed version
 tclversion_detailed = tkinter.Tcl().eval('info patchlevel')
 framework_version = tclversion_detailed
+
 import time
 import pickle
 import calendar
 import datetime
 import textwrap
 
+import socket
+from hashlib import sha256 as hh
 import inspect
 import traceback
 import difflib
@@ -198,7 +469,6 @@ import re
 import tempfile
 import ctypes
 import platform
-import socket
 
 pil_import_attempted = pil_imported = False
 
@@ -328,20 +598,19 @@ def running_windows():
     return sys.platform.startswith('win')
 
 
-
 def running_trinket():
     """
-    A special case for Trinket. Uses the hostname an platform together to determine if running on Trinket
+    A special case for Trinket.  Checks both the OS and the number of environment variables
+    Currently, Trinket only has ONE environment variable.  This fact is used to figure out if Trinket is being used.
 
     Returns True if "Trinket" (in theory)
 
-    :return: True if sys.platform indicates Linux and hostname starts with 'pygame-'
+    :return: True if sys.platform indicates Linux and the number of environment variables is 1
     :rtype:  (bool)
     """
     if sys.platform.startswith('linux') and socket.gethostname().startswith('pygame-'):
         return True
     return False
-
 
 
 def running_replit():
@@ -431,8 +700,10 @@ DEFAULT_TOOLTIP_OFFSET = (0, -20)
 DEFAULT_KEEP_ON_TOP = None
 DEFAULT_SCALING = None
 DEFAULT_ALPHA_CHANNEL = 1.0
+DEFAULT_HIDE_WINDOW_WHEN_CREATING = True
 TOOLTIP_BACKGROUND_COLOR = "#ffffe0"
 TOOLTIP_FONT = None
+DEFAULT_USE_BUTTON_SHORTCUTS = False
 #################### COLOR STUFF ####################
 BLUES = ("#082567", "#0A37A3", "#00345B")
 PURPLES = ("#480656", "#4F2398", "#380474")
@@ -582,11 +853,12 @@ MESSAGE_BOX_LINE_WIDTH = 60
 EVENT_TIMEOUT = TIMEOUT_EVENT = TIMEOUT_KEY = '__TIMEOUT__'
 WIN_CLOSED = WINDOW_CLOSED = None
 WINDOW_CLOSE_ATTEMPTED_EVENT = WIN_X_EVENT = WIN_CLOSE_ATTEMPTED_EVENT = '-WINDOW CLOSE ATTEMPTED-'
-
+WINDOW_CONFIG_EVENT = '__WINDOW CONFIG__'
 TITLEBAR_MINIMIZE_KEY = '__TITLEBAR MINIMIZE__'
 TITLEBAR_MAXIMIZE_KEY = '__TITLEBAR MAXIMIZE__'
 TITLEBAR_CLOSE_KEY = '__TITLEBAR CLOSE__'
 TITLEBAR_IMAGE_KEY = '__TITLEBAR IMAGE__'
+TITLEBAR_TEXT_KEY = '__TITLEBAR TEXT__'
 TITLEBAR_DO_NOT_USE_AN_ICON = '__TITLEBAR_NO_ICON__'
 
 # Key indicating should not create any return values for element
@@ -633,6 +905,7 @@ ALTERNATE_TABLE_AND_TREE_SELECTED_ROW_COLORS = ('SystemHighlightText', 'SystemHi
 SYMBOL_SQUARE = '█'
 SYMBOL_CIRCLE = '⚫'
 SYMBOL_CIRCLE_OUTLINE = '◯'
+SYMBOL_BULLET = '•'
 SYMBOL_UP = '▲'
 SYMBOL_RIGHT = '►'
 SYMBOL_LEFT = '◄'
@@ -812,6 +1085,25 @@ class TTKPartOverrides():
 
 ttk_part_overrides_from_options = TTKPartOverrides()
 
+
+# -------------------------  tkinter BASIC cursors... there are some OS dependent ones too  ------------------------- #
+TKINTER_CURSORS = ['X_cursor', 'arrow', 'based_arrow_down', 'based_arrow_up', 'boat',
+                   'bogosity', 'bottom_left_corner', 'bottom_right_corner', 'bottom_side',
+                   'bottom_tee', 'box_spiral', 'center_ptr', 'circle', 'clock',
+                   'coffee_mug', 'cross', 'cross_reverse', 'crosshair', 'diamond_cross',
+                   'dot', 'dotbox', 'double_arrow', 'draft_large', 'draft_small', 'draped_box',
+                   'exchange', 'fleur', 'gobbler', 'gumby', 'hand1', 'hand2', 'heart',
+                   'icon', 'iron_cross', 'left_ptr', 'left_side', 'left_tee', 'leftbutton',
+                   'll_angle', 'lr_angle', 'man', 'middlebutton', 'mouse', 'pencil', 'pirate',
+                   'plus', 'question_arrow', 'right_ptr', 'right_side', 'right_tee',
+                   'rightbutton', 'rtl_logo', 'sailboat', 'sb_down_arrow', 'sb_h_double_arrow',
+                   'sb_left_arrow', 'sb_right_arrow', 'sb_up_arrow', 'sb_v_double_arrow',
+                   'shuttle', 'sizing', 'spider', 'spraycan', 'star', 'target', 'tcross',
+                   'top_left_arrow', 'top_left_corner', 'top_right_corner', 'top_side', 'top_tee',
+                   'trek', 'ul_angle', 'umbrella', 'ur_angle', 'watch', 'xterm']
+
+
+TKINTER_CURSORS = ['X_cursor', 'arrow', 'based_arrow_down', 'based_arrow_up', 'boat', 'bogosity', 'bottom_left_corner', 'bottom_right_corner', 'bottom_side', 'bottom_tee', 'box_spiral', 'center_ptr', 'circle', 'clock', 'coffee_mug', 'cross', 'cross_reverse', 'crosshair', 'diamond_cross', 'dot', 'dotbox', 'double_arrow', 'draft_large', 'draft_small', 'draped_box', 'exchange', 'fleur', 'gobbler', 'gumby', 'hand1', 'hand2', 'heart', 'ibeam', 'icon', 'iron_cross', 'left_ptr', 'left_side', 'left_tee', 'leftbutton', 'll_angle', 'lr_angle', 'man', 'middlebutton', 'mouse', 'no', 'none', 'pencil', 'pirate', 'plus', 'question_arrow', 'right_ptr', 'right_side', 'right_tee', 'rightbutton', 'rtl_logo', 'sailboat', 'sb_down_arrow', 'sb_h_double_arrow', 'sb_left_arrow', 'sb_right_arrow', 'sb_up_arrow', 'sb_v_double_arrow', 'shuttle', 'size', 'size_ne_sw', 'size_ns', 'size_nw_se', 'size_we', 'sizing', 'spider', 'spraycan', 'star', 'starting', 'target', 'tcross', 'top_left_arrow', 'top_left_corner', 'top_right_corner', 'top_side', 'top_tee', 'trek', 'ul_angle', 'umbrella', 'uparrow', 'ur_angle', 'wait', 'watch', 'xterm']
 # -------------------------  tkinter key codes for bindings  ------------------------- #
 
 # The keycode that when pressed will take a snapshot of the current window
@@ -1030,6 +1322,12 @@ class Element():
         # self.pad_used = (0, 0)  # the amount of pad used when was inserted into the layout
         self._popup_menu_location = (None, None)
         self.pack_settings = None
+        self.vsb_style_name = None           # ttk style name used for the verical scrollbar if one is attached to element
+        self.hsb_style_name = None           # ttk style name used for the horizontal scrollbar if one is attached to element
+        self.vsb_style = None                # The ttk style used for the vertical scrollbar if one is attached to element
+        self.hsb_style = None                # The ttk style used for the horizontal scrollbar if one is attached to element
+        self.hsb = None                      # The horizontal scrollbar if one is attached to element
+        self.vsb = None                      # The vertical scrollbar if one is attached to element
         ## TTK Scrollbar Settings
         self.ttk_part_overrides = TTKPartOverrides(sbar_trough_color=sbar_trough_color, sbar_background_color=sbar_background_color, sbar_arrow_color=sbar_arrow_color, sbar_width=sbar_width, sbar_arrow_width=sbar_arrow_width, sbar_frame_color=sbar_frame_color, sbar_relief=sbar_relief)
 
@@ -1259,48 +1557,11 @@ class Element():
 
         """
         # If this is a minimize button for a custom titlebar, then minimize the window
-        if self.Key == TITLEBAR_MINIMIZE_KEY:
-            if running_linux():
-                self.ParentForm.TKroot.wm_attributes("-type", "normal")
-                # self.ParentForm.TKroot.state('icon')
-                # return
-                # self.ParentForm.maximize()
-                self.ParentForm.TKroot.wm_overrideredirect(False)
-                # self.ParentForm.minimize()
-                # self.ParentForm.TKroot.wm_overrideredirect(False)
-                self.ParentForm.TKroot.iconify()
-                # self._skip_first_restore_callback = True
-                self.ParentForm.TKroot.bind('<Button-1>', self._titlebar_restore)
-            else:
-                self.ParentForm.TKroot.wm_overrideredirect(False)
-                self.ParentForm.Minimize()
-                self.ParentForm.TKroot.bind('<Expose>', self._titlebar_restore)
-        elif self.Key == TITLEBAR_MAXIMIZE_KEY:
-            if self.ParentForm.maximized:
-                self.ParentForm.normal()
-            else:
-                self.ParentForm.maximize()
-        elif self.Key == TITLEBAR_CLOSE_KEY:
-            self.ParentForm._OnClosingCallback()
-        else:
-            self._generic_callback_handler(self.DisplayText)
+        if self.Key in (TITLEBAR_MINIMIZE_KEY, TITLEBAR_MAXIMIZE_KEY, TITLEBAR_CLOSE_KEY):
+            self.ParentForm._custom_titlebar_callback(self.Key)
+        self._generic_callback_handler(self.DisplayText)
         return
 
-    def _titlebar_restore(self, event):
-        if running_linux():
-            # if self._skip_first_restore_callback:
-            #     self._skip_first_restore_callback = False
-            #     return
-            self.ParentForm.TKroot.unbind('<Button-1>')
-            self.ParentForm.TKroot.deiconify()
-
-            # self.ParentForm.TKroot.wm_overrideredirect(True)
-            self.ParentForm.TKroot.wm_attributes("-type", 'dock')
-
-        else:
-            self.ParentForm.TKroot.unbind('<Expose>')
-            #self.ParentForm.TKroot.wm_overrideredirect(True)
-        self.ParentForm.normal()
 
     def _ReturnKeyHandler(self, event):
         """
@@ -1317,6 +1578,9 @@ class Element():
         MyForm = self.ParentForm
         button_element = self._FindReturnKeyBoundButton(MyForm)
         if button_element is not None:
+            # if the Button has been disabled, then don't perform the callback
+            if button_element.Disabled:
+                return
             button_element.ButtonCallBack()
 
     def _generic_callback_handler(self, alternative_to_key=None, force_key_to_be=None):
@@ -1414,6 +1678,12 @@ class Element():
         :type event:
         """
         self._generic_callback_handler('')
+
+    def _this_elements_window_closed(self, quick_check=True):
+        if self.ParentForm is not None:
+            return self.ParentForm.is_closed(quick_check=quick_check)
+
+        return True
 
     def _user_bind_callback(self, bind_string, event, propagate=True):
         """
@@ -1799,6 +2069,57 @@ class Element():
                 self.Widget.bind('<ButtonRelease-3>', self._RightClickMenuCallback)
 
 
+    def save_element_screenshot_to_disk(self, filename=None):
+        """
+        Saves an image of the PySimpleGUI window provided into the filename provided
+
+        :param filename:        Optional filename to save screenshot to. If not included, the User Settinds are used to get the filename
+        :return:                A PIL ImageGrab object that can be saved or manipulated
+        :rtype:                 (PIL.ImageGrab | None)
+        """
+        global pil_import_attempted, pil_imported, PIL, ImageGrab, Image
+
+        if not pil_import_attempted:
+            try:
+                import PIL as PIL
+                from PIL import ImageGrab
+                from PIL import Image
+                pil_imported = True
+                pil_import_attempted = True
+            except:
+                pil_imported = False
+                pil_import_attempted = True
+                print('FAILED TO IMPORT PIL!')
+                return None
+        try:
+            # Add a little to the X direction if window has a titlebar
+            rect = (self.widget.winfo_rootx(), self.widget.winfo_rooty(), self.widget.winfo_rootx() + self.widget.winfo_width(), self.widget.winfo_rooty() + self.widget.winfo_height())
+
+            grab = ImageGrab.grab(bbox=rect)
+            # Save the grabbed image to disk
+        except Exception as e:
+            # print(e)
+            popup_error_with_traceback('Screen capture failure', 'Error happened while trying to save screencapture of an element', e)
+            return None
+
+        # return grab
+        if filename is None:
+            folder = pysimplegui_user_settings.get('-screenshots folder-', '')
+            filename = pysimplegui_user_settings.get('-screenshots filename-', '')
+            full_filename = os.path.join(folder, filename)
+        else:
+            full_filename = filename
+        if full_filename:
+            try:
+                grab.save(full_filename)
+            except Exception as e:
+                popup_error_with_traceback('Screen capture failure', 'Error happened while trying to save screencapture', e)
+        else:
+            popup_error_with_traceback('Screen capture failure', 'You have attempted a screen capture but have not set up a good filename to save to')
+        return grab
+
+
+
 
     def _pack_forget_save_settings(self, alternate_widget=None):
         """
@@ -1969,7 +2290,7 @@ class Input(Element):
         super().__init__(ELEM_TYPE_INPUT_TEXT, size=sz, background_color=bg, text_color=fg, key=key, pad=pad,
                          font=font, tooltip=tooltip, visible=visible, metadata=metadata)
 
-    def update(self, value=None, disabled=None, select=None, visible=None, text_color=None, background_color=None, move_cursor_to='end', password_char=None, paste=None):
+    def update(self, value=None, disabled=None, select=None, visible=None, text_color=None, background_color=None, move_cursor_to='end', password_char=None, paste=None, readonly=None):
         """
         Changes some of the settings for the Input Element. Must call `Window.Read` or `Window.Finalize` prior.
         Changes will not be visible in your window until you call window.read or window.refresh.
@@ -1996,14 +2317,28 @@ class Input(Element):
         :type password_char:     str
         :param paste:            If True "Pastes" the value into the element rather than replacing the entire element. If anything is selected it is replaced. The text is inserted at the current cursor location.
         :type paste:             bool
+        :param readonly:         if True make element readonly (user cannot change any choices). Enables the element if either choice are made.
+        :type readonly:          (bool)
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Input.update - The window was closed')
+            return
+
         if disabled is True:
             self.TKEntry['state'] = 'readonly' if self.UseReadonlyForDisable else 'disabled'
         elif disabled is False:
             self.TKEntry['state'] = 'readonly' if self.ReadOnly else 'normal'
         self.Disabled = disabled if disabled is not None else self.Disabled
+
+        if readonly is True:
+            self.TKEntry['state'] = 'readonly'
+        elif readonly is False:
+            self.TKEntry['state'] = 'normal'
+
+
 
         if background_color not in (None, COLOR_SYSTEM_DEFAULT):
             self.TKEntry.configure(background=background_color)
@@ -2072,7 +2407,7 @@ class Combo(Element):
     ComboBox Element - A combination of a single-line input and a drop-down menu. User can type in their own value or choose from list.
     """
 
-    def __init__(self, values, default_value=None, size=(None, None), s=(None, None), auto_size_text=None, background_color=None, text_color=None, button_background_color=None, button_arrow_color=None, bind_return_key=False, change_submits=False, enable_events=False, disabled=False, key=None, k=None, pad=None, p=None, expand_x=False, expand_y=False, tooltip=None, readonly=False, font=None, visible=True, metadata=None):
+    def __init__(self, values, default_value=None, size=(None, None), s=(None, None), auto_size_text=None, background_color=None, text_color=None, button_background_color=None, button_arrow_color=None, bind_return_key=False, change_submits=False, enable_events=False, enable_per_char_events=None, disabled=False, key=None, k=None, pad=None, p=None, expand_x=False, expand_y=False, tooltip=None, readonly=False, font=None, visible=True, metadata=None):
         """
         :param values:                  values to choose. While displayed as text, the items returned are what the caller supplied, not text
         :type values:                   List[Any] or Tuple[Any]
@@ -2098,6 +2433,8 @@ class Combo(Element):
         :type change_submits:           (bool)
         :param enable_events:           Turns on the element specific events. Combo event is when a choice is made
         :type enable_events:            (bool)
+        :param enable_per_char_events:  Enables generation of events for every character that's input. This is like the Input element's events
+        :type enable_per_char_events:   (bool)
         :param disabled:                set disable state for element
         :type disabled:                 (bool)
         :param key:                     Used with window.find_element and with return values to uniquely identify this element
@@ -2147,12 +2484,12 @@ class Combo(Element):
             self.button_arrow_color = theme_button_color()[0]
         else:
             self.button_arrow_color = button_arrow_color
-
+        self.enable_per_char_events = enable_per_char_events
 
         super().__init__(ELEM_TYPE_INPUT_COMBO, size=sz, auto_size_text=auto_size_text, background_color=bg,
                          text_color=fg, key=key, pad=pad, tooltip=tooltip, font=font or DEFAULT_FONT, visible=visible, metadata=metadata)
 
-    def update(self, value=None, values=None, set_to_index=None, disabled=None, readonly=None, font=None, visible=None, size=(None, None)):
+    def update(self, value=None, values=None, set_to_index=None, disabled=None, readonly=None, font=None, visible=None, size=(None, None), select=None):
         """
         Changes some of the settings for the Combo Element. Must call `Window.Read` or `Window.Finalize` prior.
         Note that the state can be in 3 states only.... enabled, disabled, readonly even
@@ -2181,6 +2518,8 @@ class Combo(Element):
         :type visible:       (bool)
         :param size:         width, height. Width = characters-wide, height = NOTE it's the number of entries to show in the list
         :type size:          (int, int)
+        :param select:       if True, then the text will be selected, if False then selection will be cleared
+        :type select:        (bool)
         """
         if size != (None, None):
             if isinstance(size, int):
@@ -2190,6 +2529,12 @@ class Combo(Element):
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Combo.update - The window was closed')
+            return
+
+
         if values is not None:
             try:
                 self.TKCombo['values'] = values
@@ -2250,6 +2595,10 @@ class Combo(Element):
             # self.TKCombo.pack(padx=self.pad_used[0], pady=self.pad_used[1])
         if visible is not None:
             self._visible = visible
+        if select is True:
+           self.TKCombo.select_range(0, tk.END)
+        elif select is False:
+           self.TKCombo.select_clear()
 
     def get(self):
         """
@@ -2369,6 +2718,11 @@ class OptionMenu(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in OptionMenu.update - The window was closed')
+            return
+
+
         if values is not None:
             self.Values = values
             self.TKOptionMenu['menu'].delete(0, 'end')
@@ -2425,7 +2779,7 @@ class Listbox(Element):
     """
 
     def __init__(self, values, default_values=None, select_mode=None, change_submits=False, enable_events=False,
-                 bind_return_key=False, size=(None, None), s=(None, None), disabled=False, auto_size_text=None, font=None, no_scrollbar=False, horizontal_scroll=False,
+                 bind_return_key=False, size=(None, None), s=(None, None), disabled=False, justification=None, auto_size_text=None, font=None, no_scrollbar=False, horizontal_scroll=False,
                  background_color=None, text_color=None, highlight_background_color=None, highlight_text_color=None,
                  sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None, sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None,
                  key=None, k=None, pad=None, p=None, tooltip=None, expand_x=False, expand_y=False,right_click_menu=None, visible=True, metadata=None):
@@ -2448,6 +2802,8 @@ class Listbox(Element):
         :type s:                           (int, int)  | (None, None) | int
         :param disabled:                   set disable state for element
         :type disabled:                    (bool)
+        :param justification:              justification for items in listbox. Valid choices - left, right, center.  Default is left. NOTE - on some older versions of tkinter, not available
+        :type justification:               (str)
         :param auto_size_text:             True if element should be the same size as the contents
         :type auto_size_text:              (bool)
         :param font:                       specifies the font family, size, etc.  Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
@@ -2500,6 +2856,9 @@ class Listbox(Element):
         :type metadata:                    (Any)
         """
 
+        if values is None:
+            _error_popup_with_traceback('Error in your Listbox definition - The values parameter cannot be None', 'Use an empty list if you want no values in your Listbox')
+
         self.Values = values
         self.DefaultValues = default_values
         self.TKListbox = None
@@ -2532,6 +2891,7 @@ class Listbox(Element):
         pad = pad if pad is not None else p
         self.expand_x = expand_x
         self.expand_y = expand_y
+        self.justification = justification
 
         super().__init__(ELEM_TYPE_INPUT_LISTBOX, size=sz, auto_size_text=auto_size_text, font=font,
                          background_color=bg, text_color=fg, key=key, pad=pad, tooltip=tooltip, visible=visible, metadata=metadata,
@@ -2561,6 +2921,10 @@ class Listbox(Element):
         """
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Listbox.update - The window was closed')
             return
 
         if disabled is True:
@@ -2791,6 +3155,11 @@ class Radio(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Radio.update - The window was closed')
+            return
+
+
         if value is not None:
             try:
                 if value is True:
@@ -2997,6 +3366,11 @@ class Checkbox(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Checkbox.update - The window was closed')
+            return
+
+
         if value is not None:
             value = bool(value)
             try:
@@ -3065,7 +3439,7 @@ class Spin(Element):
     """
 
     def __init__(self, values, initial_value=None, disabled=False, change_submits=False, enable_events=False, readonly=False,
-                 size=(None, None), s=(None, None), auto_size_text=None, bind_return_key=None, font=None, background_color=None, text_color=None, key=None, k=None, pad=None, p=None,
+                 size=(None, None), s=(None, None), auto_size_text=None, bind_return_key=None, font=None, background_color=None, text_color=None, key=None, k=None, pad=None, p=None, wrap=None,
                  tooltip=None, right_click_menu=None, expand_x=False, expand_y=False, visible=True, metadata=None):
         """
         :param values:           List of valid values
@@ -3078,7 +3452,7 @@ class Spin(Element):
         :type change_submits:    (bool)
         :param enable_events:    Turns on the element specific events. Spin events happen when an item changes
         :type enable_events:     (bool)
-        :param readonly:         Turns on the element specific events. Spin events happen when an item changes
+        :param readonly:         If True, then users cannot type in values. Only values from the values list are allowed.
         :type readonly:          (bool)
         :param size:             (w, h) w=characters-wide, h=rows-high. If an int instead of a tuple is supplied, then height is auto-set to 1
         :type size:              (int, int)  | (None, None) | int
@@ -3102,6 +3476,8 @@ class Spin(Element):
         :type pad:               (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
         :param p:                Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
         :type p:                 (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
+        :param wrap:             Determines if the values should "Wrap". Default is False. If True, when reaching last value, will continue back to the first value.
+        :type wrap:              (bool)
         :param tooltip:          text, that will appear when mouse hovers over the element
         :type tooltip:           (str)
         :param right_click_menu: A list of lists of Menu items to show when this element is right clicked. See user docs for exact format.
@@ -3125,6 +3501,7 @@ class Spin(Element):
         self.Readonly = readonly
         self.RightClickMenu = right_click_menu
         self.BindReturnKey = bind_return_key
+        self.wrap = wrap
 
         bg = background_color if background_color else DEFAULT_INPUT_ELEMENTS_COLOR
         fg = text_color if text_color is not None else DEFAULT_INPUT_TEXT_COLOR
@@ -3165,6 +3542,10 @@ class Spin(Element):
         """
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Spin.update - The window was closed')
             return
 
         if values != None:
@@ -3255,7 +3636,7 @@ class Multiline(Element):
 
     def __init__(self, default_text='', enter_submits=False, disabled=False, autoscroll=False, border_width=None,
                  size=(None, None), s=(None, None), auto_size_text=None, background_color=None, text_color=None,  horizontal_scroll=False, change_submits=False,
-                 enable_events=False, do_not_clear=True, key=None, k=None, write_only=False, auto_refresh=False, reroute_stdout=False, reroute_stderr=False, reroute_cprint=False, echo_stdout_stderr=False, focus=False, font=None, pad=None, p=None, tooltip=None, justification=None, no_scrollbar=False,
+                 enable_events=False, do_not_clear=True, key=None, k=None, write_only=False, auto_refresh=False, reroute_stdout=False, reroute_stderr=False, reroute_cprint=False, echo_stdout_stderr=False, focus=False, font=None, pad=None, p=None, tooltip=None, justification=None, no_scrollbar=False, wrap_lines=None,
                  sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None, sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None,
                  expand_x=False, expand_y=False, rstrip=True, right_click_menu=None, visible=True, metadata=None):
         """
@@ -3317,6 +3698,8 @@ class Multiline(Element):
         :type justification:                 (str)
         :param no_scrollbar:                 If False then a vertical scrollbar will be shown (the default)
         :type no_scrollbar:                  (bool)
+        :param wrap_lines:                   If True, the lines will be wrapped automatically. Other parms affect this setting, but this one will override them all. Default is it does nothing and uses previous settings for wrapping.
+        :type wrap_lines:                    (bool)
         :param sbar_trough_color:           Scrollbar color of the trough
         :type sbar_trough_color:            (str)
         :param sbar_background_color:       Scrollbar color of the background of the arrow buttons at the ends AND the color of the "thumb" (the thing you grab and slide). Switches to arrow color when mouse is over
@@ -3365,8 +3748,6 @@ class Multiline(Element):
         self.WriteOnly = write_only
         self.AutoRefresh = auto_refresh
         key = key if key is not None else k
-        self.previous_stdout = None
-        self.previous_stderr = None
         self.reroute_cprint = reroute_cprint
         self.echo_stdout_stderr = echo_stdout_stderr
         self.Justification = 'left' if justification is None else justification
@@ -3375,10 +3756,9 @@ class Multiline(Element):
         self.expand_x = expand_x
         self.expand_y = expand_y
         self.rstrip = rstrip
-        if reroute_stdout:
-            self.reroute_stdout_to_here()
-        if reroute_stderr:
-            self.reroute_stderr_to_here()
+        self.wrap_lines = wrap_lines
+        self.reroute_stdout = reroute_stdout
+        self.reroute_stderr = reroute_stderr
         self.no_scrollbar = no_scrollbar
         self.hscrollbar = None      # The horizontal scrollbar
         sz = size if size != (None, None) else s
@@ -3427,6 +3807,11 @@ class Multiline(Element):
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            # _error_popup_with_traceback('Error in Multiline.update - The window was closed')
+            return
+
 
         if autoscroll is not None:
             self.Autoscroll = autoscroll
@@ -3588,31 +3973,32 @@ class Multiline(Element):
         """
         Sends stdout (prints) to this element
         """
-        self.previous_stdout = sys.stdout
+        # if nothing on the stack, then need to save the very first stdout
+        if len(Window._rerouted_stdout_stack) == 0:
+            Window._original_stdout = sys.stdout
+        Window._rerouted_stdout_stack.insert(0, (self.ParentForm, self))
         sys.stdout = self
 
     def reroute_stderr_to_here(self):
         """
         Sends stderr to this element
         """
-        self.previous_stderr = sys.stderr
+        if len(Window._rerouted_stderr_stack) == 0:
+            Window._original_stderr = sys.stderr
+        Window._rerouted_stderr_stack.insert(0, (self.ParentForm, self))
         sys.stderr = self
 
     def restore_stdout(self):
         """
         Restore a previously re-reouted stdout back to the original destination
         """
-        if self.previous_stdout:
-            sys.stdout = self.previous_stdout
-            self.previous_stdout = None  # indicate no longer routed here
+        Window._restore_stdout()
 
     def restore_stderr(self):
         """
         Restore a previously re-reouted stderr back to the original destination
         """
-        if self.previous_stderr:
-            sys.stderr = self.previous_stderr
-            self.previous_stderr = None  # indicate no longer routed here
+        Window._restore_stderr()
 
     def write(self, txt):
         """
@@ -3623,8 +4009,12 @@ class Multiline(Element):
         """
         try:
             self.update(txt, append=True)
+            # if need to echo, then send the same text to the destinatoin that isn't thesame as this one
             if self.echo_stdout_stderr:
-                self.previous_stdout.write(txt)
+                if sys.stdout != self:
+                    sys.stdout.write(txt)
+                elif sys.stderr != self:
+                    sys.stderr.write(txt)
         except:
             pass
 
@@ -3633,25 +4023,22 @@ class Multiline(Element):
         Flush parameter was passed into a print statement.
         For now doing nothing.  Not sure what action should be taken to ensure a flush happens regardless.
         """
-        try:
-            self.previous_stdout.flush()
-        except:
-            pass
+        # try:
+        #     self.previous_stdout.flush()
+        # except:
+        #     pass
+        return
 
     def __del__(self):
         """
-        If this Widget is deleted, be sure and restore the old stdout, stderr
+        AT ONE TIME --- If this Widget is deleted, be sure and restore the old stdout, stderr
+        Now the restore is done differently. Do not want to RELY on Python to call this method
+        in order for stdout and stderr to be restored.  Instead explicit restores are called.
+
         """
-        # These trys are here because found that if the init fails, then
-        # the variables holding the old stdout won't exist and will get an error
-        try:
-            self.restore_stdout()
-        except Exception as e:
-            pass
-        try:
-            self.restore_stderr()
-        except:
-            pass
+
+        return
+
 
     Get = get
     Update = update
@@ -3685,8 +4072,8 @@ class Text(Element):
         :type click_submits:     (bool)
         :param enable_events:    Turns on the element specific events. Text events happen when the text is clicked
         :type enable_events:     (bool)
-        :param relief:           relief style around the text. Values are same as progress meter relief values. Should be a constant that is defined at starting with "RELIEF_" - RELIEF_RAISED, RELIEF_SUNKEN, RELIEF_FLAT, RELIEF_RIDGE, RELIEF_GROOVE, RELIEF_SOLID
-        :type relief:            (str/enum)
+        :param relief:           relief style around the text. Values are same as progress meter relief values. Should be a constant that is defined at starting with RELIEF - RELIEF_RAISED, RELIEF_SUNKEN, RELIEF_FLAT, RELIEF_RIDGE, RELIEF_GROOVE, RELIEF_SOLID
+        :type relief:            (str)
         :param font:             specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
         :type font:              (str or (str, int[, str]) or None)
         :param text_color:       color of the text
@@ -3754,7 +4141,7 @@ class Text(Element):
         when made visible.
 
         :param value:            new text to show
-        :type value:             (str)
+        :type value:             (Any)
         :param background_color: color of background
         :type background_color:  (str)
         :param text_color:       color of the text
@@ -3767,6 +4154,11 @@ class Text(Element):
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Text.update - The window was closed')
+            return
+
         if value is not None:
             self.DisplayText = str(value)
             self.TKStringVar.set(str(value))
@@ -4108,6 +4500,10 @@ class StatusBar(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in StatusBar.update - The window was closed')
+            return
+
         if value is not None:
             self.DisplayText = value
             stringvar = self.TKStringVar
@@ -4225,110 +4621,6 @@ class TKProgressBar():
                 return False
         return True
 
-#
-# # ---------------------------------------------------------------------- #
-# #                           TKOutput                                     #
-# #   New Type of TK Widget that's a Text Widget in disguise               #
-# #       Note that it's inherited from the TKFrame class so that the      #
-# #       Scroll bar will span the length of the frame                     #
-# # ---------------------------------------------------------------------- #
-# class TKOutput(tk.Frame):
-#     """
-#     tkinter style class. Inherits Frame class from tkinter. Adds a tk.Text and a scrollbar together.
-#     Note - This is NOT a user controlled class. Users should NOT be directly using it unless making an extention
-#     to PySimpleGUI by directly manipulating tkinter.
-#     """
-#
-#     def __init__(self, parent, width, height, bd, background_color=None, text_color=None, echo_stdout_stderr=False, font=None, pad=None):
-#         """
-#         :param parent:             The "Root" that the Widget will be in
-#         :type parent:              tk.Tk | tk.Toplevel
-#         :param width:              Width in characters
-#         :type width:               (int)
-#         :param height:             height in rows
-#         :type height:              (int)
-#         :param bd:                 Border Depth.  How many pixels of border to show
-#         :type bd:                  (int)
-#         :param background_color:   color of background
-#         :type background_color:    (str)
-#         :param text_color:         color of the text
-#         :type text_color:          (str)
-#         :param echo_stdout_stderr: If True then output to stdout will be output to this element AND also to the normal console location
-#         :type echo_stdout_stderr:  (bool)
-#         :param font:               specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-#         :type font:                (str or (str, int[, str]) or None)
-#         :param pad:                Amount of padding to put around element in pixels (left/right, top/bottom) or ((left, right), (top, bottom)) or an int. If an int, then it's converted into a tuple (int, int)
-#         :type pad:                 (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-#         """
-#         self.frame = tk.Frame(parent)
-#         tk.Frame.__init__(self, self.frame)
-#         self.output = tk.Text(self.frame, width=width, height=height, bd=bd, font=font)
-#         if background_color and background_color != COLOR_SYSTEM_DEFAULT:
-#             self.output.configure(background=background_color)
-#             self.frame.configure(background=background_color)
-#         if text_color and text_color != COLOR_SYSTEM_DEFAULT:
-#             self.output.configure(fg=text_color)
-#             self.output.configure(insertbackground=text_color)
-#         self.vsb = tk.Scrollbar(self.frame, orient="vertical", command=self.output.yview)
-#         self.output.configure(yscrollcommand=self.vsb.set)
-#         self.output.pack(side="left", fill="both", expand=True)
-#         self.vsb.pack(side="left", fill="y", expand=False)
-#         self.frame.pack(side="left", padx=pad[0], pady=pad[1], expand=True, fill='y')
-#         self.previous_stdout = sys.stdout
-#         self.previous_stderr = sys.stderr
-#         self.parent = parent
-#         self.echo_stdout_stderr = echo_stdout_stderr
-#
-#         sys.stdout = self
-#         sys.stderr = self
-#         self.pack()
-#
-#     def write(self, txt):
-#         """
-#         Called by Python (not tkinter?) when stdout or stderr wants to write
-#         Refreshes the window after the write so that the change is immediately displayed
-#
-#         :param txt: text of output
-#         :type txt:  (str)
-#         """
-#         try:
-#             self.output.insert(tk.END, str(txt))
-#             self.output.see(tk.END)
-#             self.parent.update()
-#         except:
-#             pass
-#
-#         try:
-#             if self.echo_stdout_stderr:
-#                 self.previous_stdout.write(txt)
-#         except:
-#             pass
-#
-#     def Close(self):
-#         """
-#         Called when wanting to restore the old stdout/stderr
-#         """
-#         sys.stdout = self.previous_stdout
-#         sys.stderr = self.previous_stderr
-#
-#     def flush(self):
-#         """
-#         Flush parameter was passed into a print statement.
-#         For now doing nothing.  Not sure what action should be taken to ensure a flush happens regardless.
-#         """
-#         try:
-#             if self.echo_stdout_stderr:
-#                 self.previous_stdout.flush()
-#         except:
-#             pass
-#
-#     def __del__(self):
-#         """
-#         If this Widget is deleted, be sure and restore the old stdout, stderr
-#         """
-#         sys.stdout = self.previous_stdout
-#         sys.stderr = self.previous_stderr
-
 
 # ---------------------------------------------------------------------- #
 #                           Output                                       #
@@ -4336,23 +4628,23 @@ class TKProgressBar():
 # ---------------------------------------------------------------------- #
 class Output(Multiline):
     """
-    ** NOTE - It's recommended to use Multiline Element instead **
+    Output Element - a multi-lined text area to where stdout, stderr, cprint are rerouted.
 
-    Output Element - a multi-lined text area where stdout and stderr are re-routed to.
+    The Output Element is now based on the Multiline Element.  When you make an Output Element, you're
+    creating a Multiline Element with some specific settings set:
+        auto_refresh = True
+        auto_scroll = True
+        reroute_stdout = True
+        reroute_stderr = True
+        reroute_cprint = True
+        write_only = True
 
-    The Multiline Element is the superior and recommended method for showing the output of stdout.
-    The Multiline Element has been added to significantly while the Output element has not.
-    If you choose to use a Multiline element to replace an Output element, be sure an turn on the write_only paramter in the Multline
-
-    Of course, Output Element continues to operate and be backwards compatible, but you're missing out on
-    features such as routing the cprint output to the element.
-
-    In Apr 2022, the Output Element was switched to be a subclass of the Multiline so that more code will be in common. Nowever
-    you will not get all of the parms unless you switch to the Multline Specifically
+    If you choose to use a Multiline element to replace an Output element, be sure an turn on the write_only paramter in the Multiline
+    so that an item is not included in the values dictionary on every window.read call
     """
 
     def __init__(self, size=(None, None), s=(None, None), background_color=None, text_color=None, pad=None, p=None, echo_stdout_stderr=False, font=None, tooltip=None,
-                 key=None, k=None, right_click_menu=None, expand_x=False, expand_y=False, visible=True, metadata=None,
+                 key=None, k=None, right_click_menu=None, expand_x=False, expand_y=False, visible=True, metadata=None, wrap_lines=None, horizontal_scroll=None,
                  sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None,  sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None):
         """
         :param size:                        (w, h) w=characters-wide, h=rows-high. If an int instead of a tuple is supplied, then height is auto-set to 1
@@ -4387,6 +4679,10 @@ class Output(Multiline):
         :type visible:                      (bool)
         :param metadata:                    User metadata that can be set to ANYTHING
         :type metadata:                     (Any)
+        :param wrap_lines:                  If True, the lines will be wrapped automatically. Other parms affect this setting, but this one will override them all. Default is it does nothing and uses previous settings for wrapping.
+        :type wrap_lines:                   (bool)
+        :param horizontal_scroll:           Controls if a horizontal scrollbar should be shown. If True, then line wrapping will be off by default
+        :type horizontal_scroll:            (bool)
         :param sbar_trough_color:           Scrollbar color of the trough
         :type sbar_trough_color:            (str)
         :param sbar_background_color:       Scrollbar color of the background of the arrow buttons at the ends AND the color of the "thumb" (the thing you grab and slide). Switches to arrow color when mouse is over
@@ -4404,104 +4700,8 @@ class Output(Multiline):
         """
 
 
-        # self._TKOut = self.Widget = None  # type: TKOutput
-        # bg = background_color if background_color else DEFAULT_INPUT_ELEMENTS_COLOR
-        # fg = text_color if text_color is not None else DEFAULT_INPUT_TEXT_COLOR
-        # self.RightClickMenu = right_click_menu
-        # key = key if key is not None else k
-        # self.echo_stdout_stderr = echo_stdout_stderr
-        # sz = size if size != (None, None) else s
-        # pad = pad if pad is not None else p
-        # self.expand_x = expand_x
-        # self.expand_y = expand_y
+        super().__init__(size=size, s=s, background_color=background_color, text_color=text_color, pad=pad, p=p, echo_stdout_stderr=echo_stdout_stderr, font=font, tooltip=tooltip, wrap_lines=wrap_lines, horizontal_scroll=horizontal_scroll, key=key, k=k, right_click_menu=right_click_menu, write_only=True, reroute_stdout=True, reroute_stderr=True, reroute_cprint=True, autoscroll=True, auto_refresh=True, expand_x=expand_x, expand_y=expand_y, visible=visible, metadata=metadata, sbar_trough_color=sbar_trough_color, sbar_background_color=sbar_background_color, sbar_arrow_color=sbar_arrow_color, sbar_width=sbar_width, sbar_arrow_width=sbar_arrow_width, sbar_frame_color=sbar_frame_color, sbar_relief=sbar_relief)
 
-        super().__init__(size=size, s=s, background_color=background_color, text_color=text_color, pad=pad, p=p, echo_stdout_stderr=echo_stdout_stderr, font=font, tooltip=tooltip,
-                 key=key, k=k, right_click_menu=right_click_menu, write_only=True, reroute_stdout=True, reroute_stderr=True, autoscroll=True, expand_x=expand_x, expand_y=expand_y, visible=visible, metadata=metadata,
-                         sbar_trough_color=sbar_trough_color, sbar_background_color=sbar_background_color, sbar_arrow_color=sbar_arrow_color, sbar_width=sbar_width, sbar_arrow_width=sbar_arrow_width, sbar_frame_color=sbar_frame_color, sbar_relief=sbar_relief)
-    #
-    # @property
-    # def tk_out(self):
-    #     """
-    #     Returns the TKOutput object used to create the element
-    #
-    #     :return: The TKOutput object
-    #     :rtype:  (TKOutput)
-    #     """
-    #     if self._TKOut is None:
-    #         print('*** Did you forget to call Finalize()? Your code should look something like: ***')
-    #         print('*** form = sg.Window("My Form").Layout(layout).Finalize() ***')
-    #     return self._TKOut
-    #
-    # def update(self, value=None, visible=None):
-    #     """
-    #     Changes some of the settings for the Output Element. Must call `Window.Read` or `Window.Finalize` prior
-    #
-    #     Changes will not be visible in your window until you call window.read or window.refresh.
-    #
-    #     If you change visibility, your element may MOVE. If you want it to remain stationary, use the "layout helper"
-    #     function "pin" to ensure your element is "pinned" to that location in your layout so that it returns there
-    #     when made visible.
-    #
-    #     :param value:   string that will replace current contents of the output area
-    #     :type value:    (str)
-    #     :param visible: control visibility of element
-    #     :type visible:  (bool)
-    #     """
-    #     if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
-    #         return
-    #
-    #     if value is not None:
-    #         self._TKOut.output.delete('1.0', tk.END)
-    #         self._TKOut.output.insert(tk.END, value)
-    #     if visible is False:
-    #         self._pack_forget_save_settings(self._TKOut.frame)
-    #     elif visible is True:
-    #         self._pack_restore_settings(self._TKOut.frame)
-    #
-    #     if visible is not None:
-    #         self._visible = visible
-    #
-    # def get(self):
-    #     """
-    #     Returns the current contents of the output.  Similar to Get method other Elements
-    #     :return: the current value of the output
-    #     :rtype:  (str)
-    #     """
-    #     return self._TKOut.output.get(1.0, tk.END)
-    #
-    # def expand(self, expand_x=False, expand_y=False, expand_row=True):
-    #     """
-    #     Causes the Element to expand to fill available space in the X and Y directions.  Can specify which or both directions
-    #
-    #     :param expand_x: If True Element will expand in the Horizontal directions
-    #     :type expand_x:  (bool)
-    #     :param expand_y: If True Element will expand in the Vertical directions
-    #     :type expand_y:  (bool)
-    #     """
-    #
-    #     if expand_x and expand_y:
-    #         fill = tk.BOTH
-    #     elif expand_x:
-    #         fill = tk.X
-    #     elif expand_y:
-    #         fill = tk.Y
-    #     else:
-    #         return
-    #
-    #     self._TKOut.output.pack(expand=True, fill=fill)
-    #     self._TKOut.frame.pack(expand=True, fill=fill)
-    #     self.ParentRowFrame.pack(expand=expand_row, fill=fill)
-    #
-    # def __del__(self):
-    #     """
-    #     Delete this element. Normally Elements do not have their delete method specified, but for this one
-    #     it's important that the underlying TKOut object get deleted so that the stdout will get restored properly
-    #     """
-    #     self._TKOut.__del__()
-
-    # TKOut = tk_out
-    # Update = update
-    # Get = get
 
 
 # ---------------------------------------------------------------------- #
@@ -4528,7 +4728,7 @@ class Button(Element):
         :type target:                 str | (int, int)
         :param tooltip:               text, that will appear when mouse hovers over the element
         :type tooltip:                (str)
-        :param file_types:            the filetypes that will be used to match files. To indicate all files: (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+        :param file_types:            the filetypes that will be used to match files. To indicate all files: (("ALL Files", "*.* *"),).
         :type file_types:             Tuple[(str, str), ...]
         :param initial_folder:        starting path for folders and files
         :type initial_folder:         (str)
@@ -4653,6 +4853,7 @@ class Button(Element):
         self.calendar_day_abbreviations = None
         self.calendar_title = ''
         self.calendar_selection = ''
+        self.default_button = None
         self.InitialFolder = initial_folder
         self.DefaultExtension = default_extension
         self.Disabled = disabled
@@ -4666,6 +4867,13 @@ class Button(Element):
         #     self.UseTtkButtons = False              # if an image is to be displayed, then force the button to not be a TTK Button
         if key is None and k is None:
             _key = self.ButtonText
+            if DEFAULT_USE_BUTTON_SHORTCUTS is True:
+                pos = _key.find(MENU_SHORTCUT_CHARACTER)
+                if pos != -1:
+                    if pos < len(MENU_SHORTCUT_CHARACTER) or _key[pos - len(MENU_SHORTCUT_CHARACTER)] != "\\":
+                        _key = _key[:pos] + _key[pos + len(MENU_SHORTCUT_CHARACTER):]
+                    else:
+                        _key = _key.replace('\\'+MENU_SHORTCUT_CHARACTER, MENU_SHORTCUT_CHARACTER)
         else:
             _key = key if key is not None else k
         if highlight_colors is not None:
@@ -4738,6 +4946,7 @@ class Button(Element):
     def _find_target(self):
         target = self.Target
         target_element = None
+
         if target[0] == ThisRow:
             target = [self.Position[0], target[1]]
             if target[1] < 0:
@@ -4747,12 +4956,20 @@ class Button(Element):
         if target == (None, None):
             strvar = self.TKStringVar
         else:
-            if not isinstance(target, str):
-                if target[0] < 0:
-                    target = [self.Position[0] + target[0], target[1]]
-                target_element = self.ParentContainer._GetElementAtLocation(target)
-            else:
-                target_element = self.ParentForm.find_element(target)
+            # Need a try-block because if the target is not hashable, the "in" test will raise exception
+            try:
+                if target in self.ParentForm.AllKeysDict:
+                    target_element = self.ParentForm.AllKeysDict[target]
+            except:
+                pass
+            # if target not found or the above try got exception, then keep looking....
+            if target_element is None:
+                if not isinstance(target, str):
+                    if target[0] < 0:
+                        target = [self.Position[0] + target[0], target[1]]
+                    target_element = self.ParentContainer._GetElementAtLocation(target)
+                else:
+                    target_element = self.ParentForm.find_element(target)
             try:
                 strvar = target_element.TKStringVar
             except:
@@ -4791,7 +5008,16 @@ class Button(Element):
                 should_submit_window = False
         elif self.BType == BUTTON_TYPE_BROWSE_FILE:
             if running_mac():
-                file_name = tk.filedialog.askopenfilename(initialdir=self.InitialFolder)  # show the 'get file' dialog box
+                # Workaround for the "*.*" issue on Mac
+                is_all = [(x, y) for (x, y) in filetypes if all(ch in '* .' for ch in y)]
+                if not len(set(filetypes)) > 1 and (len(is_all) != 0 or filetypes == FILE_TYPES_ALL_FILES):
+                    file_name = tk.filedialog.askopenfilename(initialdir=self.InitialFolder)
+                else:
+                    file_name = tk.filedialog.askopenfilename(initialdir=self.InitialFolder, filetypes=filetypes)  # show the 'get file' dialog box
+                # elif _mac_allow_filetypes():
+                    # file_name = tk.filedialog.askopenfilename(initialdir=self.InitialFolder, filetypes=filetypes)  # show the 'get file' dialog box
+                # else:
+                #     file_name = tk.filedialog.askopenfilename(initialdir=self.InitialFolder)  # show the 'get file' dialog box
             else:
                 file_name = tk.filedialog.askopenfilename(filetypes=filetypes, initialdir=self.InitialFolder, parent=self.ParentForm.TKroot)  # show the 'get file' dialog box
 
@@ -4801,13 +5027,23 @@ class Button(Element):
             else:           # if "cancel" button clicked, don't generate an event
                 should_submit_window = False
         elif self.BType == BUTTON_TYPE_COLOR_CHOOSER:
-            color = tk.colorchooser.askcolor(parent=self.ParentForm.TKroot)  # show the 'get file' dialog box
+            color = tk.colorchooser.askcolor(parent=self.ParentForm.TKroot, color=self.default_color)  # show the 'get file' dialog box
             color = color[1]  # save only the #RRGGBB portion
-            strvar.set(color)
-            self.TKStringVar.set(color)
+            if color is not None:
+                strvar.set(color)
+                self.TKStringVar.set(color)
         elif self.BType == BUTTON_TYPE_BROWSE_FILES:
             if running_mac():
-                file_name = tk.filedialog.askopenfilenames(initialdir=self.InitialFolder)
+                # Workaround for the "*.*" issue on Mac
+                is_all = [(x, y) for (x, y) in filetypes if all(ch in '* .' for ch in y)]
+                if not len(set(filetypes)) > 1 and (len(is_all) != 0 or filetypes == FILE_TYPES_ALL_FILES):
+                    file_name = tk.filedialog.askopenfilenames(initialdir=self.InitialFolder)
+                else:
+                    file_name = tk.filedialog.askopenfilenames(filetypes=filetypes, initialdir=self.InitialFolder)
+                # elif _mac_allow_filetypes():
+                #     file_name = tk.filedialog.askopenfilenames(filetypes=filetypes, initialdir=self.InitialFolder)
+                # else:
+                #     file_name = tk.filedialog.askopenfilenames(initialdir=self.InitialFolder)
             else:
                 file_name = tk.filedialog.askopenfilenames(filetypes=filetypes, initialdir=self.InitialFolder, parent=self.ParentForm.TKroot)
 
@@ -4820,7 +5056,16 @@ class Button(Element):
         elif self.BType == BUTTON_TYPE_SAVEAS_FILE:
             # show the 'get file' dialog box
             if running_mac():
-                file_name = tk.filedialog.asksaveasfilename(defaultextension=self.DefaultExtension, initialdir=self.InitialFolder)
+                # Workaround for the "*.*" issue on Mac
+                is_all = [(x, y) for (x, y) in filetypes if all(ch in '* .' for ch in y)]
+                if not len(set(filetypes)) > 1 and (len(is_all) != 0 or filetypes == FILE_TYPES_ALL_FILES):
+                    file_name = tk.filedialog.asksaveasfilename(defaultextension=self.DefaultExtension, initialdir=self.InitialFolder)
+                else:
+                    file_name = tk.filedialog.asksaveasfilename(filetypes=filetypes, defaultextension=self.DefaultExtension, initialdir=self.InitialFolder)
+                # elif _mac_allow_filetypes():
+                #     file_name = tk.filedialog.asksaveasfilename(filetypes=filetypes, defaultextension=self.DefaultExtension, initialdir=self.InitialFolder)
+                # else:
+                #     file_name = tk.filedialog.asksaveasfilename(defaultextension=self.DefaultExtension, initialdir=self.InitialFolder)
             else:
                 file_name = tk.filedialog.asksaveasfilename(filetypes=filetypes, defaultextension=self.DefaultExtension, initialdir=self.InitialFolder, parent=self.ParentForm.TKroot)
 
@@ -4909,12 +5154,28 @@ class Button(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Button.update - The window was closed')
+            return
+
+
         if self.UseTtkButtons:
             style_name = self.ttk_style_name        # created when made initial window (in the pack)
             # style_name = str(self.Key) + 'custombutton.TButton'
             button_style = ttk.Style()
         if text is not None:
-            self.TKButton.configure(text=text)
+            btext = text
+            if DEFAULT_USE_BUTTON_SHORTCUTS is True:
+                pos = btext.find(MENU_SHORTCUT_CHARACTER)
+                if pos != -1:
+                    if pos < len(MENU_SHORTCUT_CHARACTER) or btext[pos - len(MENU_SHORTCUT_CHARACTER)] != "\\":
+                        btext = btext[:pos] + btext[pos + len(MENU_SHORTCUT_CHARACTER):]
+                    else:
+                        btext = btext.replace('\\'+MENU_SHORTCUT_CHARACTER, MENU_SHORTCUT_CHARACTER)
+                        pos = -1
+                if pos != -1:
+                    self.TKButton.config(underline=pos)
+            self.TKButton.configure(text=btext)
             self.ButtonText = text
         if button_color != (None, None) and button_color != COLOR_SYSTEM_DEFAULT:
             bc = button_color_to_tuple(button_color, self.ButtonColor)
@@ -5026,65 +5287,67 @@ class ButtonMenu(Element):
     def __init__(self, button_text, menu_def, tooltip=None, disabled=False, image_source=None,
                  image_filename=None, image_data=None, image_size=(None, None), image_subsample=None, border_width=None,
                  size=(None, None), s=(None, None), auto_size_button=None, button_color=None, text_color=None, background_color=None, disabled_text_color=None,
-                 font=None, item_font=None, pad=None, p=None, expand_x=False, expand_y=False, key=None, k=None, tearoff=False, visible=True, metadata=None):
+                 font=None, item_font=None, pad=None, p=None, expand_x=False, expand_y=False, key=None, k=None, tearoff=False, visible=True,
+                 metadata=None):
         """
-        :param button_text:         Text to be displayed on the button
-        :type button_text:          (str)
-        :param menu_def:            A list of lists of Menu items to show when this element is clicked. See docs for format as they are the same for all menu types
-        :type menu_def:             List[List[str]]
-        :param tooltip:             text, that will appear when mouse hovers over the element
-        :type tooltip:              (str)
-        :param disabled:            If True button will be created disabled
-        :type disabled:             (bool)
-        :param image_source:        Image to place on button. Use INSTEAD of the image_filename and image_data. Unifies these into 1 easier to use parm
-        :type image_source:         (str | bytes)
-        :param image_filename:      image filename if there is a button image. GIFs and PNGs only.
-        :type image_filename:       (str)
-        :param image_data:          Raw or Base64 representation of the image to put on button. Choose either filename or data
-        :type image_data:           bytes | str
-        :param image_size:          Size of the image in pixels (width, height)
-        :type image_size:           (int, int)
-        :param image_subsample:     amount to reduce the size of the image. Divides the size by this number. 2=1/2, 3=1/3, 4=1/4, etc
-        :type image_subsample:      (int)
-        :param border_width:        width of border around button in pixels
-        :type border_width:         (int)
-        :param size:                (w, h) w=characters-wide, h=rows-high. If an int instead of a tuple is supplied, then height is auto-set to 1
-        :type size:                 (int, int)  | (None, None) | int
-        :param s:                   Same as size parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, size will be used
-        :type s:                    (int, int)  | (None, None) | int
-        :param auto_size_button:    if True the button size is sized to fit the text
-        :type auto_size_button:     (bool)
-        :param button_color:        of button. Easy to remember which is which if you say "ON" between colors. "red" on "green"
-        :type button_color:         (str, str) or str
-        :param background_color:    color of the background
-        :type background_color:     (str)
-        :param text_color:          element's text color. Can be in #RRGGBB format or a color name "black"
-        :type text_color:           (str)
-        :param disabled_text_color: color to use for text when item is disabled. Can be in #RRGGBB format or a color name "black"
-        :type disabled_text_color:  (str)
-        :param font:                specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-        :type font:                 (str or (str, int[, str]) or None)
-        :param item_font:           specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike, for the menu items
-        :type item_font:            (str or (str, int[, str]) or None)
-        :param pad:                 Amount of padding to put around element in pixels (left/right, top/bottom) or ((left, right), (top, bottom)) or an int. If an int, then it's converted into a tuple (int, int)
-        :type pad:                  (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-        :param p:                   Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
-        :type p:                    (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-        :param expand_x:            If True the element will automatically expand in the X direction to fill available space
-        :type expand_x:             (bool)
-        :param expand_y:            If True the element will automatically expand in the Y direction to fill available space
-        :type expand_y:             (bool)
-        :param key:                 Used with window.find_element and with return values to uniquely identify this element to uniquely identify this element
-        :type key:                  str | int | tuple | object
-        :param k:                   Same as the Key. You can use either k or key. Which ever is set will be used.
-        :type k:                    str | int | tuple | object
-        :param tearoff:             Determines if menus should allow them to be torn off
-        :type tearoff:              (bool)
-        :param visible:             set visibility state of the element
-        :type visible:              (bool)
-        :param metadata:            User metadata that can be set to ANYTHING
-        :type metadata:             (Any)
+        :param button_text:               Text to be displayed on the button
+        :type button_text:                (str)
+        :param menu_def:                  A list of lists of Menu items to show when this element is clicked. See docs for format as they are the same for all menu types
+        :type menu_def:                   List[List[str]]
+        :param tooltip:                   text, that will appear when mouse hovers over the element
+        :type tooltip:                    (str)
+        :param disabled:                  If True button will be created disabled
+        :type disabled:                   (bool)
+        :param image_source:              Image to place on button. Use INSTEAD of the image_filename and image_data. Unifies these into 1 easier to use parm
+        :type image_source:               (str | bytes)
+        :param image_filename:            image filename if there is a button image. GIFs and PNGs only.
+        :type image_filename:             (str)
+        :param image_data:                Raw or Base64 representation of the image to put on button. Choose either filename or data
+        :type image_data:                 bytes | str
+        :param image_size:                Size of the image in pixels (width, height)
+        :type image_size:                 (int, int)
+        :param image_subsample:           amount to reduce the size of the image. Divides the size by this number. 2=1/2, 3=1/3, 4=1/4, etc
+        :type image_subsample:            (int)
+        :param border_width:              width of border around button in pixels
+        :type border_width:               (int)
+        :param size:                      (w, h) w=characters-wide, h=rows-high. If an int instead of a tuple is supplied, then height is auto-set to 1
+        :type size:                       (int, int)  | (None, None) | int
+        :param s:                         Same as size parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, size will be used
+        :type s:                          (int, int)  | (None, None) | int
+        :param auto_size_button:          if True the button size is sized to fit the text
+        :type auto_size_button:           (bool)
+        :param button_color:              of button. Easy to remember which is which if you say "ON" between colors. "red" on "green"
+        :type button_color:               (str, str) or str
+        :param background_color:          color of the background
+        :type background_color:           (str)
+        :param text_color:                element's text color. Can be in #RRGGBB format or a color name "black"
+        :type text_color:                 (str)
+        :param disabled_text_color:       color to use for text when item is disabled. Can be in #RRGGBB format or a color name "black"
+        :type disabled_text_color:        (str)
+        :param font:                      specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
+        :type font:                       (str or (str, int[, str]) or None)
+        :param item_font:                 specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike, for the menu items
+        :type item_font:                  (str or (str, int[, str]) or None)
+        :param pad:                       Amount of padding to put around element in pixels (left/right, top/bottom) or ((left, right), (top, bottom)) or an int. If an int, then it's converted into a tuple (int, int)
+        :type pad:                        (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
+        :param p:                         Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
+        :type p:                          (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
+        :param expand_x:                  If True the element will automatically expand in the X direction to fill available space
+        :type expand_x:                   (bool)
+        :param expand_y:                  If True the element will automatically expand in the Y direction to fill available space
+        :type expand_y:                   (bool)
+        :param key:                       Used with window.find_element and with return values to uniquely identify this element to uniquely identify this element
+        :type key:                        str | int | tuple | object
+        :param k:                         Same as the Key. You can use either k or key. Which ever is set will be used.
+        :type k:                          str | int | tuple | object
+        :param tearoff:                   Determines if menus should allow them to be torn off
+        :type tearoff:                    (bool)
+        :param visible:                   set visibility state of the element
+        :type visible:                    (bool)
+        :param metadata:                  User metadata that can be set to ANYTHING
+        :type metadata:                   (Any)
         """
+
 
         self.MenuDefinition = copy.deepcopy(menu_def)
 
@@ -5171,6 +5434,11 @@ class ButtonMenu(Element):
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in ButtonMenu.update - The window was closed')
+            return
+
 
         if menu_definition is not None:
             self.MenuDefinition = copy.deepcopy(menu_definition)
@@ -5267,7 +5535,7 @@ class ProgressBar(Element):
         :type size_px:           (int, int) | (None, None)
         :param auto_size_text:   Not sure why this is here
         :type auto_size_text:    (bool)
-        :param bar_color:        The 2 colors that make up a progress bar. Easy to remember which is which if you say "ON" between colors. "red" on "green".
+        :param bar_color:        The 2 colors that make up a progress bar. Either a tuple of 2 strings or a string. Tuple - (bar, background). A string with 1 color changes the background of the bar only. A string with 2 colors separated by "on" like "red on blue" specifies a red bar on a blue background.
         :type bar_color:         (str, str) or str
         :param style:            Progress bar style defined as one of these 'default', 'winnative', 'clam', 'alt', 'classic', 'vista', 'xpnative'
         :type style:             (str)
@@ -5371,6 +5639,11 @@ class ProgressBar(Element):
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return False
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in ProgressBar.update - The window was closed')
+            return
+
 
         if self.ParentForm.TKrootDestroyed:
             return False
@@ -5517,6 +5790,11 @@ class Image(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Image.update - The window was closed')
+            return
+
+
         if source is not None:
             if isinstance(source, bytes):
                 data = source
@@ -5545,6 +5823,9 @@ class Image(Element):
                 # return  # an error likely means the window has closed so exit
 
         if image is not None:
+            self.tktext_label.configure(image='')           # clear previous image
+            if self.tktext_label.image is not None:
+                del self.tktext_label.image
             if type(image) is not bytes:
                 width, height = size[0] if size[0] is not None else image.width(), size[1] if size[1] is not None else image.height()
             else:
@@ -5563,7 +5844,7 @@ class Image(Element):
         if filename is None and image is None and visible is None and size == (None, None):
             # Using a try because the image may have been previously deleted and don't want an error if that's happened
             try:
-                self.tktext_label.configure(width=1, height=1, bd=0)
+                self.tktext_label.configure(image='', width=1, height=1, bd=0)
                 self.tktext_label.image = None
             except:
                 pass
@@ -5742,6 +6023,10 @@ class Canvas(Element):
         """
 
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Canvas.update - The window was closed')
             return
 
         if background_color not in (None, COLOR_SYSTEM_DEFAULT):
@@ -6264,6 +6549,10 @@ class Graph(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Graph.update - The window was closed')
+            return
+
         if background_color is not None and background_color != COLOR_SYSTEM_DEFAULT:
             self._TKCanvas2.configure(background=background_color)
 
@@ -6414,24 +6703,21 @@ class Graph(Element):
         :param event: (event) event info from tkinter. Note not used in this method
         :type event:
         """
-        if not self.DragSubmits:  # only report mouse up for drag operations
-            return
+        if not self.DragSubmits:
+            return  # only report mouse up for drag operations
         self.ClickPosition = self._convert_canvas_xy_to_xy(event.x, event.y)
-        self.LastButtonClickedWasRealtime = not self.DragSubmits
+        self.ParentForm.LastButtonClickedWasRealtime = False
         if self.Key is not None:
             self.ParentForm.LastButtonClicked = self.Key
         else:
             self.ParentForm.LastButtonClicked = '__GRAPH__'  # need to put something rather than None
-        # if self.ParentForm.CurrentlyRunningMainloop:
-        #     self.ParentForm.TKroot.quit()
         _exit_mainloop(self.ParentForm)
-        if self.DragSubmits:
-            if isinstance(self.ParentForm.LastButtonClicked, str):
-                self.ParentForm.LastButtonClicked = self.ParentForm.LastButtonClicked + '+UP'
-            else:
-                self.ParentForm.LastButtonClicked = (self.ParentForm.LastButtonClicked, '+UP')
-            # self.ParentForm.LastButtonClicked += '+UP'        # this is the old method that required string key
+        if isinstance(self.ParentForm.LastButtonClicked, str):
+            self.ParentForm.LastButtonClicked = self.ParentForm.LastButtonClicked + '+UP'
+        else:
+            self.ParentForm.LastButtonClicked = (self.ParentForm.LastButtonClicked, '+UP')
         self.MouseButtonDown = False
+
 
     # button callback
     def button_press_call_back(self, event):
@@ -6729,6 +7015,10 @@ class Frame(Element):
         :type visible:  (bool)
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Frame.update - The window was closed')
             return
 
         if visible is False:
@@ -7046,6 +7336,11 @@ class Tab(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Tab.update - The window was closed')
+            return
+
+
         state = 'normal'
         if disabled is not None:
             self.Disabled = disabled
@@ -7161,7 +7456,7 @@ class TabGroup(Element):
         :type expand_x:                   (bool)
         :param expand_y:                  If True the element will automatically expand in the Y direction to fill available space
         :type expand_y:                   (bool)
-        :param visible:                   set visibility state of the element
+        :param visible:                   DEPRECATED  - Should you need to control visiblity for the TabGroup as a whole, place it into a Column element
         :type visible:                    (bool)
         :param metadata:                  User metadata that can be set to ANYTHING
         :type metadata:                   (Any)
@@ -7398,6 +7693,32 @@ class TabGroup(Element):
             tab_element.TooltipObject = ToolTip(tab_element.TKFrame, text=tab_element.Tooltip, timeout=DEFAULT_TOOLTIP_TIME)
         _add_right_click_menu(tab_element, form)
 
+
+    def update(self, visible=None):
+        """
+        Enables changing the visibility
+
+        :param visible:  control visibility of element
+        :type visible:   (bool)
+        """
+        if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in TabGroup.update - The window was closed')
+            return
+
+        if visible is False:
+            self._pack_forget_save_settings()
+        elif visible is True:
+            self._pack_restore_settings()
+
+        if visible is not None:
+            self._visible = visible
+
+
+
+
     AddRow = add_row
     FindKeyFromTabName = find_key_from_tab_name
     Get = get
@@ -7517,6 +7838,11 @@ class Slider(Element):
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Slider.update - The window was closed')
+            return
+
 
         if range != (None, None):
             self.TKScale.config(from_=range[0], to_=range[1])
@@ -7744,9 +8070,9 @@ class Column(Element):
         :type pad:                          (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
         :param p:                           Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
         :type p:                            (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-        :param scrollable:                  if True then scrollbars will be added to the column
+        :param scrollable:                  if True then scrollbars will be added to the column. If you update the contents of a scrollable column, be sure and call Column.contents_changed also
         :type scrollable:                   (bool)
-        :param vertical_scroll_only:        if Truen then no horizontal scrollbar will be shown
+        :param vertical_scroll_only:        if True then no horizontal scrollbar will be shown if a scrollable column
         :type vertical_scroll_only:         (bool)
         :param right_click_menu:            A list of lists of Menu items to show when this element is right clicked. See user docs for exact format.
         :type right_click_menu:             List[List[ List[str] | str ]]
@@ -7926,6 +8252,10 @@ class Column(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Column.update - The window was closed')
+            return
+
         if self.expand_x and self.expand_y:
             expand = tk.BOTH
         elif self.expand_x:
@@ -8056,6 +8386,11 @@ class Pane(Element):
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Pane.update - The window was closed')
+            return
+
         if visible is False:
             self._pack_forget_save_settings()
         elif visible is True:
@@ -8306,6 +8641,8 @@ class Menu(Element):
                 ['&Debugger', ['Popout', 'Launch Debugger']],
                 ['&Toolbar', ['Command &1', 'Command &2', 'Command &3', 'Command &4']],
                 ['&Help', '&About...'], ]
+    Important Note!  The colors, font, look of the Menubar itself cannot be changed, only the menus shown AFTER clicking the menubar
+    can be changed.  If you want to change the style/colors the Menubar, then you will have to use the MenubarCustom element.
     Finally, "keys" can be added to entries so make them unique.  The "Save" entry has a key associated with it. You
     can see it has a "::" which signifies the beginning of a key.  The user will not see the key portion when the
     menu is shown.  The key portion is returned as part of the event.
@@ -8314,35 +8651,36 @@ class Menu(Element):
     def __init__(self, menu_definition, background_color=None, text_color=None, disabled_text_color=None, size=(None, None), s=(None, None), tearoff=False,
                  font=None, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
         """
-        :param menu_definition:     The Menu definition specified using lists (docs explain the format)
-        :type menu_definition:      List[List[Tuple[str, List[str]]]
-        :param background_color:    color of the background
-        :type background_color:     (str)
-        :param text_color:          element's text color. Can be in #RRGGBB format or a color name "black"
-        :type text_color:           (str)
-        :param disabled_text_color: color to use for text when item is disabled. Can be in #RRGGBB format or a color name "black"
-        :type disabled_text_color:  (str)
-        :param size:                Not used in the tkinter port
-        :type size:                 (int, int)
-        :param s:                   Same as size parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, size will be used
-        :type s:                    (int, int)  | (None, None)
-        :param tearoff:             if True, then can tear the menu off from the window ans use as a floating window. Very cool effect
-        :type tearoff:              (bool)
-        :param pad:                 Amount of padding to put around element in pixels (left/right, top/bottom) or ((left, right), (top, bottom)) or an int. If an int, then it's converted into a tuple (int, int)
-        :type pad:                  (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-        :param p:                   Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
-        :type p:                    (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
-        :param font:                specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-        :type font:                 (str or (str, int[, str]) or None)
-        :param key:                 Value that uniquely identifies this element from all other elements. Used when Finding an element or in return values. Must be unique to the window
-        :type key:                  str | int | tuple | object
-        :param k:                   Same as the Key. You can use either k or key. Which ever is set will be used.
-        :type k:                    str | int | tuple | object
-        :param visible:             set visibility state of the element
-        :type visible:              (bool)
-        :param metadata:            User metadata that can be set to ANYTHING
-        :type metadata:             (Any)
+        :param menu_definition:           The Menu definition specified using lists (docs explain the format)
+        :type menu_definition:            List[List[Tuple[str, List[str]]]
+        :param background_color:          color of the background of menus, NOT the Menubar
+        :type background_color:           (str)
+        :param text_color:                text color for menus, NOT the Menubar. Can be in #RRGGBB format or a color name "black".
+        :type text_color:                 (str)
+        :param disabled_text_color:       color to use for text when item in submenu, not the menubar itself, is disabled. Can be in #RRGGBB format or a color name "black"
+        :type disabled_text_color:        (str)
+        :param size:                      Not used in the tkinter port
+        :type size:                       (int, int)
+        :param s:                         Same as size parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, size will be used
+        :type s:                          (int, int)  | (None, None)
+        :param tearoff:                   if True, then can tear the menu off from the window ans use as a floating window. Very cool effect
+        :type tearoff:                    (bool)
+        :param pad:                       Amount of padding to put around element in pixels (left/right, top/bottom) or ((left, right), (top, bottom)) or an int. If an int, then it's converted into a tuple (int, int)
+        :type pad:                        (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
+        :param p:                         Same as pad parameter.  It's an alias. If EITHER of them are set, then the one that's set will be used. If BOTH are set, pad will be used
+        :type p:                          (int, int) or ((int, int),(int,int)) or (int,(int,int)) or  ((int, int),int) | int
+        :param font:                      specifies the  font family, size, etc. of submenus. Does NOT apply to the Menubar itself. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
+        :type font:                       (str or (str, int[, str]) or None)
+        :param key:                       Value that uniquely identifies this element from all other elements. Used when Finding an element or in return values. Must be unique to the window
+        :type key:                        str | int | tuple | object
+        :param k:                         Same as the Key. You can use either k or key. Which ever is set will be used.
+        :type k:                          str | int | tuple | object
+        :param visible:                   set visibility state of the element
+        :type visible:                    (bool)
+        :param metadata:                  User metadata that can be set to ANYTHING
+        :type metadata:                   (Any)
         """
+
         self.BackgroundColor = background_color if background_color is not None else theme_input_background_color()
         self.TextColor = text_color if text_color is not None else theme_input_text_color()
 
@@ -8395,11 +8733,16 @@ class Menu(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Menu.update - The window was closed')
+            return
+
         if menu_definition is not None:
             self.MenuDefinition = copy.deepcopy(menu_definition)
 
             self.TKMenu = tk.Menu(self.ParentForm.TKroot, tearoff=self.Tearoff, tearoffcommand=self._tearoff_menu_callback)  # create the menubar
             menubar = self.TKMenu
+            self.Widget = self.TKMenu   # same the new menu so user can access to extend PySimpleGUI
             for menu_entry in self.MenuDefinition:
                 baritem = tk.Menu(menubar, tearoff=self.Tearoff, tearoffcommand=self._tearoff_menu_callback)
 
@@ -8447,8 +8790,8 @@ Menubar = Menu  # another name for Menu to make it clear it's the Menu Bar
 # ---------------------------------------------------------------------- #
 class Table(Element):
 
-    def __init__(self, values, headings=None, visible_column_map=None, col_widths=None, def_col_width=10,
-                 auto_size_columns=True, max_col_width=20, select_mode=None, display_row_numbers=False, num_rows=None,
+    def __init__(self, values, headings=None, visible_column_map=None, col_widths=None, cols_justification=None, def_col_width=10,
+                 auto_size_columns=True, max_col_width=20, select_mode=None, display_row_numbers=False, starting_row_number=0, num_rows=None,
                  row_height=None, font=None, justification='right', text_color=None, background_color=None,
                  alternating_row_color=None, selected_row_colors=(None, None), header_text_color=None, header_background_color=None, header_font=None, header_border_width=None, header_relief=None,
                  row_colors=None, vertical_scroll_only=True, hide_vertical_scroll=False, border_width=None,
@@ -8464,6 +8807,8 @@ class Table(Element):
         :type visible_column_map:       List[bool]
         :param col_widths:              Number of characters that each column will occupy
         :type col_widths:               List[int]
+        :param cols_justification:      Justification for EACH column. Is a list of strings with the value 'l', 'r', 'c' that indicates how the column will be justified. Either no columns should be set, or have to have one for every colun
+        :type cols_justification:       List[str] or Tuple[str] or None
         :param def_col_width:           Default column width in characters
         :type def_col_width:            (int)
         :param auto_size_columns:       if True columns will be sized automatically
@@ -8474,6 +8819,8 @@ class Table(Element):
         :type select_mode:              (enum)
         :param display_row_numbers:     if True, the first column of the table will be the row #
         :type display_row_numbers:      (bool)
+        :param starting_row_number:     The row number to use for the first row. All following rows will be based on this starting value. Default is 0.
+        :type starting_row_number:      (int)
         :param num_rows:                The number of rows of the table to display at a time
         :type num_rows:                 (int)
         :param row_height:              height of a single row in pixels
@@ -8561,6 +8908,7 @@ class Table(Element):
         self.ColumnHeadings = headings
         self.ColumnsToDisplay = visible_column_map
         self.ColumnWidths = col_widths
+        self.cols_justification = cols_justification
         self.MaxColumnWidth = max_col_width
         self.DefaultColumnWidth = def_col_width
         self.AutoSizeColumns = auto_size_columns
@@ -8582,7 +8930,7 @@ class Table(Element):
         self.SelectedRows = []
         self.ChangeSubmits = change_submits or enable_events
         self.BindReturnKey = bind_return_key
-        self.StartingRowNumber = 0  # When displaying row numbers, where to start
+        self.StartingRowNumber = starting_row_number  # When displaying row numbers, where to start
         self.RowHeaderText = 'Row'
         self.enable_click_events = enable_click_events
         self.right_click_selects = right_click_selects
@@ -8590,6 +8938,8 @@ class Table(Element):
         self.HeaderBorderWidth = header_border_width
         self.BorderWidth = border_width
         self.HeaderRelief = header_relief
+        self.table_ttk_style_name = None        # the ttk style name for the Table itself
+        self.ttk_style = None                   # the ttk style for the Table
         if selected_row_colors == (None, None):
             # selected_row_colors = DEFAULT_TABLE_AND_TREE_SELECTED_ROW_COLORS
             selected_row_colors = theme_button_color()
@@ -8639,6 +8989,10 @@ class Table(Element):
         :type row_colors:             List[Tuple[int, str] | Tuple[Int, str, str]]
         """
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
+            return
+
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Table.update - The window was closed')
             return
 
         if values is not None:
@@ -9074,6 +9428,10 @@ class Tree(Element):
         if not self._widget_was_created():  # if widget hasn't been created yet, then don't allow
             return
 
+        if self._this_elements_window_closed():
+            _error_popup_with_traceback('Error in Tree.update - The window was closed')
+            return
+
         if values is not None:
             children = self.TKTreeview.get_children()
             for i in children:
@@ -9331,6 +9689,11 @@ class Window:
     _counter_for_ttk_widgets = 0
     _floating_debug_window_build_needed = False
     _main_debug_window_build_needed = False
+    # rereouted stdout info. List of tuples (window, element, previous destination)
+    _rerouted_stdout_stack = []             # type: List[Tuple[Window, Element]]
+    _rerouted_stderr_stack = []             # type: List[Tuple[Window, Element]]
+    _original_stdout = None
+    _original_stderr = None
 
     def __init__(self, title, layout=None, default_element_size=None,
                  default_button_element_size=(None, None),
@@ -9341,10 +9704,9 @@ class Window:
                  alpha_channel=None, return_keyboard_events=False, use_default_focus=True, text_justification=None,
                  no_titlebar=False, grab_anywhere=False, grab_anywhere_using_control=True, keep_on_top=None, resizable=False, disable_close=False,
                  disable_minimize=False, right_click_menu=None, transparent_color=None, debugger_enabled=True,
-                 right_click_menu_background_color=None, right_click_menu_text_color=None, right_click_menu_disabled_text_color=None,
-                 right_click_menu_selected_colors=(None, None),
+                 right_click_menu_background_color=None, right_click_menu_text_color=None, right_click_menu_disabled_text_color=None, right_click_menu_selected_colors=(None, None),
                  right_click_menu_font=None, right_click_menu_tearoff=False,
-                 finalize=False, element_justification='left', ttk_theme=None, use_ttk_buttons=None, modal=False, enable_close_attempted_event=False,
+                 finalize=False, element_justification='left', ttk_theme=None, use_ttk_buttons=None, modal=False, enable_close_attempted_event=False, enable_window_config_events=False,
                  titlebar_background_color=None, titlebar_text_color=None, titlebar_font=None, titlebar_icon=None,
                  use_custom_titlebar=None, scaling=None,
                  sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None, sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None,
@@ -9364,8 +9726,8 @@ class Window:
         :type auto_size_buttons:                     (bool)
         :param relative_location:                    (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
         :type relative_location:                     (int, int)
-        :param location:                             (x,y) location, in pixels, to locate the upper left corner of the window on the screen. Default is to center on screen.
-        :type location:                              (int, int)
+        :param location:                             (x,y) location, in pixels, to locate the upper left corner of the window on the screen. Default is to center on screen. None will not set any location meaning the OS will decide
+        :type location:                              (int, int) or (None, None) or None
         :param size:                                 (width, height) size in pixels for this window. Normally the window is autosized to fit contents, not set to an absolute size by the user. Try not to set this value. You risk, the contents being cut off, etc. Let the layout determine the window size instead
         :type size:                                  (int, int)
         :param element_padding:                      Default amount of padding to put around elements in window (left/right, top/bottom) or ((left, right), (top, bottom)), or an int. If an int, then it's converted into a tuple (int, int)
@@ -9442,6 +9804,8 @@ class Window:
         :type modal:                                 (bool)
         :param enable_close_attempted_event:         If True then the window will not close when "X" clicked. Instead an event WINDOW_CLOSE_ATTEMPTED_EVENT if returned from window.read
         :type enable_close_attempted_event:          (bool)
+        :param enable_window_config_events:          If True then window configuration events (resizing or moving the window) will return WINDOW_CONFIG_EVENT from window.read. Note you will get several when Window is created.
+        :type enable_window_config_events:           (bool)
         :param titlebar_background_color:            If custom titlebar indicated by use_custom_titlebar, then use this as background color
         :type titlebar_background_color:             (str | None)
         :param titlebar_text_color:                  If custom titlebar indicated by use_custom_titlebar, then use this as text color
@@ -9481,7 +9845,10 @@ class Window:
         self.DefaultElementSize = default_element_size if default_element_size is not None else DEFAULT_ELEMENT_SIZE
         self.DefaultButtonElementSize = default_button_element_size if default_button_element_size != (
             None, None) else DEFAULT_BUTTON_ELEMENT_SIZE
-        self.Location = location
+        if DEFAULT_WINDOW_LOCATION != (None, None) and location == (None, None):
+            self.Location = DEFAULT_WINDOW_LOCATION
+        else:
+            self.Location = location
         self.RelativeLoction = relative_location
         self.ButtonColor = button_color_to_tuple(button_color)
         self.BackgroundColor = background_color if background_color else DEFAULT_BACKGROUND_COLOR
@@ -9583,6 +9950,7 @@ class Window:
         self.auto_close_timer_needs_starting = False
         self.finalize_in_progress = False
         self.close_destroys_window = not enable_close_attempted_event if enable_close_attempted_event is not None else None
+        self.enable_window_config_events = enable_window_config_events
         self.override_custom_titlebar = False
         self.use_custom_titlebar = use_custom_titlebar or theme_use_custom_titlebar()
         self.titlebar_background_color = titlebar_background_color
@@ -9811,7 +10179,7 @@ class Window:
         :return:          (Window) self so could be chained
         :rtype:           (Window)
         """
-        column = Column(rows, pad=(0, 0))
+        column = Column(rows, pad=(0, 0), background_color=container.BackgroundColor)
         if self == container:
             frame = self.TKroot
         elif isinstance(container.Widget, TkScrollableFrame):
@@ -10424,7 +10792,7 @@ class Window:
             closest_key = self._find_closest_key(key)
             if not silent_on_error:
                 print('** Error looking up your element using the key: ', key, 'The closest matching key: ', closest_key)
-                _error_popup_with_traceback('Key Error', 'Problem finding your key ' + str(key), 'Closest match = ' + str(closest_key))
+                _error_popup_with_traceback('Key Error', 'Problem finding your key ' + str(key), 'Closest match = ' + str(closest_key), emoji=EMOJI_BASE64_KEY)
                 if not SUPPRESS_RAISE_KEY_ERRORS:
                     raise KeyError(key)
                 element = ErrorElement(key=key)
@@ -10658,8 +11026,12 @@ class Window:
         """
         if not self._is_window_created('tried Window.minimize'):
             return
-        self.TKroot.iconify()
+        if self.use_custom_titlebar is True:
+            self._custom_titlebar_minimize()
+        else:
+            self.TKroot.iconify()
         self.maximized = False
+
 
     def maximize(self):
         """
@@ -10684,14 +11056,17 @@ class Window:
         """
         if not self._is_window_created('tried Window.normal'):
             return
-        if self.TKroot.state() == 'iconic':
-            self.TKroot.deiconify()
+        if self.use_custom_titlebar:
+            self._custom_titlebar_restore()
         else:
-            if not running_linux():
-                self.TKroot.state('normal')
+            if self.TKroot.state() == 'iconic':
+                self.TKroot.deiconify()
             else:
-                self.TKroot.attributes('-fullscreen', False)
-        self.maximized = False
+                if not running_linux():
+                    self.TKroot.state('normal')
+                else:
+                    self.TKroot.attributes('-fullscreen', False)
+            self.maximized = False
 
 
     def _StartMoveUsingControlKey(self, event):
@@ -10793,23 +11168,37 @@ class Window:
         print('Focus event = {} window = {}'.format(event, self.Title))
 
     def _config_callback(self, event):
-        print('Config  event = {} window = {}'.format(event, self.Title))
-        #
-        # try:
-        #     deltax = event.x - self.TKroot.x
-        #     deltay = event.y - self.TKroot.y
-        #     x = self.TKroot.winfo_x() + deltax
-        #     y = self.TKroot.winfo_y() + deltay
-        #     self.TKroot.geometry("+%s+%s" % (x, y))  # this is what really moves the window
-        #     # print('{},{}'.format(x,y))
-        #
-        #     if Window._move_all_windows:
-        #         for window in Window._active_windows:
-        #             x = window.TKroot.winfo_x() + deltax
-        #             y = window.TKroot.winfo_y() + deltay
-        #             window.TKroot.geometry("+%s+%s" % (x, y))  # this is what really moves the window
-        # except Exception as e:
-        #     print('on motion error {}'.format(e), 'title = {}'.format(window.Title))
+        """
+        Called when a config event happens for the window
+
+        :param event:            From tkinter and is not used
+        :type event:             Any
+        """
+        self.LastButtonClicked = WINDOW_CONFIG_EVENT
+        self.FormRemainedOpen = True
+        self.user_bind_event = event
+        _exit_mainloop(self)
+
+
+    def _move_callback(self, event):
+        """
+        Called when a control + arrow key is pressed.
+        This is a built-in window positioning key sequence
+
+        :param event:            From tkinter and is not used
+        :type event:             Any
+        """
+        if not self._is_window_created('Tried to move window using arrow keys'):
+            return
+        x,y = self.current_location()
+        if event.keysym == 'Up':
+            self.move(x, y-1)
+        elif event.keysym == 'Down':
+            self.move(x, y+1)
+        elif event.keysym == 'Left':
+            self.move(x-1, y)
+        elif event.keysym == 'Right':
+            self.move(x+1, y)
 
     """
     def _config_callback(self, event):
@@ -10898,6 +11287,7 @@ class Window:
         :parm without_event: if True, then do not cause an event to be generated, "silently" close the window
         :type without_event: (bool)
         """
+
         try:
             self.TKroot.update()
         except:
@@ -10916,6 +11306,7 @@ class Window:
         Closes window.  Users can safely call even if window has been destroyed.   Should always call when done with
         a window so that resources are properly freed up within your thread.
         """
+
         try:
             del Window._active_windows[self]  # will only be in the list if window was explicitly finalized
         except:
@@ -10946,16 +11337,28 @@ class Window:
         self.Rows = None
         self.TKroot = None
 
-    def is_closed(self):
+        self._restore_stdout()
+        self._restore_stderr()
+
+
+
+    def is_closed(self, quick_check=None):
         """
         Returns True is the window is maybe closed.  Can be difficult to tell sometimes
-
-        :return:    True if the window was closed or destroyed
-        :rtype:     (bool)
+        NOTE - the call to TKroot.update was taking over 500 ms sometimes so added a flag to bypass the lengthy call.
+        :param quick_quick: If True, then don't use the root.update call, only check the flags
+        :type quick_check:  bool
+        :return:            True if the window was closed or destroyed
+        :rtype:             (bool)
         """
 
         if self.TKrootDestroyed or self.TKroot is None:
             return True
+
+        # if performing a quick check only, then skip calling tkinter for performance reasons
+        if quick_check is True:
+            return False
+
         # see if can do an update... if not, then it's been destroyed
         try:
             rc = self.TKroot.update()
@@ -10991,6 +11394,8 @@ class Window:
                 self.LastButtonClicked = WINDOW_CLOSE_ATTEMPTED_EVENT
         if self.close_destroys_window:
             self.RootNeedsDestroying = True
+        self._restore_stdout()
+        self._restore_stderr()
 
     def disable(self):
         """
@@ -11028,6 +11433,14 @@ class Window:
         if self._Hidden:
             self.TKroot.deiconify()
             self._Hidden = False
+
+    def is_hidden(self):
+        """
+            Returns True if the window is currently hidden
+        :return:    Returns True if the window is currently hidden
+        :rtype:     bool
+        """
+        return self._Hidden
 
     def disappear(self):
         """
@@ -11145,24 +11558,31 @@ class Window:
 
 
 
-    def current_location(self, more_accurate=False):
+    def current_location(self, more_accurate=False, without_titlebar=False):
         """
         Get the current location of the window's top left corner.
         Sometimes, depending on the environment, the value returned does not include the titlebar,etc
         A new option, more_accurate, can be used to get the theoretical upper leftmost corner of the window.
         The titlebar and menubar are crated by the OS. It gets really confusing when running in a webpage (repl, trinket)
         Thus, the values can appear top be "off" due to the sometimes unpredictable way the location is calculated.
+        If without_titlebar is set then the location of the root x,y is used which should not include the titlebar but
+            may be OS dependent.
 
-        :param more_accurate: If True, will use the window's geometry to get the topmost location with titlebar, menubar taken into account
-        :type more_accurate:  (bool)
-        :return:              The x and y location in tuple form (x,y)
-        :rtype:               Tuple[(int | None), (int | None)]
+        :param more_accurate:    If True, will use the window's geometry to get the topmost location with titlebar, menubar taken into account
+        :type more_accurate:     (bool)
+        :param without_titlebar: If True, return location of top left of main window area without the titlebar (may be OS dependent?)
+        :type without_titlebar:  (bool)
+        :return:                 The x and y location in tuple form (x,y)
+        :rtype:                  Tuple[(int | None), (int | None)]
         """
+
 
         if not self._is_window_created('tried Window.current_location'):
             return (None, None)
         try:
-            if more_accurate:
+            if without_titlebar is True:
+                x, y = self.TKroot.winfo_rootx(), self.TKroot.winfo_rooty()
+            elif more_accurate:
                 geometry = self.TKroot.geometry()
                 location = geometry[geometry.find('+') + 1:].split('+')
                 x, y = int(location[0]), int(location[1])
@@ -11172,6 +11592,7 @@ class Window:
             warnings.warn('Error in Window.current_location. Trouble getting x,y location\n' + str(e), UserWarning)
             x, y = (None, None)
         return (x,y)
+
 
     def current_size_accurate(self):
         """
@@ -11221,6 +11642,25 @@ class Window:
         except:
             pass
 
+
+    def set_size(self, size):
+        """
+        Changes the size of the window, if possible. You can also use the Window.size prooerty
+        to set/get the size.
+
+        :param size: (width, height) of the desired window size
+        :type size:  (int, int)
+        """
+        if not self._is_window_created('Tried to change the size of the window prior to creation.'):
+            return
+        try:
+            self.TKroot.geometry("%sx%s" % (size[0], size[1]))
+            self.TKroot.update_idletasks()
+        except:
+            pass
+
+
+
     def set_min_size(self, size):
         """
         Changes the minimum size of the window. Note Window must be read or finalized first.
@@ -11232,6 +11672,25 @@ class Window:
             return
         self.TKroot.minsize(size[0], size[1])
         self.TKroot.update_idletasks()
+
+
+    def set_resizable(self, x_axis_enable, y_axis_enable):
+        """
+        Changes if a window can be resized in either the X or the Y direction.
+        Note Window must be read or finalized first.
+
+        :param x_axis_enable: If True, the window can be changed in the X-axis direction. If False, it cannot
+        :type x_axis_enable: (bool)
+        :param y_axis_enable: If True, the window can be changed in the Y-axis direction. If False, it cannot
+        :type y_axis_enable: (bool)
+        """
+
+        if not self._is_window_created('tried Window.set_resixable'):
+            return
+        try:
+            self.TKroot.resizable(x_axis_enable, y_axis_enable)
+        except Exception as e:
+            _error_popup_with_traceback('Window.set_resizable - tkinter reported error', e)
 
     def visibility_changed(self):
         """
@@ -11336,6 +11795,22 @@ class Window:
             # _error_popup_with_traceback('Window.bind error', e)
         self.user_bind_dict[bind_string] = key
 
+
+    def unbind(self, bind_string):
+        """
+        Used to remove tkinter events to a Window.
+        This implementation removes ALL of the binds of the bind_string from the Window.  If there
+        are multiple binds for the Window itself, they will all be removed.  This can be extended later if there
+        is a need.
+        :param bind_string: The string tkinter expected in its bind function
+        :type bind_string:  (str)
+        """
+        if not self._is_window_created('tried Window.unbind'):
+            return
+        self.TKroot.unbind(bind_string)
+
+
+
     def _callback_main_debugger_window_create_keystroke(self, event):
         """
         Called when user presses the key that creates the main debugger window
@@ -11391,6 +11866,12 @@ class Window:
         """
         if not self._is_window_created('tried Window.set_title'):
             return
+        if self._has_custom_titlebar:
+            try:    # just in case something goes badly, don't crash
+                self.find_element(TITLEBAR_TEXT_KEY).update(title)
+            except:
+                pass
+        # even with custom titlebar, set the main window's title too so it'll match when minimized
         self.TKroot.wm_title(str(title))
 
     def make_modal(self):
@@ -11680,6 +12161,132 @@ class Window:
         """
         return self.AllKeysDict
 
+
+    def key_is_good(self, key):
+        """
+        Checks to see if this is a good key for this window
+        If there's an element with the key provided, then True is returned
+        :param key:     The key to check
+        :type key:      str | int | tuple | object
+        :return:        True if key is an element in this window
+        :rtype:         bool
+        """
+        if key in self.key_dict:
+            return True
+        return False
+
+    def get_scaling(self):
+        """
+        Returns the current scaling value set for this window
+
+        :return:    Scaling according to tkinter. Returns DEFAULT_SCALING if error
+        :rtype:     float
+        """
+
+        if not self._is_window_created('Tried Window.set_scaling'):
+            return DEFAULT_SCALING
+        try:
+            scaling = self.TKroot.tk.call('tk', 'scaling')
+        except Exception as e:
+            if not SUPPRESS_ERROR_POPUPS:
+                _error_popup_with_traceback('Window.get_scaling() - tkinter reported error', e)
+            scaling = DEFAULT_SCALING
+
+        return scaling
+
+
+    def _custom_titlebar_restore_callback(self, event):
+        self._custom_titlebar_restore()
+
+
+    def _custom_titlebar_restore(self):
+        if running_linux():
+            # if self._skip_first_restore_callback:
+            #     self._skip_first_restore_callback = False
+            #     return
+            self.TKroot.unbind('<Button-1>')
+            self.TKroot.deiconify()
+
+            # self.ParentForm.TKroot.wm_overrideredirect(True)
+            self.TKroot.wm_attributes("-type", 'dock')
+
+        else:
+            self.TKroot.unbind('<Expose>')
+            self.TKroot.wm_overrideredirect(True)
+        if self.TKroot.state() == 'iconic':
+            self.TKroot.deiconify()
+        else:
+            if not running_linux():
+                self.TKroot.state('normal')
+            else:
+                self.TKroot.attributes('-fullscreen', False)
+        self.maximized = False
+
+
+    def _custom_titlebar_minimize(self):
+        if running_linux():
+            self.TKroot.wm_attributes("-type", "normal")
+            # self.ParentForm.TKroot.state('icon')
+            # return
+            # self.ParentForm.maximize()
+            self.TKroot.wm_overrideredirect(False)
+            # self.ParentForm.minimize()
+            # self.ParentForm.TKroot.wm_overrideredirect(False)
+            self.TKroot.iconify()
+            # self._skip_first_restore_callback = True
+            self.TKroot.bind('<Button-1>', self._custom_titlebar_restore_callback)
+        else:
+            self.TKroot.wm_overrideredirect(False)
+            self.TKroot.iconify()
+            self.TKroot.bind('<Expose>', self._custom_titlebar_restore_callback)
+
+
+    def _custom_titlebar_callback(self, key):
+        """
+        One of the Custom Titlbar buttons was clicked
+        :param key:
+        :return:
+        """
+        if key == TITLEBAR_MINIMIZE_KEY:
+            self._custom_titlebar_minimize()
+        elif key == TITLEBAR_MAXIMIZE_KEY:
+            if self.maximized:
+                self.normal()
+            else:
+                self.maximize()
+        elif key == TITLEBAR_CLOSE_KEY:
+            self._OnClosingCallback()
+
+
+    @classmethod
+    def _restore_stdout(cls):
+        for item in cls._rerouted_stdout_stack:
+            (window, element) = item   # type: (Window, Element)
+            if not window.is_closed():
+                sys.stdout = element
+                break
+        cls._rerouted_stdout_stack = [item for item in cls._rerouted_stdout_stack if not item[0].is_closed()]
+        if len(cls._rerouted_stdout_stack) == 0 and cls._original_stdout is not None:
+            sys.stdout = cls._original_stdout
+        # print('Restored stdout... new stack:',  [item[0].Title for item in cls._rerouted_stdout_stack ])
+
+
+    @classmethod
+    def _restore_stderr(cls):
+        for item in cls._rerouted_stderr_stack:
+            (window, element) = item   # type: (Window, Element)
+            if not window.is_closed():
+                sys.stderr = element
+                break
+        cls._rerouted_stderr_stack = [item for item in cls._rerouted_stderr_stack if not item[0].is_closed()]
+        if len(cls._rerouted_stderr_stack) == 0 and cls._original_stderr is not None:
+            sys.stderr = cls._original_stderr
+        # print('Restored stderr... new stack:',  [item[0].Title for item in cls._rerouted_stderr_stack ])
+
+
+
+
+
     # def __enter__(self):
     #     """
     #     WAS used with context managers which are no longer needed nor advised.  It is here for legacy support and
@@ -11697,6 +12304,7 @@ class Window:
 
         :param key: The key to find
         :type key:  str | int | tuple | object
+        :return:    The element found
         :rtype:     Element | Input | Combo | OptionMenu | Listbox | Radio | Checkbox | Spin | Multiline | Text | StatusBar | Output | Button | ButtonMenu | ProgressBar | Image | Canvas | Graph | Frame | VerticalSeparator | HorizontalSeparator | Tab | TabGroup | Slider | Column | Pane | Menu | Table | Tree | ErrorElement | None
         """
 
@@ -11708,7 +12316,7 @@ class Window:
         window() == window.read()
         window(timeout=50) == window.read(timeout=50)
 
-        :return: The famous event, values that Read returns.
+        :return: The famous event, values that read returns.
         :rtype:  Tuple[Any, Dict[Any, Any]]
         """
         return self.read(*args, **kwargs)
@@ -12101,14 +12709,14 @@ class SystemTray:
         """
 
         if isinstance(time, tuple):
-            fade_duraction, display_duration = time
+            fade_duration, display_duration = time
         else:
             fade_duration = SYSTEM_TRAY_MESSAGE_FADE_IN_DURATION
             display_duration = time
 
         user_icon = data_base64 or filename or data or messageicon
 
-        event = self.notify(title, message, icon=user_icon, fade_in_duration=fade_duraction, display_duration_in_ms=display_duration)
+        event = self.notify(title, message, icon=user_icon, fade_in_duration=fade_duration, display_duration_in_ms=display_duration)
         self.last_message_event = event
         return event
 
@@ -12269,6 +12877,11 @@ def pin(elem, vertical_alignment=None, shrink=True, expand_x=None, expand_y=None
     Pin's an element provided into a layout so that when it's made invisible and visible again, it will
      be in the correct place.  Otherwise it will be placed at the end of its containing window/column.
 
+     The element you want to pin is the element that you'll be making visibile/invisible.
+
+    The pin helper function also causes containers to shrink to fit the contents correct after something inside
+     has changed visiblity.  Note that setting a hardcoded size on your window can impact this ability to shrink.
+
     :param elem:               the element to put into the layout
     :type elem:                Element
     :param vertical_alignment: Aligns elements vertically. 'top', 'center', 'bottom'. Can be shortened to 't', 'c', 'b'
@@ -12289,64 +12902,72 @@ def pin(elem, vertical_alignment=None, shrink=True, expand_x=None, expand_y=None
         return Column([[elem]], pad=(0, 0), vertical_alignment=vertical_alignment, expand_x=expand_x, expand_y=expand_y)
 
 
-def vtop(elem_or_row, expand_x=None, expand_y=None):
+def vtop(elem_or_row, expand_x=None, expand_y=None, background_color=None):
     """
     Align an element or a row of elements to the top of the row that contains it
 
-    :param elem_or_row: the element or row of elements
-    :type elem_or_row:  Element | List[Element] | Tuple[Element]
-    :param expand_x:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_x:     (bool)
-    :param expand_y:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_y:     (bool)
-    :return:            A column element containing the provided element aligned to the top or list of elements (a row)
-    :rtype:             Column | List[Column]
+    :param elem_or_row:      the element or row of elements
+    :type elem_or_row:       Element | List[Element] | Tuple[Element]
+    :param expand_x:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_x:          (bool)
+    :param expand_y:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_y:          (bool)
+    :param background_color: Background color for container that is used by vtop to do the alignment
+    :type background_color:  str | None
+    :return:                 A column element containing the provided element aligned to the top or list of elements (a row)
+    :rtype:                  Column | List[Column]
     """
 
+
     if isinstance(elem_or_row, list) or isinstance(elem_or_row, tuple):
-        return [Column([[e]], pad=(0, 0), vertical_alignment='top', expand_x=expand_x, expand_y=expand_y) for e in elem_or_row]
+        return [Column([[e]], pad=(0, 0), vertical_alignment='top', expand_x=expand_x, expand_y=expand_y, background_color=background_color) for e in elem_or_row]
 
-    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='top', expand_x=expand_x, expand_y=expand_y)
+    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='top', expand_x=expand_x, expand_y=expand_y, background_color=background_color)
 
 
-def vcenter(elem_or_row, expand_x=None, expand_y=None):
+def vcenter(elem_or_row, expand_x=None, expand_y=None, background_color=None):
     """
     Align an element or a row of elements to the center of the row that contains it
 
-    :param elem_or_row: the element or row of elements
-    :type elem_or_row:  Element | List[Element] | Tuple[Element]
-    :param expand_x:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_x:     (bool)
-    :param expand_y:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_y:     (bool)
-    :return:            A column element containing the provided element aligned to the center or list of elements (a row)
-    :rtype:             Column | List[Column]
+    :param elem_or_row:      the element or row of elements
+    :type elem_or_row:       Element | List[Element] | Tuple[Element]
+    :param expand_x:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_x:          (bool)
+    :param expand_y:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_y:          (bool)
+    :param background_color: Background color for container that is used by vcenter to do the alignment
+    :type background_color:  str | None
+    :return:                 A column element containing the provided element aligned to the center or list of elements (a row)
+    :rtype:                  Column | List[Column]
     """
 
     if isinstance(elem_or_row, list) or isinstance(elem_or_row, tuple):
-        return [Column([[e]], pad=(0, 0), vertical_alignment='center') for e in elem_or_row]
+        return [Column([[e]], pad=(0, 0), vertical_alignment='center',expand_x=expand_x, expand_y=expand_y, background_color=background_color) for e in elem_or_row]
 
-    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='center')
+    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='center', expand_x=expand_x, expand_y=expand_y,background_color=background_color)
 
 
-def vbottom(elem_or_row, expand_x=None, expand_y=None):
+def vbottom(elem_or_row, expand_x=None, expand_y=None, background_color=None):
     """
     Align an element or a row of elements to the bottom of the row that contains it
 
-    :param elem_or_row: the element or row of elements
-    :type elem_or_row:  Element | List[Element] | Tuple[Element]
-    :param expand_x:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_x:     (bool)
-    :param expand_y:    If True/False the value will be passed to the Column Elements used to make this feature
-    :type expand_y:     (bool)
-    :return:            A column element containing the provided element aligned to the bottom or list of elements (a row)
-    :rtype:             Column | List[Column]
+    :param elem_or_row:      the element or row of elements
+    :type elem_or_row:       Element | List[Element] | Tuple[Element]
+    :param expand_x:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_x:          (bool)
+    :param expand_y:         If True/False the value will be passed to the Column Elements used to make this feature
+    :type expand_y:          (bool)
+    :param background_color: Background color for container that is used by vcenter to do the alignment
+    :type background_color:  str | None
+    :return:                 A column element containing the provided element aligned to the bottom or list of elements (a row)
+    :rtype:                  Column | List[Column]
     """
 
-    if isinstance(elem_or_row, list) or isinstance(elem_or_row, tuple):
-        return [Column([[e]], pad=(0, 0), vertical_alignment='bottom') for e in elem_or_row]
 
-    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='bottom')
+    if isinstance(elem_or_row, list) or isinstance(elem_or_row, tuple):
+        return [Column([[e]], pad=(0, 0), vertical_alignment='bottom', expand_x=expand_x, expand_y=expand_y, background_color=background_color) for e in elem_or_row]
+
+    return Column([[elem_or_row]], pad=(0, 0), vertical_alignment='bottom', expand_x=expand_x, expand_y=expand_y,background_color=background_color)
 
 
 def Titlebar(title='', icon=None, text_color=None, background_color=None, font=None, key=None, k=None):
@@ -12403,7 +13024,7 @@ def Titlebar(title='', icon=None, text_color=None, background_color=None, font=N
     else:
         icon_and_text_portion = [Image(data=DEFAULT_BASE64_ICON_16_BY_16, background_color=bc, key=TITLEBAR_IMAGE_KEY)]
 
-    icon_and_text_portion += [T(title, text_color=tc, background_color=bc, font=font, grab=True)]
+    icon_and_text_portion += [T(title, text_color=tc, background_color=bc, font=font, grab=True, key=TITLEBAR_TEXT_KEY)]
 
     return Column([[Column([icon_and_text_portion], pad=(0, 0), background_color=bc),
                     Column([[T(SYMBOL_TITLEBAR_MINIMIZE, text_color=tc, background_color=bc, enable_events=True, font=font, key=TITLEBAR_MINIMIZE_KEY),
@@ -12479,7 +13100,7 @@ def MenubarCustom(menu_definition, disabled_text_color=None, bar_font=None, font
 # -------------------------  FOLDER BROWSE Element lazy function  ------------------------- #
 def FolderBrowse(button_text='Browse', target=(ThisRow, -1), initial_folder=None, tooltip=None, size=(None, None), s=(None, None),
                  auto_size_button=None, button_color=None, disabled=False, change_submits=False, enable_events=False,
-                 font=None, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+                 font=None, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
     :param button_text:      text in the button (Default value = 'Browse')
     :type button_text:       (str)
@@ -12517,6 +13138,10 @@ def FolderBrowse(button_text='Browse', target=(ThisRow, -1), initial_folder=None
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 The Button created
     :rtype:                  (Button)
     """
@@ -12524,21 +13149,21 @@ def FolderBrowse(button_text='Browse', target=(ThisRow, -1), initial_folder=None
     return Button(button_text=button_text, button_type=BUTTON_TYPE_BROWSE_FOLDER, target=target,
                   initial_folder=initial_folder, tooltip=tooltip, size=size, s=s, auto_size_button=auto_size_button,
                   disabled=disabled, button_color=button_color, change_submits=change_submits,
-                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  FILE BROWSE Element lazy function  ------------------------- #
 def FileBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPES_ALL_FILES, initial_folder=None,
                tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None, change_submits=False,
                enable_events=False, font=None, disabled=False,
-               pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+               pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Browse')
     :type button_text:       (str)
     :param target:           key or (row,col) target for the button (Default value = (ThisRow, -1))
     :type target:            str | (int, int)
-    :param file_types:       filter file types Default value = (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+    :param file_types:       filter file types Default value = (("ALL Files", "*.* *"),).
     :type file_types:        Tuple[(str, str), ...]
     :param initial_folder:   starting path for folders and files
     :type initial_folder:
@@ -12572,20 +13197,24 @@ def FileBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPES
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_BROWSE_FILE, target=target, file_types=file_types,
                   initial_folder=initial_folder, tooltip=tooltip, size=size, s=s, auto_size_button=auto_size_button,
                   change_submits=change_submits, enable_events=enable_events, disabled=disabled,
-                  button_color=button_color, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  button_color=button_color, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  FILES BROWSE Element (Multiple file selection) lazy function  ------------------------- #
 def FilesBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPES_ALL_FILES, disabled=False,
                 initial_folder=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None,
                 change_submits=False, enable_events=False,
-                font=None, pad=None, p=None, key=None, k=None, visible=True, files_delimiter=BROWSE_FILES_DELIMITER, metadata=None):
+                font=None, pad=None, p=None, key=None, k=None, visible=True, files_delimiter=BROWSE_FILES_DELIMITER, metadata=None, expand_x=False, expand_y=False):
     """
     Allows browsing of multiple files. File list is returned as a single list with the delimiter defined using the files_delimiter parameter.
 
@@ -12593,7 +13222,7 @@ def FilesBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPE
     :type button_text:       (str)
     :param target:           key or (row,col) target for the button (Default value = (ThisRow, -1))
     :type target:            str | (int, int)
-    :param file_types:       Default value = (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+    :param file_types:       Default value = (("ALL Files", "*.* *"),).
     :type file_types:        Tuple[(str, str), ...]
     :param disabled:         set disable state for element (Default = False)
     :type disabled:          (bool)
@@ -12629,13 +13258,17 @@ def FilesBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPE
     :type files_delimiter:   str
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     button = Button(button_text=button_text, button_type=BUTTON_TYPE_BROWSE_FILES, target=target, file_types=file_types,
                     initial_folder=initial_folder, change_submits=change_submits, enable_events=enable_events,
                     tooltip=tooltip, size=size, s=s, auto_size_button=auto_size_button,
-                    disabled=disabled, button_color=button_color, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                    disabled=disabled, button_color=button_color, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
     button._files_delimiter = files_delimiter
     return button
 
@@ -12644,14 +13277,14 @@ def FilesBrowse(button_text='Browse', target=(ThisRow, -1), file_types=FILE_TYPE
 def FileSaveAs(button_text='Save As...', target=(ThisRow, -1), file_types=FILE_TYPES_ALL_FILES, initial_folder=None,
                default_extension='', disabled=False, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None,
                change_submits=False, enable_events=False, font=None,
-               pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+               pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:       text in the button (Default value = 'Save As...')
     :type button_text:        (str)
     :param target:            key or (row,col) target for the button (Default value = (ThisRow, -1))
     :type target:             str | (int, int)
-    :param file_types:        Default value = (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+    :param file_types:        Default value = (("ALL Files", "*.* *"),).
     :type file_types:         Tuple[(str, str), ...]
     :param default_extension: If no extension entered by user, add this to filename (only used in saveas dialogs)
     :type default_extension:  (str)
@@ -12687,27 +13320,30 @@ def FileSaveAs(button_text='Save As...', target=(ThisRow, -1), file_types=FILE_T
     :type visible:            (bool)
     :param metadata:          Anything you want to store along with this button
     :type metadata:           (Any)
-    :return:                  returns a button
+    :param expand_x:          If True Element will expand in the Horizontal directions
+    :type expand_x:           (bool)
+    :param expand_y:          If True Element will expand in the Vertical directions
+    :type expand_y:           (bool)        :return:                  returns a button
     :rtype:                   (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_SAVEAS_FILE, target=target, file_types=file_types,
                   initial_folder=initial_folder, default_extension=default_extension, tooltip=tooltip, size=size, s=s, disabled=disabled,
                   auto_size_button=auto_size_button, button_color=button_color, change_submits=change_submits,
-                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  SAVE AS Element lazy function  ------------------------- #
 def SaveAs(button_text='Save As...', target=(ThisRow, -1), file_types=FILE_TYPES_ALL_FILES, initial_folder=None, default_extension='',
            disabled=False, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None,
            change_submits=False, enable_events=False, font=None,
-           pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+           pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:       text in the button (Default value = 'Save As...')
     :type button_text:        (str)
     :param target:            key or (row,col) target for the button (Default value = (ThisRow, -1))
     :type target:             str | (int, int)
-    :param file_types:        Default value = (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+    :param file_types:        Default value = (("ALL Files", "*.* *"),).
     :type file_types:         Tuple[(str, str), ...]
     :param default_extension: If no extension entered by user, add this to filename (only used in saveas dialogs)
     :type default_extension:  (str)
@@ -12742,18 +13378,22 @@ def SaveAs(button_text='Save As...', target=(ThisRow, -1), file_types=FILE_TYPES
     :type visible:            (bool)
     :param metadata:          Anything you want to store along with this button
     :type metadata:           (Any)
+    :param expand_x:          If True Element will expand in the Horizontal directions
+    :type expand_x:           (bool)
+    :param expand_y:          If True Element will expand in the Vertical directions
+    :type expand_y:           (bool)
     :return:                  returns a button
     :rtype:                   (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_SAVEAS_FILE, target=target, file_types=file_types,
                   initial_folder=initial_folder, default_extension=default_extension, tooltip=tooltip, size=size, s=s, disabled=disabled,
                   auto_size_button=auto_size_button, button_color=button_color, change_submits=change_submits,
-                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  enable_events=enable_events, font=font, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  SAVE BUTTON Element lazy function  ------------------------- #
 def Save(button_text='Save', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, bind_return_key=True,
-         disabled=False, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+         disabled=False, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Save')
@@ -12788,17 +13428,21 @@ def Save(button_text='Save', size=(None, None), s=(None, None), auto_size_button
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  SUBMIT BUTTON Element lazy function  ------------------------- #
 def Submit(button_text='Submit', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False,
-           bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+           bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Submit')
@@ -12833,18 +13477,22 @@ def Submit(button_text='Submit', size=(None, None), s=(None, None), auto_size_bu
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  OPEN BUTTON Element lazy function  ------------------------- #
 # -------------------------  OPEN BUTTON Element lazy function  ------------------------- #
 def Open(button_text='Open', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False,
-         bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+         bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Open')
@@ -12879,17 +13527,21 @@ def Open(button_text='Open', size=(None, None), s=(None, None), auto_size_button
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  OK BUTTON Element lazy function  ------------------------- #
 def OK(button_text='OK', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False,
-       bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+       bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'OK')
@@ -12924,17 +13576,21 @@ def OK(button_text='OK', size=(None, None), s=(None, None), auto_size_button=Non
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  YES BUTTON Element lazy function  ------------------------- #
 def Ok(button_text='Ok', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False,
-       bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+       bind_return_key=True, tooltip=None, font=None, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Ok')
@@ -12969,17 +13625,21 @@ def Ok(button_text='Ok', size=(None, None), s=(None, None), auto_size_button=Non
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  CANCEL BUTTON Element lazy function  ------------------------- #
 def Cancel(button_text='Cancel', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False,
-           tooltip=None, font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+           tooltip=None, font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Cancel')
@@ -13014,17 +13674,21 @@ def Cancel(button_text='Cancel', size=(None, None), s=(None, None), auto_size_bu
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  QUIT BUTTON Element lazy function  ------------------------- #
 def Quit(button_text='Quit', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, tooltip=None,
-         font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+         font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Quit')
@@ -13059,17 +13723,21 @@ def Quit(button_text='Quit', size=(None, None), s=(None, None), auto_size_button
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  Exit BUTTON Element lazy function  ------------------------- #
 def Exit(button_text='Exit', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, tooltip=None,
-         font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+         font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Exit')
@@ -13104,17 +13772,21 @@ def Exit(button_text='Exit', size=(None, None), s=(None, None), auto_size_button
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  YES BUTTON Element lazy function  ------------------------- #
 def Yes(button_text='Yes', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, tooltip=None,
-        font=None, bind_return_key=True, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+        font=None, bind_return_key=True, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Yes')
@@ -13149,17 +13821,21 @@ def Yes(button_text='Yes', size=(None, None), s=(None, None), auto_size_button=N
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  NO BUTTON Element lazy function  ------------------------- #
 def No(button_text='No', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, tooltip=None,
-       font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+       font=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'No')
@@ -13194,17 +13870,21 @@ def No(button_text='No', size=(None, None), s=(None, None), auto_size_button=Non
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  NO BUTTON Element lazy function  ------------------------- #
 def Help(button_text='Help', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, font=None,
-         tooltip=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+         tooltip=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button (Default value = 'Help')
@@ -13239,17 +13919,21 @@ def Help(button_text='Help', size=(None, None), s=(None, None), auto_size_button
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
     return Button(button_text=button_text, button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  NO BUTTON Element lazy function  ------------------------- #
 def Debug(button_text='', size=(None, None), s=(None, None), auto_size_button=None, button_color=None, disabled=False, font=None,
-          tooltip=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+          tooltip=None, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
     This Button has been changed in how it works!!
     Your button has been replaced with a normal button that has the PySimpleGUI Debugger buggon logo on it.
@@ -13287,6 +13971,10 @@ def Debug(button_text='', size=(None, None), s=(None, None), auto_size_button=No
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
@@ -13297,13 +13985,13 @@ def Debug(button_text='', size=(None, None), s=(None, None), auto_size_button=No
     return Button(button_text='', button_type=BUTTON_TYPE_READ_FORM, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=theme_button_color(), font=font, disabled=disabled,
                   bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=user_key, k=k, visible=visible, image_data=PSG_DEBUGGER_LOGO,
-                  image_subsample=2, border_width=0, metadata=metadata)
+                  image_subsample=2, border_width=0, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  GENERIC BUTTON Element lazy function  ------------------------- #
 def SimpleButton(button_text, image_filename=None, image_data=None, image_size=(None, None), image_subsample=None,
                  border_width=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None,
-                 font=None, bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None):
+                 font=None, bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None, expand_x=False, expand_y=False):
     """
     DEPIRCATED
 
@@ -13347,6 +14035,10 @@ def SimpleButton(button_text, image_filename=None, image_data=None, image_size=(
     :type k:                 str | int | tuple | object
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
@@ -13354,13 +14046,13 @@ def SimpleButton(button_text, image_filename=None, image_data=None, image_size=(
                   image_data=image_data, image_size=image_size, image_subsample=image_subsample,
                   border_width=border_width, tooltip=tooltip, disabled=disabled, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  CLOSE BUTTON Element lazy function  ------------------------- #
 def CloseButton(button_text, image_filename=None, image_data=None, image_size=(None, None), image_subsample=None,
                 border_width=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None, font=None,
-                bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None):
+                bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None, expand_x=False, expand_y=False):
     """
     DEPRICATED
 
@@ -13405,6 +14097,10 @@ def CloseButton(button_text, image_filename=None, image_data=None, image_size=(N
     :type k:                 str | int | tuple | object
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
@@ -13412,7 +14108,7 @@ def CloseButton(button_text, image_filename=None, image_data=None, image_size=(N
                   image_data=image_data, image_size=image_size, image_subsample=image_subsample,
                   border_width=border_width, tooltip=tooltip, disabled=disabled, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 CButton = CloseButton
@@ -13421,7 +14117,7 @@ CButton = CloseButton
 # -------------------------  GENERIC BUTTON Element lazy function  ------------------------- #
 def ReadButton(button_text, image_filename=None, image_data=None, image_size=(None, None), image_subsample=None,
                border_width=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None, font=None,
-               bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None):
+               bind_return_key=False, disabled=False, focus=False, pad=None, p=None, key=None, k=None, metadata=None, expand_x=False, expand_y=False):
     """
     :param button_text:      text in the button
     :type button_text:       (str)
@@ -13463,6 +14159,10 @@ def ReadButton(button_text, image_filename=None, image_data=None, image_size=(No
     :type border_width:      (int)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 Button created
     :rtype:                  (Button)
     """
@@ -13471,7 +14171,7 @@ def ReadButton(button_text, image_filename=None, image_data=None, image_size=(No
                   image_data=image_data, image_size=image_size, image_subsample=image_subsample,
                   border_width=border_width, tooltip=tooltip, size=size, s=s, disabled=disabled,
                   auto_size_button=auto_size_button, button_color=button_color, font=font,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 ReadFormButton = ReadButton
@@ -13481,7 +14181,7 @@ RButton = ReadFormButton
 # -------------------------  Realtime BUTTON Element lazy function  ------------------------- #
 def RealtimeButton(button_text, image_filename=None, image_data=None, image_size=(None, None), image_subsample=None,
                    border_width=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None,
-                   font=None, disabled=False, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+                   font=None, disabled=False, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button
@@ -13526,6 +14226,10 @@ def RealtimeButton(button_text, image_filename=None, image_data=None, image_size
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 Button created
     :rtype:                  (Button)
     """
@@ -13533,13 +14237,13 @@ def RealtimeButton(button_text, image_filename=None, image_data=None, image_size
                   image_data=image_data, image_size=image_size, image_subsample=image_subsample,
                   border_width=border_width, tooltip=tooltip, disabled=disabled, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  Dummy BUTTON Element lazy function  ------------------------- #
 def DummyButton(button_text, image_filename=None, image_data=None, image_size=(None, None), image_subsample=None,
                 border_width=None, tooltip=None, size=(None, None), s=(None, None), auto_size_button=None, button_color=None, font=None,
-                disabled=False, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None):
+                disabled=False, bind_return_key=False, focus=False, pad=None, p=None, key=None, k=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
     This is a special type of Button.
 
@@ -13590,6 +14294,10 @@ def DummyButton(button_text, image_filename=None, image_data=None, image_size=(N
     :type visible:           (bool)
     :param metadata:         Anything you want to store along with this button
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
@@ -13597,7 +14305,7 @@ def DummyButton(button_text, image_filename=None, image_data=None, image_size=(N
                   image_data=image_data, image_size=image_size, image_subsample=image_subsample,
                   border_width=border_width, tooltip=tooltip, size=size, s=s, auto_size_button=auto_size_button,
                   button_color=button_color, font=font, disabled=disabled, bind_return_key=bind_return_key, focus=focus,
-                  pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                  pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
 
 
 # -------------------------  Calendar Chooser Button lazy function  ------------------------- #
@@ -13607,7 +14315,7 @@ def CalendarButton(button_text, target=(ThisRow, -1), close_when_date_chosen=Tru
                    button_color=None, disabled=False, font=None, bind_return_key=False, focus=False, pad=None, p=None, enable_events=None,
                    key=None, k=None, visible=True, locale=None, format='%Y-%m-%d %H:%M:%S', begin_at_sunday_plus=0, month_names=None, day_abbreviations=None,
                    title='Choose Date',
-                   no_titlebar=True, location=(None, None), metadata=None):
+                   no_titlebar=True, location=(None, None), metadata=None, expand_x=False, expand_y=False):
     """
     Button that will show a calendar chooser window.  Fills in the target element with result
 
@@ -13673,6 +14381,10 @@ def CalendarButton(button_text, target=(ThisRow, -1), close_when_date_chosen=Tru
     :type visible:                 (bool)
     :param metadata:               Anything you want to store along with this button
     :type metadata:                (Any)
+    :param expand_x:               If True Element will expand in the Horizontal directions
+    :type expand_x:                (bool)
+    :param expand_y:               If True Element will expand in the Vertical directions
+    :type expand_y:                (bool)
     :return:                       returns a button
     :rtype:                        (Button)
     """
@@ -13680,7 +14392,7 @@ def CalendarButton(button_text, target=(ThisRow, -1), close_when_date_chosen=Tru
                     image_filename=image_filename, image_data=image_data, image_size=image_size,
                     image_subsample=image_subsample, border_width=border_width, tooltip=tooltip, size=size, s=s,
                     auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled, enable_events=enable_events,
-                    bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
+                    bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
     button.calendar_close_when_chosen = close_when_date_chosen
     button.calendar_default_date_M_D_Y = default_date_m_d_y
     button.calendar_locale = locale
@@ -13699,7 +14411,7 @@ def CalendarButton(button_text, target=(ThisRow, -1), close_when_date_chosen=Tru
 def ColorChooserButton(button_text, target=(ThisRow, -1), image_filename=None, image_data=None, image_size=(None, None),
                        image_subsample=None, tooltip=None, border_width=None, size=(None, None), s=(None, None), auto_size_button=None,
                        button_color=None, disabled=False, font=None, bind_return_key=False, focus=False, pad=None, p=None,
-                       key=None, k=None, visible=True, metadata=None):
+                       key=None, k=None, default_color=None, visible=True, metadata=None, expand_x=False, expand_y=False):
     """
 
     :param button_text:      text in the button
@@ -13743,19 +14455,26 @@ def ColorChooserButton(button_text, target=(ThisRow, -1), image_filename=None, i
     :type key:               str | int | tuple | object
     :param k:                Same as the Key. You can use either k or key. Which ever is set will be used.
     :type k:                 str | int | tuple | object
+    :param default_color:    Color to be sent to tkinter to use as the default color
+    :type default_color:     str
     :param visible:          set initial visibility state of the Button
     :type visible:           (bool)
     :param metadata:         User metadata that can be set to ANYTHING
     :type metadata:          (Any)
+    :param expand_x:         If True Element will expand in the Horizontal directions
+    :type expand_x:          (bool)
+    :param expand_y:         If True Element will expand in the Vertical directions
+    :type expand_y:          (bool)
     :return:                 returns a button
     :rtype:                  (Button)
     """
-    return Button(button_text=button_text, button_type=BUTTON_TYPE_COLOR_CHOOSER, target=target,
+    button = Button(button_text=button_text, button_type=BUTTON_TYPE_COLOR_CHOOSER, target=target,
                   image_filename=image_filename, image_data=image_data, image_size=image_size,
                   image_subsample=image_subsample, border_width=border_width, tooltip=tooltip, size=size, s=s,
                   auto_size_button=auto_size_button, button_color=button_color, font=font, disabled=disabled,
-                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata)
-
+                  bind_return_key=bind_return_key, focus=focus, pad=pad, p=p, key=key, k=k, visible=visible, metadata=metadata, expand_x=expand_x, expand_y=expand_y)
+    button.default_color = default_color
+    return button
 
 #####################################  -----  BUTTON Functions   ------ ##################################################
 
@@ -14250,8 +14969,10 @@ def AddMenuItem(top_menu, sub_menu_info, element, is_sub_menu=False, skip=False,
                         window = element.ParentForm
                         if window.right_click_menu_background_color not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(bg=window.right_click_menu_background_color)
+                            new_menu.config(activeforeground=window.right_click_menu_background_color)
                         if window.right_click_menu_text_color not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(fg=window.right_click_menu_text_color)
+                            new_menu.config(activebackground=window.right_click_menu_text_color)
                         if window.right_click_menu_disabled_text_color not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(disabledforeground=window.right_click_menu_disabled_text_color)
                         if window.right_click_menu_font is not None:
@@ -14261,8 +14982,10 @@ def AddMenuItem(top_menu, sub_menu_info, element, is_sub_menu=False, skip=False,
                             new_menu.config(font=element.Font)
                         if element.BackgroundColor not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(bg=element.BackgroundColor)
+                            new_menu.config(activeforeground=element.BackgroundColor)
                         if element.TextColor not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(fg=element.TextColor)
+                            new_menu.config(activebackground=element.TextColor)
                         if element.DisabledTextColor not in (COLOR_SYSTEM_DEFAULT, None):
                             new_menu.config(disabledforeground=element.DisabledTextColor)
                         if element.ItemFont is not None:
@@ -14454,11 +15177,13 @@ def _make_ttk_scrollbar(element, orientation, window):
         # style_name_thumb = _make_ttk_style_name('.Vertical.TScrollbar.thumb', element)
         element.vsb_style = style
         element.vsb = ttk.Scrollbar(element.element_frame, orient=orient, command=element.Widget.yview, style=style_name)
+        element.vsb_style_name = style_name
     else:
         orient = 'horizontal'
         style_name = _make_ttk_style_name('.Horizontal.TScrollbar', element)
         element.hsb_style = style
         element.hsb = ttk.Scrollbar(element.element_frame, orient=orient, command=element.Widget.xview, style=style_name)
+        element.hsb_style_name = style_name
 
 
     # ------------------ Get the colors using heirarchy of element, window, options, settings ------------------
@@ -15022,8 +15747,18 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     bc = DEFAULT_BUTTON_COLOR
 
                 bd = element.BorderWidth
-
+                pos = -1
+                if DEFAULT_USE_BUTTON_SHORTCUTS is True:
+                    pos = btext.find(MENU_SHORTCUT_CHARACTER)
+                    if pos != -1:
+                        if pos < len(MENU_SHORTCUT_CHARACTER) or btext[pos - len(MENU_SHORTCUT_CHARACTER)] != "\\":
+                            btext = btext[:pos] + btext[pos + len(MENU_SHORTCUT_CHARACTER):]
+                        else:
+                            btext = btext.replace('\\'+MENU_SHORTCUT_CHARACTER, MENU_SHORTCUT_CHARACTER)
+                            pos = -1
                 tkbutton = element.Widget = tk.Button(tk_row_frame, text=btext, width=width, height=height, justify=tk.CENTER, bd=bd, font=font)
+                if pos != -1:
+                    tkbutton.config(underline=pos)
                 try:
                     if btype != BUTTON_TYPE_REALTIME:
                         tkbutton.config( command=element.ButtonCallBack)
@@ -15067,6 +15802,7 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                             width, height = photo.width(), photo.height()
                     except Exception as e:
                         _error_popup_with_traceback('Button Element error {}'.format(e), 'Image filename: {}'.format(element.ImageFilename),
+                                                     'NOTE - file format must be PNG or GIF!',
                                                     'Button element key: {}'.format(element.Key),
                                                     "Parent Window's Title: {}".format(toplevel_form.Title))
                     tkbutton.config(image=photo, compound=tk.CENTER, width=width, height=height)
@@ -15140,6 +15876,15 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 element.TKStringVar = stringvar
                 element.Location = (row_num, col_num)
                 btext = element.ButtonText
+                pos = -1
+                if DEFAULT_USE_BUTTON_SHORTCUTS is True:
+                    pos = btext.find(MENU_SHORTCUT_CHARACTER)
+                    if pos != -1:
+                        if pos < len(MENU_SHORTCUT_CHARACTER) or btext[pos - len(MENU_SHORTCUT_CHARACTER)] != "\\":
+                            btext = btext[:pos] + btext[pos + len(MENU_SHORTCUT_CHARACTER):]
+                        else:
+                            btext = btext.replace('\\'+MENU_SHORTCUT_CHARACTER, MENU_SHORTCUT_CHARACTER)
+                            pos = -1
                 btype = element.BType
                 if element.AutoSizeButton is not None:
                     auto_size = element.AutoSizeButton
@@ -15158,6 +15903,8 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     bc = DEFAULT_BUTTON_COLOR
                 bd = element.BorderWidth
                 tkbutton = element.Widget = ttk.Button(tk_row_frame, text=btext, width=width)
+                if pos != -1:
+                    tkbutton.config(underline=pos)
                 if btype != BUTTON_TYPE_REALTIME:
                     tkbutton.config(command=element.ButtonCallBack)
                 else:
@@ -15275,8 +16022,11 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 element.TKButtonMenu = tkbutton
                 if bc != (None, None) and bc != COLOR_SYSTEM_DEFAULT and bc[1] != COLOR_SYSTEM_DEFAULT:
                     tkbutton.config(foreground=bc[0], background=bc[1])
+                    tkbutton.config(activebackground=bc[0])
+                    tkbutton.config(activeforeground=bc[1])
                 elif bc[0] != COLOR_SYSTEM_DEFAULT:
                     tkbutton.config(foreground=bc[0])
+                    tkbutton.config(activebackground=bc[0])
                 if bd == 0 and not running_mac():
                     tkbutton.config(relief=RELIEF_FLAT)
                 elif bd != 0:
@@ -15315,8 +16065,10 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
 
                 if element.BackgroundColor not in (COLOR_SYSTEM_DEFAULT, None):
                     top_menu.config(bg=element.BackgroundColor)
+                    top_menu.config(activeforeground=element.BackgroundColor)
                 if element.TextColor not in (COLOR_SYSTEM_DEFAULT, None):
                     top_menu.config(fg=element.TextColor)
+                    top_menu.config(activebackground=element.TextColor)
                 if element.DisabledTextColor not in (COLOR_SYSTEM_DEFAULT, None):
                     top_menu.config(disabledforeground=element.DisabledTextColor)
                 if element.ItemFont is not None:
@@ -15356,14 +16108,14 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     element.TKEntry.bind('<Key>', element._KeyboardHandler)
                 element.TKEntry.bind('<Return>', element._ReturnKeyHandler)
 
-                if element.BackgroundColor is not None and element.BackgroundColor != COLOR_SYSTEM_DEFAULT:
+                if element.BackgroundColor not in (None, COLOR_SYSTEM_DEFAULT):
                     element.TKEntry.configure(background=element.BackgroundColor, selectforeground=element.BackgroundColor)
-                if text_color is not None and text_color != COLOR_SYSTEM_DEFAULT:
+                if text_color not in (None, COLOR_SYSTEM_DEFAULT):
                     element.TKEntry.configure(fg=text_color, selectbackground=text_color)
 
-                if element.disabled_readonly_background_color is not None:
+                if element.disabled_readonly_background_color not in (None, COLOR_SYSTEM_DEFAULT):
                     element.TKEntry.config(readonlybackground=element.disabled_readonly_background_color)
-                if element.disabled_readonly_text_color is not None:
+                if element.disabled_readonly_text_color not in (None, COLOR_SYSTEM_DEFAULT):
                     element.TKEntry.config(fg=element.disabled_readonly_text_color)
 
                 element.Widget.config(highlightthickness=0)
@@ -15415,6 +16167,7 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                         combostyle.configure(style_name, foreground=element.TextColor)
                         combostyle.configure(style_name, selectbackground=element.TextColor)
                         combostyle.configure(style_name, insertcolor=element.TextColor)
+                        combostyle.map(style_name, fieldforeground=[('readonly', element.TextColor)])
                     if element.BackgroundColor not in (None, COLOR_SYSTEM_DEFAULT):
                         combostyle.configure(style_name, selectforeground=element.BackgroundColor)
                         combostyle.map(style_name, fieldbackground=[('readonly', element.BackgroundColor)])
@@ -15424,6 +16177,12 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                         combostyle.configure(style_name, arrowcolor=element.button_arrow_color)
                     if element.button_background_color not in (None, COLOR_SYSTEM_DEFAULT):
                         combostyle.configure(style_name, background=element.button_background_color)
+                    if element.Readonly is True:
+                        if element.TextColor not in (None, COLOR_SYSTEM_DEFAULT):
+                            combostyle.configure(style_name, selectforeground=element.TextColor)
+                        if element.BackgroundColor not in (None, COLOR_SYSTEM_DEFAULT):
+                            combostyle.configure(style_name, selectbackground=element.BackgroundColor)
+
 
                 except Exception as e:
                     _error_popup_with_traceback('Combo Element error {}'.format(e),
@@ -15478,6 +16237,8 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     element.TKCombo.bind('<<ComboboxSelected>>', element._ComboboxSelectHandler)
                 if element.BindReturnKey:
                     element.TKCombo.bind('<Return>', element._ComboboxSelectHandler)
+                if element.enable_per_char_events:
+                    element.TKCombo.bind('<Key>', element._KeyboardHandler)
                 if element.Readonly:
                     element.TKCombo['state'] = 'readonly'
                 if element.Disabled is True:  # note overrides readonly if disabled
@@ -15527,9 +16288,24 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 element_frame = tk.Frame(tk_row_frame)
                 element.element_frame = element_frame
 
+                justification = tk.LEFT
+                if element.justification is not None:
+                    if element.justification.startswith('l'):
+                        justification = tk.LEFT
+                    elif element.justification.startswith('r'):
+                        justification = tk.RIGHT
+                    elif element.justification.startswith('c'):
+                        justification = tk.CENTER
+
                 element.TKStringVar = tk.StringVar()
                 element.TKListbox = element.Widget = tk.Listbox(element_frame, height=element_size[1], width=width,
                                                                 selectmode=element.SelectMode, font=font, exportselection=False)
+                # On OLD versions of tkinter the justify option isn't available
+                try:
+                    element.Widget.config(justify=justification)
+                except:
+                    pass
+
                 element.Widget.config(highlightthickness=0)
                 for index, item in enumerate(element.Values):
                     element.TKListbox.insert(tk.END, item)
@@ -15545,9 +16321,6 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     element.TKListbox.config(selectforeground=element.HighlightTextColor)
                 if element.ChangeSubmits:
                     element.TKListbox.bind('<<ListboxSelect>>', element._ListboxSelectHandler)
-
-
-
 
                 if not element.NoScrollbar:
                     _make_ttk_scrollbar(element, 'v', toplevel_form)
@@ -15632,6 +16405,11 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 else:
                     element.TKText.config(wrap='word')
 
+                if element.wrap_lines is True:
+                    element.TKText.config(wrap='word')
+                elif element.wrap_lines is False:
+                    element.TKText.config(wrap='none')
+
                 if not element.no_scrollbar or element.HorizontalScroll:
                     # Chr0nic
                     element.TKText.bind("<Enter>", lambda event, em=element: testMouseHook(em))
@@ -15692,6 +16470,11 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 _add_right_click_menu_and_grab(element)
                 if theme_input_text_color() not in (COLOR_SYSTEM_DEFAULT, None):
                     element.Widget.config(insertbackground=theme_input_text_color())
+
+                if element.reroute_stdout:
+                    element.reroute_stdout_to_here()
+                if element.reroute_stderr:
+                    element.reroute_stderr_to_here()
 
                 # row_should_expand = True
             # -------------------------  CHECKBOX pleacement element  ------------------------- #
@@ -15826,6 +16609,8 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     element.TKSpinBox.configure(background=element.BackgroundColor)
                     element.TKSpinBox.configure(buttonbackground=element.BackgroundColor)
                 element.Widget.config(highlightthickness=0)
+                if element.wrap is True:
+                    element.Widget.configure(wrap=True)
                 expand, fill, row_should_expand, row_fill_direction = _add_expansion(element, row_should_expand, row_fill_direction)
                 element.TKSpinBox.pack(side=tk.LEFT, padx=elementpad[0], pady=elementpad[1], expand=expand, fill=fill)
                 if element.visible is False:
@@ -15964,8 +16749,10 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     baritem = tk.Menu(menubar, tearoff=element.Tearoff, tearoffcommand=element._tearoff_menu_callback)
                     if element.BackgroundColor not in (COLOR_SYSTEM_DEFAULT, None):
                         baritem.config(bg=element.BackgroundColor)
+                        baritem.config(activeforeground=element.BackgroundColor)
                     if element.TextColor not in (COLOR_SYSTEM_DEFAULT, None):
                         baritem.config(fg=element.TextColor)
+                        baritem.config(activebackground=element.TextColor)
                     if element.DisabledTextColor not in (COLOR_SYSTEM_DEFAULT, None):
                         baritem.config(disabledforeground=element.DisabledTextColor)
                     if font is not None:
@@ -16069,17 +16856,18 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
 
                 # element.photo_image = tk.PhotoImage(data=DEFAULT_BASE64_ICON)
                 # form.TKNotebook.add(element.TKFrame, text=element.Title, compound=tk.LEFT, state=state,image = element.photo_image)
+
+
                 form.TKNotebook.add(element.TKFrame, text=element.Title, state=state)
-                expand, fill, row_should_expand, row_fill_direction = _add_expansion(element, row_should_expand, row_fill_direction)
-                form.TKNotebook.pack(side=tk.LEFT, padx=elementpad[0], pady=elementpad[1], fill=fill, expand=expand)
+                # July 28 2022 removing the expansion and pack as a test
+                # expand, fill, row_should_expand, row_fill_direction = _add_expansion(element, row_should_expand, row_fill_direction)
+                # form.TKNotebook.pack(side=tk.LEFT, padx=elementpad[0], pady=elementpad[1], fill=fill, expand=expand)
 
                 element.ParentNotebook = form.TKNotebook
                 element.TabID = form.TabCount
                 form.TabCount += 1
-                if element.BackgroundColor != COLOR_SYSTEM_DEFAULT and element.BackgroundColor is not None:
-                    element.TKFrame.configure(background=element.BackgroundColor,
-                                              highlightbackground=element.BackgroundColor,
-                                              highlightcolor=element.BackgroundColor)
+                if element.BackgroundColor not in (COLOR_SYSTEM_DEFAULT, None):
+                    element.TKFrame.configure(background=element.BackgroundColor, highlightbackground=element.BackgroundColor, highlightcolor=element.BackgroundColor)
 
                 # if element.BorderWidth is not None:
                 #     element.TKFrame.configure(borderwidth=element.BorderWidth)
@@ -16121,7 +16909,7 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                     style.configure(custom_style, borderwidth=element.BorderWidth)
                 if element.TabBorderWidth is not None:
                     style.configure(custom_style + '.Tab', borderwidth=element.TabBorderWidth)       # if ever want to get rid of border around the TABS themselves
-                if element.FocusColor is not None:
+                if element.FocusColor not in (None, COLOR_SYSTEM_DEFAULT):
                     style.configure(custom_style + '.Tab', focuscolor=element.FocusColor)
 
                 style.configure(custom_style + '.Tab', font=font)
@@ -16141,7 +16929,8 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 if element.Size != (None, None):
                     element.TKNotebook.configure(width=element.Size[0], height=element.Size[1])
                 _add_right_click_menu_and_grab(element)
-
+                if element.visible is False:
+                    element._pack_forget_save_settings()
                 # row_should_expand = True
                 # -------------------  SLIDER placement element  ------------------------- #
             elif element_type == ELEM_TYPE_INPUT_SLIDER:
@@ -16167,13 +16956,13 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 tkscale.config(highlightthickness=0)
                 if element.ChangeSubmits:
                     tkscale.config(command=element._SliderChangedHandler)
-                if element.BackgroundColor is not None and element.BackgroundColor != COLOR_SYSTEM_DEFAULT:
+                if element.BackgroundColor not in (None, COLOR_SYSTEM_DEFAULT):
                     tkscale.configure(background=element.BackgroundColor)
                 if element.TroughColor != COLOR_SYSTEM_DEFAULT:
                     tkscale.config(troughcolor=element.TroughColor)
                 if element.DisableNumericDisplay:
                     tkscale.config(showvalue=0)
-                if text_color is not None and text_color != COLOR_SYSTEM_DEFAULT:
+                if text_color not in (None, COLOR_SYSTEM_DEFAULT):
                     tkscale.configure(fg=text_color)
                 expand, fill, row_should_expand, row_fill_direction = _add_expansion(element, row_should_expand, row_fill_direction)
                 tkscale.pack(side=tk.LEFT, padx=elementpad[0], pady=elementpad[1], expand=expand, fill=fill)
@@ -16251,14 +17040,29 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                             width = element.ColumnWidths[i] * _char_width_in_pixels(font)
                         except:
                             width = element.DefaultColumnWidth * _char_width_in_pixels(font)
-                    treeview.column(heading, width=width, minwidth=10, anchor=anchor, stretch=element.expand_x)
+                    if element.cols_justification is not None:
+                        try:
+                            if element.cols_justification[i].startswith('l'):
+                                col_anchor = tk.W
+                            elif element.cols_justification[i].startswith('r'):
+                                col_anchor = tk.E
+                            elif element.cols_justification[i].startswith('c'):
+                                col_anchor = tk.CENTER
+                            else:
+                                col_anchor = anchor
+
+                        except:             # likely didn't specify enough entries (must be one per col)
+                            col_anchor = anchor
+                    else:
+                        col_anchor = anchor
+                    treeview.column(heading, width=width, minwidth=10, anchor=col_anchor, stretch=element.expand_x)
                 # Insert values into the tree
                 for i, value in enumerate(element.Values):
                     if element.DisplayRowNumbers:
                         value = [i + element.StartingRowNumber] + value
                     id = treeview.insert('', 'end', text=value, iid=i + 1, values=value, tag=i)
                     element.tree_ids.append(id)
-                if element.AlternatingRowColor is not None:  # alternating colors
+                if element.AlternatingRowColor not in (None, COLOR_SYSTEM_DEFAULT):  # alternating colors
                     for row in range(0, len(element.Values), 2):
                         treeview.tag_configure(row, background=element.AlternatingRowColor)
                 if element.RowColors is not None:  # individual row colors
@@ -16270,7 +17074,7 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
                 # ------ Do Styling of Colors -----
                 # style_name = str(element.Key) + 'customtable.Treeview'
                 style_name = _make_ttk_style_name( '.customtable.Treeview', element)
-
+                element.table_ttk_style_name = style_name
                 table_style = ttk.Style()
                 element.ttk_style = table_style
 
@@ -16564,7 +17368,7 @@ def PackFormIntoFrame(form, containing_frame, toplevel_form):
 
                 _change_ttk_theme(style, toplevel_form.TtkTheme)
 
-                if element.color is not None:
+                if element.color not in (None, COLOR_SYSTEM_DEFAULT):
                     style.configure(style_name, background=element.color)
                 separator = element.Widget = ttk.Separator(tk_row_frame, orient=element.Orientation, )
 
@@ -16730,8 +17534,7 @@ def _no_titlebar_setup(window):
                 # window.TKroot.wm_attributes("-type", 'splash')
                 window.TKroot.wm_attributes("-type", 'dock')
             else:
-                # I should prob not comment this, but otherwise its too annoying
-                #window.TKroot.wm_overrideredirect(True)
+                window.TKroot.wm_overrideredirect(True)
                 # Special case for Mac. Need to clear flag again if not tkinter version 8.6.10+
                 # Previously restricted patch to only certain tkinter versions. Now use the patch setting exclusively regardless of tk ver
                 # if running_mac() and ENABLE_MAC_NOTITLEBAR_PATCH and (sum([int(i) for i in tclversion_detailed.split('.')]) < 24):
@@ -16753,44 +17556,53 @@ def _convert_window_to_tk(window):
     master.title(window.Title)
     InitializeResults(window)
 
+
     PackFormIntoFrame(window, master, window)
 
     window.TKroot.configure(padx=window.Margins[0], pady=window.Margins[1])
+
 
     # ....................................... DONE creating and laying out window ..........................#
     if window._Size != (None, None):
         master.geometry("%sx%s" % (window._Size[0], window._Size[1]))
     screen_width = master.winfo_screenwidth()  # get window info to move to middle of screen
     screen_height = master.winfo_screenheight()
-    if window.Location != (None, None):
-        x, y = window.Location
-    elif DEFAULT_WINDOW_LOCATION != (None, None):
-        x, y = DEFAULT_WINDOW_LOCATION
+    if window.Location is not None:
+        if window.Location != (None, None):
+            x, y = window.Location
+        elif DEFAULT_WINDOW_LOCATION != (None, None):
+            x, y = DEFAULT_WINDOW_LOCATION
+        else:
+            master.update_idletasks()  # don't forget to do updates or values are bad
+            win_width = master.winfo_width()
+            win_height = master.winfo_height()
+            x = screen_width / 2 - win_width / 2
+            y = screen_height / 2 - win_height / 2
+            if y + win_height > screen_height:
+                y = screen_height - win_height
+            if x + win_width > screen_width:
+                x = screen_width - win_width
+
+        if window.RelativeLoction != (None, None):
+            x += window.RelativeLoction[0]
+            y += window.RelativeLoction[1]
+
+        move_string = '+%i+%i' % (int(x), int(y))
+        master.geometry(move_string)
+        window.config_last_location = (int(x), (int(y)))
+        window.TKroot.x = int(x)
+        window.TKroot.y = int(y)
+        window.starting_window_position = (int(x), (int(y)))
+        master.update_idletasks()  # don't forget
+        master.geometry(move_string)
+        master.update_idletasks()  # don't forget
     else:
-        master.update_idletasks()  # don't forget to do updates or values are bad
-        win_width = master.winfo_width()
-        win_height = master.winfo_height()
-        x = screen_width / 2 - win_width / 2
-        y = screen_height / 2 - win_height / 2
-        if y + win_height > screen_height:
-            y = screen_height - win_height
-        if x + win_width > screen_width:
-            x = screen_width - win_width
-
-    if window.RelativeLoction != (None, None):
-        x += window.RelativeLoction[0]
-        y += window.RelativeLoction[1]
-
-    move_string = '+%i+%i' % (int(x), int(y))
-    master.geometry(move_string)
-    window.config_last_location = (int(x), (int(y)))
-    window.TKroot.x = int(x)
-    window.TKroot.y = int(y)
-    window.starting_window_position = (int(x), (int(y)))
-    master.update_idletasks()  # don't forget
-    master.geometry(move_string)
-    master.update_idletasks()  # don't forget
-
+        master.update_idletasks()
+        x, y = int(master.winfo_x()), int(master.winfo_y())
+        window.config_last_location = x,y
+        window.TKroot.x = x
+        window.TKroot.y = y
+        window.starting_window_position = x,y
     _no_titlebar_setup(window)
 
     return
@@ -16825,15 +17637,17 @@ def StartupTK(window):
         root.bind('<Cancel>', window._callback_main_debugger_window_create_keystroke)
         root.bind('<Pause>', window._callback_popout_window_create_keystroke)
 
-        # root.bind('<Cancel>', Debugger._build_main_debugger_window)
-        # root.bind('<Pause>', Debugger._build_floating_window)
-    try:
-        if not running_mac() or \
-            (running_mac() and not window.NoTitleBar) or \
-            (running_mac() and window.NoTitleBar and not _mac_should_apply_notitlebar_patch()):
-            root.attributes('-alpha', 0)  # hide window while building it. makes for smoother 'paint'
-    except Exception as e:
-        print('*** Exception setting alpha channel to zero while creating window ***', e)
+
+    # If location is None, then there's no need to hide the window.  Let it build where it is going to end up being.
+    if DEFAULT_HIDE_WINDOW_WHEN_CREATING is True and window.Location is not None:
+        try:
+            if not running_mac() or \
+                (running_mac() and not window.NoTitleBar) or \
+                (running_mac() and window.NoTitleBar and not _mac_should_apply_notitlebar_patch()):
+
+                root.attributes('-alpha', 0)  # hide window while building it. makes for smoother 'paint'
+        except Exception as e:
+            print('*** Exception setting alpha channel to zero while creating window ***', e)
 
 
     if window.BackgroundColor is not None and window.BackgroundColor != COLOR_SYSTEM_DEFAULT:
@@ -16846,10 +17660,7 @@ def StartupTK(window):
 
     # for the Raspberry Pi. Need to set the attributes here, prior to the building of the window
     # so going ahead and doing it for all platforms, in addition to doing it after the window is packed
-    # 2023-April - this call seems to be causing problems on MacOS 13.2.1 Ventura.  Input elements become non-responsive
-    # if this call is made here and at the end of building the window
-    if not running_mac():
-        _no_titlebar_setup(window)
+    _no_titlebar_setup(window)
 
     if not window.Resizable:
         root.resizable(False, False)
@@ -16883,12 +17694,19 @@ def StartupTK(window):
         root.bind("<Control-Button-1>", window._StartMoveUsingControlKey)
         root.bind("<Control-ButtonRelease-1>", window._StopMove)
         root.bind("<Control-B1-Motion>", window._OnMotionUsingControlKey)
-    window.set_icon(window.WindowIcon)
+        # also enable movement using Control + Arrow key
+        root.bind("<Control-Left>", window._move_callback)
+        root.bind("<Control-Right>", window._move_callback)
+        root.bind("<Control-Up>", window._move_callback)
+        root.bind("<Control-Down>", window._move_callback)
 
+    window.set_icon(window.WindowIcon)
     try:
-        root.attributes('-alpha', 1 if window.AlphaChannel is None else window.AlphaChannel)  # Make window visible again
-    except:
-        pass
+        alpha_channel = 1 if window.AlphaChannel is None else window.AlphaChannel
+        root.attributes('-alpha', alpha_channel)  # Make window visible again
+    except Exception as e:
+        print('**** Error setting Alpha Channel to {} after window was created ****'.format(alpha_channel), e)
+        # pass
 
     if window.ReturnKeyboardEvents and not window.NonBlocking:
         root.bind("<KeyRelease>", window._KeyboardCallback)
@@ -16933,7 +17751,8 @@ def StartupTK(window):
         if window.modal or DEFAULT_MODAL_WINDOWS_FORCED:
             window.make_modal()
 
-        # window.TKroot.bind("<Configure>", window._config_callback)
+        if window.enable_window_config_events:
+            window.TKroot.bind("<Configure>", window._config_callback)
 
         # ----------------------------------- tkinter mainloop call -----------------------------------
         Window._window_running_mainloop = window
@@ -17073,8 +17892,8 @@ class QuickMeter(object):
         :type *args:          (Any)
         :param orientation:   'horizontal' or 'vertical' ('h' or 'v' work) (Default value = 'vertical' / 'v')
         :type orientation:    (str)
-        :param bar_color:     color of a bar line
-        :type bar_color:      (str, str)
+        :param bar_color:     The 2 colors that make up a progress bar. Either a tuple of 2 strings or a string. Tuple - (bar, background). A string with 1 color changes the background of the bar only. A string with 2 colors separated by "on" like "red on blue" specifies a red bar on a blue background.
+        :type bar_color:      (str, str) or str
         :param button_color:  button color (foreground, background)
         :type button_color:   (str, str) or str
         :param size:          (w,h) w=characters-wide, h=rows-high (Default value = DEFAULT_PROGRESS_BAR_SIZE)
@@ -17195,8 +18014,8 @@ def one_line_progress_meter(title, current_value, max_value, *args, key='OK for 
     :type key:            str | int | tuple | object
     :param orientation:   'horizontal' or 'vertical' ('h' or 'v' work) (Default value = 'vertical' / 'v')
     :type orientation:    (str)
-    :param bar_color:     color of a bar line
-    :type bar_color:      Tuple(str, str)
+    :param bar_color:     The 2 colors that make up a progress bar. Either a tuple of 2 strings or a string. Tuple - (bar, background). A string with 1 color changes the background of the bar only. A string with 2 colors separated by "on" like "red on blue" specifies a red bar on a blue background.
+    :type bar_color:      (str, str) or str
     :param button_color:  button color (foreground, background)
     :type button_color:   (str, str) or str
     :param size:          (w,h) w=characters-wide, h=rows-high (Default value = DEFAULT_PROGRESS_BAR_SIZE)
@@ -17373,13 +18192,13 @@ class _DebugWin():
         else:
             print(*args, sep=sepchar, end=endchar)
         # This is tricky....changing the button type depending on the blocking parm. If blocking, then the "Quit" button should become a normal button
-        if blocking:
+        if blocking and not self.no_button:
             self.quit_button.BType = BUTTON_TYPE_READ_FORM
             try:                    # The window may be closed by user at any time, so have to protect
                 self.quit_button.update(text='Click to continue...')
             except:
                 self.window = None
-        else:
+        elif not self.no_button:
             self.quit_button.BType = BUTTON_TYPE_CLOSES_WIN_ONLY
             try:                    # The window may be closed by user at any time, so have to protect
                 self.quit_button.update(text='Quit')
@@ -17387,9 +18206,9 @@ class _DebugWin():
                 self.window = None
 
         try:                        # The window may be closed by user at any time, so have to protect
-            if blocking:
+            if blocking and not self.no_button:
                 self.window['-PAUSE-'].update(visible=False)
-            else:
+            elif not self.no_button:
                 self.window['-PAUSE-'].update(visible=True)
         except:
             self.window = None
@@ -17408,7 +18227,7 @@ class _DebugWin():
             elif not paused and event == TIMEOUT_EVENT and not blocking:
                 break
             elif event == '-PAUSE-':
-                if blocking:            # if blocking, ignore the pause button entirely
+                if blocking or self.no_button:            # if blocking or shouldn't have been a button event, ignore the pause button entirely
                     continue
                 if paused:
                     self.window['-PAUSE-'].update(text='Pause')
@@ -17545,7 +18364,7 @@ def cprint_set_output_destination(window, multiline_key):
 
 
 def cprint(*args, end=None, sep=' ', text_color=None, font=None, t=None, background_color=None, b=None, colors=None, c=None, window=None, key=None,
-           justification=None, autoscroll=True):
+           justification=None, autoscroll=True, erase_all=False):
     """
     Color print to a multiline element in a window of your choice.
     Must have EITHER called cprint_set_output_destination prior to making this call so that the
@@ -17602,6 +18421,8 @@ def cprint(*args, end=None, sep=' ', text_color=None, font=None, t=None, backgro
     :type justification:     (str)
     :param autoscroll:       If True the contents of the element will automatically scroll as more data added to the end
     :type autoscroll:        (bool)
+    :param erase_all         If True the contents of the element will be cleared before printing happens
+    :type erase_all          (bool)
     """
 
     destination_key = CPRINT_DESTINATION_MULTILINE_ELMENT_KEY if key is None else key
@@ -17633,6 +18454,8 @@ def cprint(*args, end=None, sep=' ', text_color=None, font=None, t=None, backgro
     mline = destination_window.find_element(destination_key, silent_on_error=True)  # type: Multiline
     try:
         # mline = destination_window[destination_key]     # type: Multiline
+        if erase_all is True:
+            mline.update('')
         if end is None:
             mline.print(*args, text_color=kw_text_color, background_color=kw_background_color, end='', sep=sep, justification=justification, font=font,
                         autoscroll=autoscroll)
@@ -17754,7 +18577,8 @@ def set_options(icon=None, button_color=None, element_size=(None, None), button_
                 suppress_error_popups=None, suppress_raise_key_errors=None, suppress_key_guessing=None,warn_button_key_duplicates=False, enable_treeview_869_patch=None,
                 enable_mac_notitlebar_patch=None, use_custom_titlebar=None, titlebar_background_color=None, titlebar_text_color=None, titlebar_font=None,
                 titlebar_icon=None, user_settings_path=None, pysimplegui_settings_path=None, pysimplegui_settings_filename=None, keep_on_top=None, dpi_awareness=None, scaling=None, disable_modal_windows=None, force_modal_windows=None, tooltip_offset=(None, None),
-                sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None, sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None, alpha_channel=None):
+                sbar_trough_color=None, sbar_background_color=None, sbar_arrow_color=None, sbar_width=None, sbar_arrow_width=None, sbar_frame_color=None, sbar_relief=None, alpha_channel=None,
+                hide_window_when_creating=None, use_button_shortcuts=None):
     """
     :param icon:                            Can be either a filename or Base64 value. For Windows if filename, it MUST be ICO format. For Linux, must NOT be ICO. Most portable is to use a Base64 of a PNG file. This works universally across all OS's
     :type icon:                             bytes | str
@@ -17881,9 +18705,13 @@ def set_options(icon=None, button_color=None, element_size=(None, None), button_
     :param sbar_frame_color:                Scrollbar Color of frame around scrollbar (available only on some ttk themes)
     :type sbar_frame_color:                 (str)
     :param sbar_relief:                     Scrollbar relief that will be used for the "thumb" of the scrollbar (the thing you grab that slides). Should be a constant that is defined at starting with "RELIEF_" - RELIEF_RAISED, RELIEF_SUNKEN, RELIEF_FLAT, RELIEF_RIDGE, RELIEF_GROOVE, RELIEF_SOLID
-    :param alpha_channel                    Default alpha channel to be used on all windows
-    :type alpha_channel                     (float)
     :type sbar_relief:                      (str)
+    :param alpha_channel:                   Default alpha channel to be used on all windows
+    :type alpha_channel:                    (float)
+    :param hide_window_when_creating:       If True then alpha will be set to 0 while a window is made and moved to location indicated
+    :type hide_window_when_creating:        (bool)
+    :param use_button_shortcuts:            If True then Shortcut Char will be used with Buttons
+    :type use_button_shortcuts:             (bool)
     :return:                                None
     :rtype:                                 None
     """
@@ -17943,9 +18771,10 @@ def set_options(icon=None, button_color=None, element_size=(None, None), button_
     global DEFAULT_MODAL_WINDOWS_FORCED
     global DEFAULT_TOOLTIP_OFFSET
     global DEFAULT_ALPHA_CHANNEL
-
     global _pysimplegui_user_settings
     global ttk_part_overrides_from_options
+    global DEFAULT_HIDE_WINDOW_WHEN_CREATING
+    global DEFAULT_USE_BUTTON_SHORTCUTS
     # global _my_windows
 
     if icon:
@@ -18129,6 +18958,7 @@ def set_options(icon=None, button_color=None, element_size=(None, None), button_
     if tooltip_offset != (None, None):
         DEFAULT_TOOLTIP_OFFSET = tooltip_offset
 
+
     if alpha_channel is not None:
         DEFAULT_ALPHA_CHANNEL = alpha_channel
 
@@ -18154,6 +18984,11 @@ def set_options(icon=None, button_color=None, element_size=(None, None), button_
     if sbar_width is not None:
         ttk_part_overrides_from_options.sbar_width = sbar_width
 
+    if hide_window_when_creating is not None:
+        DEFAULT_HIDE_WINDOW_WHEN_CREATING = hide_window_when_creating
+
+    if use_button_shortcuts is not None:
+        DEFAULT_USE_BUTTON_SHORTCUTS = use_button_shortcuts
     return True
 
 
@@ -18576,12 +19411,20 @@ LOOK_AND_FEEL_TABLE = {
                    "BUTTON": ("#fafbfc", "#155398"), "PROGRESS": ("#155398", "#1d2125"), "BORDER": 1, "SLIDER_DEPTH": 0, "PROGRESS_DEPTH": 0, },
     "DarkGrey15": {'BACKGROUND': '#121212', 'TEXT': '#dddddd', 'INPUT': '#1e1e1e', 'TEXT_INPUT': '#69b1ef', 'SCROLL': '#272727',
                   'BUTTON': ('#69b1ef', '#2e2e2e'), 'PROGRESS': ('#69b1ef', '#2e2e2e'), 'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,},
+    "DarkGrey16":     {'BACKGROUND': '#353535', 'TEXT': '#ffffff', 'INPUT': '#191919', 'TEXT_INPUT': '#ffffff', 'SCROLL': '#454545',
+                       'BUTTON': ('#ffffff', '#454545'), 'PROGRESS': ('#757575', '#454545'), 'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,},
     "DarkBrown7": {"BACKGROUND": "#2c2417", "TEXT": "#baa379", "INPUT": "#baa379", "TEXT_INPUT": "#000000", "SCROLL": "#392e1c",
                    "BUTTON": ("#000000", "#baa379"), "PROGRESS": ("#baa379", "#453923"), "BORDER": 1, "SLIDER_DEPTH": 1, "PROGRESS_DEPTH": 0, },
     "Python": {"BACKGROUND": "#3d7aab", "TEXT": "#ffde56", "INPUT": "#295273", "TEXT_INPUT": "#ffde56", "SCROLL": "#295273",
                "BUTTON": ("#ffde56", "#295273"), "PROGRESS": ("#ffde56", "#295273"), "BORDER": 1, "SLIDER_DEPTH": 1, "PROGRESS_DEPTH": 0, },
     "PythonPlus": {"BACKGROUND": "#001d3c", "TEXT": "#ffffff", "INPUT": "#015bbb", "TEXT_INPUT": "#fed500", "SCROLL": "#015bbb",
-               "BUTTON": ("#fed500", "#015bbb"), "PROGRESS": ("#015bbb", "#fed500"), "BORDER": 1, "SLIDER_DEPTH": 1, "PROGRESS_DEPTH": 0, },
+                   "BUTTON": ("#fed500", "#015bbb"), "PROGRESS": ("#015bbb", "#fed500"), "BORDER": 1, "SLIDER_DEPTH": 1, "PROGRESS_DEPTH": 0, },
+    "NeonBlue1": {"BACKGROUND": "#000000", "TEXT": "#ffffff", "INPUT": "#000000", "TEXT_INPUT": "#33ccff", "SCROLL": "#33ccff",
+                  "BUTTON": ("#33ccff", "#000000"), "PROGRESS": ("#33ccff", "#ffffff"), "BORDER": 1, "SLIDER_DEPTH": 0, "PROGRESS_DEPTH": 0, },
+    "NeonGreen1": {"BACKGROUND": "#000000", "TEXT": "#ffffff", "INPUT": "#000000", "TEXT_INPUT": "#96ff7b", "SCROLL": "#96ff7b",
+                   "BUTTON": ("#96ff7b", "#000000"), "PROGRESS": ("#96ff7b", "#ffffff"), "BORDER": 1, "SLIDER_DEPTH": 0, "PROGRESS_DEPTH": 0, },
+    "NeonYellow1": {"BACKGROUND": "#000000", "TEXT": "#ffffff", "INPUT": "#000000", "TEXT_INPUT": "#ffcf40", "SCROLL": "##ffcf40",
+                    "BUTTON": ("#ffcf40", "#000000"), "PROGRESS": ("#ffcf40", "#ffffff"), "BORDER": 1, "SLIDER_DEPTH": 0, "PROGRESS_DEPTH": 0, },
 }
 
 
@@ -19258,7 +20101,7 @@ def clipboard_get():
 
 def popup(*args, title=None, button_color=None, background_color=None, text_color=None, button_type=POPUP_BUTTONS_OK, auto_close=False,
           auto_close_duration=None, custom_text=(None, None), non_blocking=False, icon=None, line_width=None, font=None, no_titlebar=False, grab_anywhere=False,
-          keep_on_top=None, location=(None, None), relative_location=(None, None), any_key_closes=False, image=None, modal=True):
+          keep_on_top=None, location=(None, None), relative_location=(None, None), any_key_closes=False, image=None, modal=True, button_justification=None, drop_whitespace=True):
     """
     Popup - Display a popup Window with as many parms as you wish to include.  This is the GUI equivalent of the
     "print" statement.  It's also great for "pausing" your program's flow until the user can read some error messages.
@@ -19267,51 +20110,57 @@ def popup(*args, title=None, button_color=None, background_color=None, text_colo
     choice, _ = sg.Window('Continue?', [[sg.T('Do you want to continue?')], [sg.Yes(s=10), sg.No(s=10)]], disable_close=True).read(close=True)
 
 
-    :param *args:               Variable number of your arguments.  Load up the call with stuff to see!
-    :type *args:                (Any)
-    :param title:               Optional title for the window. If none provided, the first arg will be used instead.
-    :type title:                (str)
-    :param button_color:        Color of the buttons shown (text color, button color)
-    :type button_color:         (str, str) | None
-    :param background_color:    Window's background color
-    :type background_color:     (str)
-    :param text_color:          text color
-    :type text_color:           (str)
-    :param button_type:         NOT USER SET!  Determines which pre-defined buttons will be shown (Default value = POPUP_BUTTONS_OK). There are many Popup functions and they call Popup, changing this parameter to get the desired effect.
-    :type button_type:          (int)
-    :param auto_close:          If True the window will automatically close
-    :type auto_close:           (bool)
-    :param auto_close_duration: time in seconds to keep window open before closing it automatically
-    :type auto_close_duration:  (int)
-    :param custom_text:         A string or pair of strings that contain the text to display on the buttons
-    :type custom_text:          (str, str) | str
-    :param non_blocking:        If True then will immediately return from the function without waiting for the user's input.
-    :type non_blocking:         (bool)
-    :param icon:                icon to display on the window. Same format as a Window call
-    :type icon:                 str | bytes
-    :param line_width:          Width of lines in characters.  Defaults to MESSAGE_BOX_LINE_WIDTH
-    :type line_width:           (int)
-    :param font:                specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-    :type font:                 str | Tuple[font_name, size, modifiers]
-    :param no_titlebar:         If True will not show the frame around the window and the titlebar across the top
-    :type no_titlebar:          (bool)
-    :param grab_anywhere:       If True can grab anywhere to move the window. If no_titlebar is True, grab_anywhere should likely be enabled too
-    :type grab_anywhere:        (bool)
-    :param location:            Location on screen to display the top left corner of window. Defaults to window centered on screen
-    :type location:             (int, int)
-    :param relative_location:   (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
-    :type relative_location:    (int, int)
-    :param keep_on_top:         If True the window will remain above all current windows
-    :type keep_on_top:          (bool)
-    :param any_key_closes:      If True then will turn on return_keyboard_events for the window which will cause window to close as soon as any key is pressed.  Normally the return key only will close the window.  Default is false.
-    :type any_key_closes:       (bool)
-    :param image:               Image to include at the top of the popup window
-    :type image:                (str) or (bytes)
-    :param modal:               If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
-    :type modal:                bool
-    :return:                    Returns text of the button that was pressed.  None will be returned if user closed window with X
-    :rtype:                     str | None
+    :param *args:                 Variable number of your arguments.  Load up the call with stuff to see!
+    :type *args:                  (Any)
+    :param title:                 Optional title for the window. If none provided, the first arg will be used instead.
+    :type title:                  (str)
+    :param button_color:          Color of the buttons shown (text color, button color)
+    :type button_color:           (str, str) | None
+    :param background_color:      Window's background color
+    :type background_color:       (str)
+    :param text_color:            text color
+    :type text_color:             (str)
+    :param button_type:           NOT USER SET!  Determines which pre-defined buttons will be shown (Default value = POPUP_BUTTONS_OK). There are many Popup functions and they call Popup, changing this parameter to get the desired effect.
+    :type button_type:            (int)
+    :param auto_close:            If True the window will automatically close
+    :type auto_close:             (bool)
+    :param auto_close_duration:   time in seconds to keep window open before closing it automatically
+    :type auto_close_duration:    (int)
+    :param custom_text:           A string or pair of strings that contain the text to display on the buttons
+    :type custom_text:            (str, str) | str
+    :param non_blocking:          If True then will immediately return from the function without waiting for the user's input.
+    :type non_blocking:           (bool)
+    :param icon:                  icon to display on the window. Same format as a Window call
+    :type icon:                   str | bytes
+    :param line_width:            Width of lines in characters.  Defaults to MESSAGE_BOX_LINE_WIDTH
+    :type line_width:             (int)
+    :param font:                  specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
+    :type font:                   str | Tuple[font_name, size, modifiers]
+    :param no_titlebar:           If True will not show the frame around the window and the titlebar across the top
+    :type no_titlebar:            (bool)
+    :param grab_anywhere:         If True can grab anywhere to move the window. If no_titlebar is True, grab_anywhere should likely be enabled too
+    :type grab_anywhere:          (bool)
+    :param location:              Location on screen to display the top left corner of window. Defaults to window centered on screen
+    :type location:               (int, int)
+    :param relative_location:     (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
+    :type relative_location:      (int, int)
+    :param keep_on_top:           If True the window will remain above all current windows
+    :type keep_on_top:            (bool)
+    :param any_key_closes:        If True then will turn on return_keyboard_events for the window which will cause window to close as soon as any key is pressed.  Normally the return key only will close the window.  Default is false.
+    :type any_key_closes:         (bool)
+    :param image:                 Image to include at the top of the popup window
+    :type image:                  (str) or (bytes)
+    :param modal:                 If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
+    :type modal:                  bool
+    :param right_justify_buttons: If True then the buttons will be "pushed" to the right side of the Window
+    :type right_justify_buttons:  bool
+    :param button_justification:  Speficies if buttons should be left, right or centered. Default is left justified
+    :type button_justification:   str
+    :return:                      Returns text of the button that was pressed.  None will be returned if user closed window with X
+    :rtype:                       str | None
     """
+
+
 
     if not args:
         args_to_print = ['']
@@ -19341,7 +20190,7 @@ def popup(*args, title=None, button_color=None, background_color=None, text_colo
             msg_list = message.split('\n')  # break into segments that will each be wrapped
             message_wrapped = '\n'.join([textwrap.fill(msg, local_line_width) for msg in msg_list])
         else:
-            message_wrapped = textwrap.fill(message, local_line_width)
+            message_wrapped = textwrap.fill(message, local_line_width, drop_whitespace=drop_whitespace)
         message_wrapped_lines = message_wrapped.count('\n') + 1
         longest_line_len = max([len(l) for l in message.split('\n')])
         width_used = min(longest_line_len, local_line_width)
@@ -19369,23 +20218,28 @@ def popup(*args, title=None, button_color=None, background_color=None, text_colo
             layout += [[PopupButton(custom_text[0], button_color=button_color, focus=True, bind_return_key=True,
                                     size=(len(custom_text[0]), 1)),
                         PopupButton(custom_text[1], button_color=button_color, size=(len(custom_text[1]), 1))]]
-    elif button_type is POPUP_BUTTONS_YES_NO:
-        layout += [[PopupButton('Yes', button_color=button_color, focus=True, bind_return_key=True, pad=((20, 5), 3),
+    elif button_type == POPUP_BUTTONS_YES_NO:
+        layout += [[PopupButton('Yes', button_color=button_color, focus=True, bind_return_key=True,
                                 size=(5, 1)), PopupButton('No', button_color=button_color, size=(5, 1))]]
-    elif button_type is POPUP_BUTTONS_CANCELLED:
+    elif button_type == POPUP_BUTTONS_CANCELLED:
         layout += [[
-            PopupButton('Cancelled', button_color=button_color, focus=True, bind_return_key=True, pad=((20, 0), 3))]]
-    elif button_type is POPUP_BUTTONS_ERROR:
-        layout += [[PopupButton('Error', size=(6, 1), button_color=button_color, focus=True, bind_return_key=True,
-                                pad=((20, 0), 3))]]
-    elif button_type is POPUP_BUTTONS_OK_CANCEL:
+            PopupButton('Cancelled', button_color=button_color, focus=True, bind_return_key=True )]]
+    elif button_type == POPUP_BUTTONS_ERROR:
+        layout += [[PopupButton('Error', size=(6, 1), button_color=button_color, focus=True, bind_return_key=True)]]
+    elif button_type == POPUP_BUTTONS_OK_CANCEL:
         layout += [[PopupButton('OK', size=(6, 1), button_color=button_color, focus=True, bind_return_key=True),
                     PopupButton('Cancel', size=(6, 1), button_color=button_color)]]
-    elif button_type is POPUP_BUTTONS_NO_BUTTONS:
+    elif button_type == POPUP_BUTTONS_NO_BUTTONS:
         pass
     else:
-        layout += [[PopupButton('OK', size=(5, 1), button_color=button_color, focus=True, bind_return_key=True,
-                                pad=((20, 0), 3))]]
+        layout += [[PopupButton('OK', size=(5, 1), button_color=button_color, focus=True, bind_return_key=True,)]]
+    if button_justification is not None:
+        justification = button_justification.lower()[0]
+        if justification == 'r':
+            layout[-1] = [Push()] + layout[-1]
+        elif justification == 'c':
+            layout[-1] = [Push()] + layout[-1] + [Push()]
+
 
     window = Window(_title, layout, auto_size_text=True, background_color=background_color, button_color=button_color,
                     auto_close=auto_close, auto_close_duration=auto_close_duration, icon=icon, font=font,
@@ -19420,56 +20274,59 @@ def MsgBox(*args):
 
 # ========================  Scrolled Text Box   =====#
 # ===================================================#
-def popup_scrolled(*args, title=None, button_color=None, background_color=None, text_color=None, yes_no=False, auto_close=False, auto_close_duration=None,
-                   size=(None, None), location=(None, None), relative_location=(None, None), non_blocking=False, no_titlebar=False, grab_anywhere=False, keep_on_top=None, font=None,
-                   image=None, icon=None, modal=True, no_sizegrip=False):
+def popup_scrolled(*args, title=None, button_color=None, background_color=None, text_color=None, yes_no=False, no_buttons=False, button_justification='l', auto_close=False, auto_close_duration=None, size=(None, None), location=(None, None), relative_location=(None, None), non_blocking=False, no_titlebar=False, grab_anywhere=False, keep_on_top=None, font=None, image=None, icon=None, modal=True, no_sizegrip=False):
     """
     Show a scrolled Popup window containing the user's text that was supplied.  Use with as many items to print as you
     want, just like a print statement.
 
-    :param *args:               Variable number of items to display
-    :type *args:                (Any)
-    :param title:               Title to display in the window.
-    :type title:                (str)
-    :param button_color:        button color (foreground, background)
-    :type button_color:         (str, str) or str
-    :param yes_no:              If True, displays Yes and No buttons instead of Ok
-    :type yes_no:               (bool)
-    :param auto_close:          if True window will close itself
-    :type auto_close:           (bool)
-    :param auto_close_duration: Older versions only accept int. Time in seconds until window will close
-    :type auto_close_duration:  int | float
-    :param size:                (w,h) w=characters-wide, h=rows-high
-    :type size:                 (int, int)
-    :param location:            Location on the screen to place the upper left corner of the window
-    :type location:             (int, int)
-    :param relative_location:   (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
-    :type relative_location:    (int, int)
-    :param non_blocking:        if True the call will immediately return rather than waiting on user input
-    :type non_blocking:         (bool)
-    :param background_color:    color of background
-    :type background_color:     (str)
-    :param text_color:          color of the text
-    :type text_color:           (str)
-    :param no_titlebar:         If True no titlebar will be shown
-    :type no_titlebar:          (bool)
-    :param grab_anywhere:       If True, than can grab anywhere to move the window (Default = False)
-    :type grab_anywhere:        (bool)
-    :param keep_on_top:         If True the window will remain above all current windows
-    :type keep_on_top:          (bool)
-    :param font:                specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-    :type font:                 (str or (str, int[, str]) or None)
-    :param image:               Image to include at the top of the popup window
-    :type image:                (str) or (bytes)
-    :param icon:                filename or base64 string to be used for the window's icon
-    :type icon:                 bytes | str
-    :param modal:               If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
-    :type modal:                bool
-    :param no_sizegrip:         If True no Sizegrip will be shown when there is no titlebar. It's only shown if there is no titlebar
-    :type no_sizegrip:          (bool)
-    :return:                    Returns text of the button that was pressed.  None will be returned if user closed window with X
-    :rtype:                     str | None | TIMEOUT_KEY
+    :param *args:                 Variable number of items to display
+    :type *args:                  (Any)
+    :param title:                 Title to display in the window.
+    :type title:                  (str)
+    :param button_color:          button color (foreground, background)
+    :type button_color:           (str, str) or str
+    :param yes_no:                If True, displays Yes and No buttons instead of Ok
+    :type yes_no:                 (bool)
+    :param no_buttons:            If True, no buttons will be shown. User will have to close using the "X"
+    :type no_buttons:             (bool)
+    :param button_justification:  How buttons should be arranged.  l, c, r for Left, Center or Right justified
+    :type button_justification:   (str)
+    :param auto_close:            if True window will close itself
+    :type auto_close:             (bool)
+    :param auto_close_duration:   Older versions only accept int. Time in seconds until window will close
+    :type auto_close_duration:    int | float
+    :param size:                  (w,h) w=characters-wide, h=rows-high
+    :type size:                   (int, int)
+    :param location:              Location on the screen to place the upper left corner of the window
+    :type location:               (int, int)
+    :param relative_location:     (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
+    :type relative_location:      (int, int)
+    :param non_blocking:          if True the call will immediately return rather than waiting on user input
+    :type non_blocking:           (bool)
+    :param background_color:      color of background
+    :type background_color:       (str)
+    :param text_color:            color of the text
+    :type text_color:             (str)
+    :param no_titlebar:           If True no titlebar will be shown
+    :type no_titlebar:            (bool)
+    :param grab_anywhere:         If True, than can grab anywhere to move the window (Default = False)
+    :type grab_anywhere:          (bool)
+    :param keep_on_top:           If True the window will remain above all current windows
+    :type keep_on_top:            (bool)
+    :param font:                  specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
+    :type font:                   (str or (str, int[, str]) or None)
+    :param image:                 Image to include at the top of the popup window
+    :type image:                  (str) or (bytes)
+    :param icon:                  filename or base64 string to be used for the window's icon
+    :type icon:                   bytes | str
+    :param modal:                 If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
+    :type modal:                  bool
+    :param no_sizegrip:           If True no Sizegrip will be shown when there is no titlebar. It's only shown if there is no titlebar
+    :type no_sizegrip:            (bool)
+    :return:                      Returns text of the button that was pressed.  None will be returned if user closed window with X
+    :rtype:                       str | None | TIMEOUT_KEY
     """
+
     if not args: return
     width, height = size
     width = width if width else MESSAGE_BOX_LINE_WIDTH
@@ -19500,16 +20357,26 @@ def popup_scrolled(*args, title=None, button_color=None, background_color=None, 
         height_computed = height
     layout += [[Multiline(complete_output, size=(max_line_width, height_computed), background_color=background_color, text_color=text_color, expand_x=True,
                           expand_y=True, k='-MLINE-')]]
-    pad = max_line_total - 15 if max_line_total > 15 else 1
     # show either an OK or Yes/No depending on paramater
     button = DummyButton if non_blocking else Button
+
     if yes_no:
-        layout += [[Text('', size=(pad, 1), auto_size_text=False, background_color=background_color), button('Yes'), button('No')]]
+        buttons = [button('Yes'), button('No')]
+    elif no_buttons is not True:
+        buttons =  [button('OK', size=(5, 1), button_color=button_color)]
     else:
-        layout += [[Text('', size=(pad, 1), auto_size_text=False, background_color=background_color),
-                    button('OK', size=(5, 1), button_color=button_color)]]
-    if no_titlebar and no_sizegrip is not True:
-        layout += [[Sizegrip()]]
+        buttons = None
+
+    if buttons is not None:
+        if button_justification.startswith('l'):
+            layout += [buttons]
+        elif button_justification.startswith('c'):
+            layout += [[Push()] + buttons + [Push()]]
+        else:
+            layout += [[Push()] + buttons]
+
+    if no_sizegrip is not True:
+        layout[-1] += [Sizegrip()]
 
     window = Window(title or args[0], layout, auto_size_text=True, button_color=button_color, auto_close=auto_close,
                     auto_close_duration=auto_close_duration, location=location, relative_location=relative_location, resizable=True, font=font, background_color=background_color,
@@ -20289,7 +21156,7 @@ def popup_get_file(message, title=None, default_path='', default_extension='', s
     :type save_as:                   (bool)
     :param multiple_files:           if True, then allows multiple files to be selected that are returned with ';' between each filename
     :type multiple_files:            (bool)
-    :param file_types:               List of extensions to show using wildcards. All files (the default) = (("ALL Files", "*.* *"),). NOT avoilable on the MAC
+    :param file_types:               List of extensions to show using wildcards. All files (the default) = (("ALL Files", "*.* *"),).
     :type file_types:                Tuple[Tuple[str,str]]
     :param no_window:                if True, no PySimpleGUI window will be shown. Instead just the tkinter dialog is shown
     :type no_window:                 (bool)
@@ -20385,9 +21252,16 @@ def popup_get_file(message, title=None, default_path='', default_extension='', s
         # for Macs, setting parent=None fixes a warning problem.
         if save_as:
             if running_mac():
-                filename = tk.filedialog.asksaveasfilename(initialdir=initial_folder,
-                                                       initialfile=default_path,
-                                                       defaultextension=default_extension)  # show the 'get file' dialog box
+                is_all = [(x, y) for (x, y) in file_types if all(ch in '* .' for ch in y)]
+                if not len(set(file_types)) > 1 and (len(is_all) != 0 or file_types == FILE_TYPES_ALL_FILES):
+                    filename = tk.filedialog.asksaveasfilename(initialdir=initial_folder,
+                                                               initialfile=default_path,
+                                                               defaultextension=default_extension)  # show the 'get file' dialog box
+                else:
+                    filename = tk.filedialog.asksaveasfilename(filetypes=file_types,
+                                                               initialdir=initial_folder,
+                                                               initialfile=default_path,
+                                                               defaultextension=default_extension)  # show the 'get file' dialog box
             else:
                 filename = tk.filedialog.asksaveasfilename(filetypes=file_types,
                                                        initialdir=initial_folder,
@@ -20396,20 +21270,34 @@ def popup_get_file(message, title=None, default_path='', default_extension='', s
                                                        defaultextension=default_extension)  # show the 'get file' dialog box
         elif multiple_files:
             if running_mac():
-                filename = tk.filedialog.askopenfilenames(initialdir=initial_folder,
-                                                          initialfile=default_path,
-                                                          defaultextension=default_extension)  # show the 'get file' dialog box
+                is_all = [(x, y) for (x, y) in file_types if all(ch in '* .' for ch in y)]
+                if not len(set(file_types)) > 1 and (len(is_all) != 0 or file_types == FILE_TYPES_ALL_FILES):
+                    filename = tk.filedialog.askopenfilenames(initialdir=initial_folder,
+                                                              initialfile=default_path,
+                                                              defaultextension=default_extension)  # show the 'get file' dialog box
+                else:
+                    filename = tk.filedialog.askopenfilenames(filetypes=file_types,
+                                                              initialdir=initial_folder,
+                                                              initialfile=default_path,
+                                                              defaultextension=default_extension)  # show the 'get file' dialog box
             else:
                 filename = tk.filedialog.askopenfilenames(filetypes=file_types,
-                                                      initialdir=initial_folder,
-                                                      initialfile=default_path,
-                                                      parent=root,
-                                                      defaultextension=default_extension)  # show the 'get file' dialog box
+                                                          initialdir=initial_folder,
+                                                          initialfile=default_path,
+                                                          parent=root,
+                                                          defaultextension=default_extension)  # show the 'get file' dialog box
         else:
             if running_mac():
-                filename = tk.filedialog.askopenfilename(initialdir=initial_folder,
-                                                     initialfile=default_path,
-                                                     defaultextension=default_extension)  # show the 'get files' dialog box
+                is_all = [(x, y) for (x, y) in file_types if all(ch in '* .' for ch in y)]
+                if not len(set(file_types)) > 1 and (len(is_all) != 0 or file_types == FILE_TYPES_ALL_FILES):
+                    filename = tk.filedialog.askopenfilename(initialdir=initial_folder,
+                                                             initialfile=default_path,
+                                                             defaultextension=default_extension)  # show the 'get files' dialog box
+                else:
+                    filename = tk.filedialog.askopenfilename(filetypes=file_types,
+                                                             initialdir=initial_folder,
+                                                             initialfile=default_path,
+                                                             defaultextension=default_extension)  # show the 'get files' dialog box
             else:
                 filename = tk.filedialog.askopenfilename(filetypes=file_types,
                                                      initialdir=initial_folder,
@@ -20488,47 +21376,67 @@ def popup_get_file(message, title=None, default_path='', default_extension='', s
 
 def popup_get_text(message, title=None, default_text='', password_char='', size=(None, None), button_color=None,
                    background_color=None, text_color=None, icon=None, font=None, no_titlebar=False,
-                   grab_anywhere=False, keep_on_top=None, location=(None, None), relative_location=(None, None), image=None, modal=True):
+                   grab_anywhere=False, keep_on_top=None, location=(None, None), relative_location=(None, None), image=None, history=False, history_setting_filename=None, modal=True):
     """
     Display Popup with text entry field. Returns the text entered or None if closed / cancelled
 
-    :param message:          message displayed to user
-    :type message:           (str)
-    :param title:            Window title
-    :type title:             (str)
-    :param default_text:     default value to put into input area
-    :type default_text:      (str)
-    :param password_char:    character to be shown instead of actually typed characters
-    :type password_char:     (str)
-    :param size:             (width, height) of the InputText Element
-    :type size:              (int, int)
-    :param button_color:     Color of the button (text, background)
-    :type button_color:      (str, str) or str
-    :param background_color: background color of the entire window
-    :type background_color:  (str)
-    :param text_color:       color of the message text
-    :type text_color:        (str)
-    :param icon:             filename or base64 string to be used for the window's icon
-    :type icon:              bytes | str
-    :param font:             specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
-    :type font:              (str or (str, int[, str]) or None)
-    :param no_titlebar:      If True no titlebar will be shown
-    :type no_titlebar:       (bool)
-    :param grab_anywhere:    If True can click and drag anywhere in the window to move the window
-    :type grab_anywhere:     (bool)
-    :param keep_on_top:      If True the window will remain above all current windows
-    :type keep_on_top:       (bool)
-    :param location:         (x,y) Location on screen to display the upper left corner of window
-    :type location:          (int, int)
-    :param relative_location: (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
-    :type relative_location: (int, int)
-    :param image:            Image to include at the top of the popup window
-    :type image:             (str) or (bytes)
-    :param modal:            If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
-    :type modal:             bool
-    :return:                 Text entered or None if window was closed or cancel button clicked
-    :rtype:                  str | None
+    :param message:                  message displayed to user
+    :type message:                   (str)
+    :param title:                    Window title
+    :type title:                     (str)
+    :param default_text:             default value to put into input area
+    :type default_text:              (str)
+    :param password_char:            character to be shown instead of actually typed characters. WARNING - if history=True then can't hide passwords
+    :type password_char:             (str)
+    :param size:                     (width, height) of the InputText Element
+    :type size:                      (int, int)
+    :param button_color:             Color of the button (text, background)
+    :type button_color:              (str, str) or str
+    :param background_color:         background color of the entire window
+    :type background_color:          (str)
+    :param text_color:               color of the message text
+    :type text_color:                (str)
+    :param icon:                     filename or base64 string to be used for the window's icon
+    :type icon:                      bytes | str
+    :param font:                     specifies the  font family, size, etc. Tuple or Single string format 'name size styles'. Styles: italic * roman bold normal underline overstrike
+    :type font:                      (str or (str, int[, str]) or None)
+    :param no_titlebar:              If True no titlebar will be shown
+    :type no_titlebar:               (bool)
+    :param grab_anywhere:            If True can click and drag anywhere in the window to move the window
+    :type grab_anywhere:             (bool)
+    :param keep_on_top:              If True the window will remain above all current windows
+    :type keep_on_top:               (bool)
+    :param location:                 (x,y) Location on screen to display the upper left corner of window
+    :type location:                  (int, int)
+    :param relative_location:        (x,y) location relative to the default location of the window, in pixels. Normally the window centers.  This location is relative to the location the window would be created. Note they can be negative.
+    :type relative_location:         (int, int)
+    :param image:                    Image to include at the top of the popup window
+    :type image:                     (str) or (bytes)
+    :param history:                  If True then enable a "history" feature that will display previous entries used. Uses settings filename provided or default if none provided
+    :type history:                   bool
+    :param history_setting_filename: Filename to use for the User Settings. Will store list of previous entries in this settings file
+    :type history_setting_filename:  (str)
+    :param modal:                    If True then makes the popup will behave like a Modal window... all other windows are non-operational until this one is closed. Default = True
+    :type modal:                     bool
+    :return:                         Text entered or None if window was closed or cancel button clicked
+    :rtype:                          str | None
     """
+
+
+    # First setup the history settings file if history feature is enabled
+    if history and history_setting_filename is not None:
+        try:
+            history_settings = UserSettings(history_setting_filename)
+        except Exception as e:
+            _error_popup_with_traceback('popup_get_file - Something is wrong with your supplied history settings filename',
+                                        'Exception: {}'.format(e))
+            return None
+    elif history:
+        history_settings_filename = os.path.basename(inspect.stack()[1].filename)
+        history_settings_filename = os.path.splitext(history_settings_filename)[0] + '.json'
+        history_settings = UserSettings(history_settings_filename)
+    else:
+        history_settings = None
 
     if image is not None:
         if isinstance(image, str):
@@ -20538,21 +21446,46 @@ def popup_get_text(message, title=None, default_text='', password_char='', size=
     else:
         layout = [[]]
 
-    layout += [[Text(message, auto_size_text=True, text_color=text_color, background_color=background_color)],
-               [InputText(default_text=default_text, size=size, key='-INPUT-', password_char=password_char)],
-               [Button('Ok', size=(6, 1), bind_return_key=True), Button('Cancel', size=(6, 1))]]
+    layout += [[Text(message, auto_size_text=True, text_color=text_color, background_color=background_color)]]
+    if not history:
+        layout += [[InputText(default_text=default_text, size=size, key='-INPUT-', password_char=password_char)]]
+    else:
+        text_list = history_settings.get("-PSG text list-", [])
+        last_entry = text_list[0] if text_list else default_text
+        layout += [[Combo(text_list, default_value=last_entry, key='-INPUT-', size=size if size != (None, None) else (80, 1), bind_return_key=True),
+                    Button('Clear History', tooltip='Clears the list of files shown in the combobox')]]
+
+    layout += [[Button('Ok', size=(6, 1), bind_return_key=True), Button('Cancel', size=(6, 1))]]
 
     window = Window(title=title or message, layout=layout, icon=icon, auto_size_text=True, button_color=button_color, no_titlebar=no_titlebar,
                     background_color=background_color, grab_anywhere=grab_anywhere, keep_on_top=keep_on_top, location=location, relative_location=relative_location, finalize=True, modal=modal, font=font)
 
-    button, values = window.read()
+
+    while True:
+        event, values = window.read()
+        if event in ('Cancel', WIN_CLOSED):
+            break
+        elif event == 'Clear History':
+            history_settings.set('-PSG text list-', [])
+            window['-INPUT-'].update('', [])
+            popup_quick_message('History of Previous Choices Cleared', background_color='red', text_color='white', font='_ 20', keep_on_top=True)
+        elif event in ('Ok', '-INPUT-'):
+            if values['-INPUT-'] != '':
+                if history_settings is not None:
+                    list_of_entries = history_settings.get('-PSG text list-', [])
+                    if values['-INPUT-'] in list_of_entries:
+                        list_of_entries.remove(values['-INPUT-'])
+                    list_of_entries.insert(0, values['-INPUT-'])
+                    history_settings.set('-PSG text list-', list_of_entries)
+            break
+
     window.close()
     del window
-    if button != 'Ok':
+    if event in ('Cancel', WIN_CLOSED):
         return None
     else:
-        path = values['-INPUT-']
-        return path
+        text = values['-INPUT-']
+        return text
 
 
 def popup_get_date(start_mon=None, start_day=None, start_year=None, begin_at_sunday_plus=0, no_titlebar=True, title='Choose Date', keep_on_top=True,
@@ -20892,7 +21825,7 @@ def popup_menu(window, element, menu_def, title=None, location=(None, None)):
     top_menu.invoke(0)
 
 
-def popup_error_with_traceback(title, *messages):
+def popup_error_with_traceback(title, *messages, emoji=None):
     """
     Show an error message and as many additoinal lines of messages as you want.
     Will show the same error window as PySimpleGUI uses internally.  Has a button to
@@ -20900,15 +21833,17 @@ def popup_error_with_traceback(title, *messages):
 
     :param title:    The title that will be shown in the popup's titlebar and in the first line of the window
     :type title:     str
+    :param emoji:    An optional BASE64 Encoded image to shows in the error window
+    :type emoji:     bytes
     :param messages: A variable number of lines of messages you wish to show your user
     :type messages:  *Any
     """
 
     # For now, call the function that PySimpleGUI uses internally
-    _error_popup_with_traceback(str(title), *messages)
+    _error_popup_with_traceback(str(title), *messages, emoji=emoji)
 
 
-def _error_popup_with_traceback(title, *args):
+def _error_popup_with_traceback(title, *args, emoji=None):
     if SUPPRESS_ERROR_POPUPS:
         return
     trace_details = traceback.format_stack()
@@ -20920,7 +21855,7 @@ def _error_popup_with_traceback(title, *args):
             error_message = line
             break
     if file_info_pysimplegui is None:
-        _error_popup_with_code(title, None, None, 'Did not find your traceback info', *args)
+        _error_popup_with_code(title, None, None,  'Did not find your traceback info', *args,emoji=emoji,)
         return
 
     error_parts = None
@@ -20934,12 +21869,13 @@ def _error_popup_with_traceback(title, *args):
         return
     filename = error_parts[0][error_parts[0].index('File ') + 5:]
     line_num = error_parts[1][error_parts[1].index('line ') + 5:]
-    _error_popup_with_code(title, filename, line_num, error_message, *args)
+    _error_popup_with_code(title, filename, line_num, error_message, *args, emoji=emoji)
 
 
-def _error_popup_with_code(title, filename=None, line_num=None, *args):
+def _error_popup_with_code(title, filename, line_num, *args,  emoji=None):
+    emoji_data = emoji if emoji is not None else _random_error_emoji()
     layout = [[Text('ERROR'), Text(title)],
-              [Image(data=_random_error_emoji())]]
+              [Image(data=emoji_data)]]
     # make max length of line be 90 chars and allow the height to vary based on number of needed lines
     lines = [str(msg).split('\n') for msg in args]
     max_line_len = 0
@@ -23006,7 +23942,9 @@ def get_versions():
     Returns a human-readable string of version numbers for:
 
     Python version
-    PySimpleGUI Port (tkinter in this case)
+    Platform (Win, Mac, Linux)
+    Platform version (tuple with information from the platform module)
+    PySimpleGUI Port (PySimpleGUI in this case)
     tkinter version
     PySimpleGUI version
     The location of the PySimpleGUI.py file
@@ -23016,13 +23954,39 @@ def get_versions():
     :return:
     :rtype:  str
     """
-    versions = "Python version: {}.{}.{}\nPort: {}\ntkinter version: {}\nPySimpleGUI version: {}\nPySimpleGUI filename: {}".format(sys.version_info.major,
+    if running_mac():
+        platform_name, platform_ver = 'Mac', platform.mac_ver()
+    elif running_windows():
+        platform_name, platform_ver = 'Windows', platform.win32_ver()
+    elif running_linux():
+        platform_name, platform_ver = 'Linux', platform.libc_ver()
+    else:
+        platform_name, platform_ver = 'Unknown platorm', 'Unknown platform version'
+
+    versions = "Python Interpeter: {}\nPython version: {}.{}.{}\nPlatform: {}\nPlatform version: {}\nPort: {}\ntkinter version: {}\nPySimpleGUI version: {}\nPySimpleGUI filename: {}".format(sys.executable, sys.version_info.major,
                                                                                                                                    sys.version_info.minor,
-                                                                                                                                   sys.version_info.micro, port,
-                                                                                                                                   tclversion_detailed, ver,
+                                                                                                                                   sys.version_info.micro,
+                                                                                                                                    platform_name, platform_ver,
+                                                                                                                                   port,
+                                                                                                                                   tclversion_detailed,
+                                                                                                                                   ver,
                                                                                                                                    __file__)
     return versions
 
+
+def scheck_hh():
+    with open(__file__, "r",encoding="utf8") as file:
+        lines_in_file = file.readlines()
+    combined_lines = ''.join(lines_in_file[:-1])
+    entire_file_bytes = bytearray(combined_lines, encoding='utf8')
+    cfileh = hh(entire_file_bytes)
+    return cfileh.hexdigest()
+
+
+def read_last_line():
+    with open(__file__, "r",encoding="utf8") as file:
+        last_line = file.readlines()[-1]
+    return last_line
 
 # ==================================================#
 #
@@ -23108,18 +24072,80 @@ EMOJI_BASE64_MIKE = b'iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAAkzklEQVR4nM
 
 EMOJI_BASE64_SUPERHERO = b'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'
 
+EMOJI_BASE64_BLANK_STARE = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMxMTQxQTEyOUM0MTFFREE2QUNBOEEzMUIzMDUzQjMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMxMTQxQTAyOUM0MTFFREE2QUNBOEEzMUIzMDUzQjMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
 
-EMOJI_BASE64_HAPPY_LIST = [EMOJI_BASE64_HAPPY_STARE, EMOJI_BASE64_HAPPY_LAUGH, EMOJI_BASE64_HAPPY_JOY, EMOJI_BASE64_HAPPY_IDEA, EMOJI_BASE64_HAPPY_GASP,
-                           EMOJI_BASE64_HAPPY_RELIEF, EMOJI_BASE64_HAPPY_WINK, EMOJI_BASE64_HAPPY_THUMBS_UP, EMOJI_BASE64_HAPPY_HEARTS,
-                           EMOJI_BASE64_HAPPY_CONTENT, EMOJI_BASE64_HAPPY_BIG_SMILE, EMOJI_BASE64_PRAY, EMOJI_BASE64_GUESS, EMOJI_BASE64_FINGERS_CROSSED,
-                           EMOJI_BASE64_CLAP]
+EMOJI_BASE64_COOL = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjU2QUIxRjUyOUM1MTFFRDk2Nzg4MjA4RThGMEY0RDUiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjU2QUIxRjQyOUM1MTFFRDk2Nzg4MjA4RThGMEY0RDUiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
 
-EMOJI_BASE64_SAD_LIST = [EMOJI_BASE64_YIKES, EMOJI_BASE64_WEARY, EMOJI_BASE64_DREAMING, EMOJI_BASE64_THINK, EMOJI_BASE64_SKEPTICAL, EMOJI_BASE64_FACEPALM,
-                         EMOJI_BASE64_FRUSTRATED, EMOJI_BASE64_PONDER, EMOJI_BASE64_NOTUNDERSTANDING, EMOJI_BASE64_CRY, EMOJI_BASE64_DEAD, EMOJI_BASE64_ZIPPED_SHUT,
-                         EMOJI_BASE64_NO_HEAR, EMOJI_BASE64_NO_SEE, EMOJI_BASE64_NO_SPEAK]
+EMOJI_BASE64_EYE_ROLL = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzlDNDJCNTQyOUM1MTFFREE0NkZBRDk2MDIyOEZEQTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzlDNDJCNTMyOUM1MTFFREE0NkZBRDk2MDIyOEZEQTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
 
+EMOJI_BASE64_OK = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjREOTYwNDQzMkMzNjExRUQ4MTVBQjZCNjk3OTUzN0IxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjREOTYwNDQ0MkMzNjExRUQ4MTVBQjZCNjk3OTUzN0IxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NEQ5NjA0NDEyQzM2MTFFRDgxNUFCNkI2OTc5NTM3QjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NEQ5NjA0NDIyQzM2MTFFRDgxNUFCNkI2OTc5NTM3QjEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz67w/ebAAAYJUlEQVR42txa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'
+
+EMOJI_BASE64_QUESTION = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTM5RTlGQzYyOUM0MTFFREIxNTdEMDBGMzhGNjVBNEIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTM5RTlGQzUyOUM0MTFFREIxNTdEMDBGMzhGNjVBNEIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_SKEPTIC = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTIzRDJEN0QyOUM0MTFFREE3NTdFMjk3NzIzN0VDMjYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTIzRDJEN0MyOUM0MTFFREE3NTdFMjk3NzIzN0VDMjYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_SLEEPING = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEMzN0M3NDAyOUM0MTFFREEyOUNENzdBMTRBNTI1NTkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEMzN0M3M0YyOUM0MTFFREEyOUNENzdBMTRBNTI1NTkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_TEAR = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTAwRDAzM0EyOUM1MTFFRDlBNTNFODhEQ0E0RkNFQ0MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTAwRDAzMzkyOUM1MTFFRDlBNTNFODhEQ0E0RkNFQ0MiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_UPSIDE_DOWN = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjVBRkMyMkUyOUM1MTFFRDgzMzZDOUJBMEFDQjg1REMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjVBRkMyMkQyOUM1MTFFRDgzMzZDOUJBMEFDQjg1REMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_WIZARD = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkNTJlMTYxMC0xNThlLTlhNDItYTY0Ni0yNjViYjMyYzFkMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEIwRDE1RUEyOUM1MTFFREFCMjU4NjU5N0VFM0Q1OUEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEIwRDE1RTkyOUM1MTFFREFCMjU4NjU5N0VFM0Q1OUEiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ZDUyZTE2MTAtMTU4ZS05YTQyLWE2NDYtMjY1YmIzMmMxZDA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQ1MmUxNjEwLTE1OGUtOWE0Mi1hNjQ2LTI2NWJiMzJjMWQwOCIv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'
+
+EMOJI_BASE64_CRAZY = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjZFNUE0RkQ2MzQwQjExRURCOURBOTRFOUM4NDIwRTUwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjZFNUE0RkQ3MzQwQjExRURCOURBOTRFOUM4NDIwRTUwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NkU1QTRGRDQzNDBCMTFFREI5REE5NEU5Qzg0MjBFNTAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NkU1QTRGRDUzNDBCMTFFREI5REE5NEU5Qzg0MjBFNTAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz64kfh5AAAWqElEQVR42rxa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'
+
+EMOJI_BASE64_GLASSES = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkFDODJFQTk4MzQwQjExRURCMjlGODk3NDQ5NTQ5RUZCIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkFDODJFQTk5MzQwQjExRURCMjlGODk3NDQ5NTQ5RUZCIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUM4MkVBOTYzNDBCMTFFREIyOUY4OTc0NDk1NDlFRkIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QUM4MkVBOTczNDBCMTFFREIyOUY4OTc0NDk1NDlFRkIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz63QkX8AAAWkklEQVR42rxa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'
+
+EMOJI_BASE64_HEAD_EXPLODE = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjlCMDEyRDc5MzQwQzExRUQ4QjhGREE4RURBODNBOEY0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjlCMDEyRDdBMzQwQzExRUQ4QjhGREE4RURBODNBOEY0Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUIwMTJENzczNDBDMTFFRDhCOEZEQThFREE4M0E4RjQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUIwMTJENzgzNDBDMTFFRDhCOEZEQThFREE4M0E4RjQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7feGyYAAAQ70lEQVR42sxa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'
+
+
+EMOJI_BASE64_LAPTOP = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjI3RUM1QzE3MzQwQzExRUQ4M0I0Q0I4NzYwOERFNjZDIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjI3RUM1QzE4MzQwQzExRUQ4M0I0Q0I4NzYwOERFNjZDIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjdFQzVDMTUzNDBDMTFFRDgzQjRDQjg3NjA4REU2NkMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjdFQzVDMTYzNDBDMTFFRDgzQjRDQjg3NjA4REU2NkMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7XxuepAAASgUlEQVR42uxa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'
+
+
+
+EMOJI_BASE64_PARTY = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxMUE2MDI2MzQwQjExRURCNEM2QjE1MzA1QTRFQ0FFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxMUE2MDI3MzQwQjExRURCNEM2QjE1MzA1QTRFQ0FFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjExQTYwMjQzNDBCMTFFREI0QzZCMTUzMDVBNEVDQUUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjExQTYwMjUzNDBCMTFFREI0QzZCMTUzMDVBNEVDQUUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5A1idCAAAUNElEQVR42tRa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'
+
+EMOJI_BASE64_RAINEDON = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjcyRjZCQzYyMzQwQzExRUQ5MjA3RUZFMzQ4MkFCQjI2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjcyRjZCQzYzMzQwQzExRUQ5MjA3RUZFMzQ4MkFCQjI2Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzJGNkJDNjAzNDBDMTFFRDkyMDdFRkUzNDgyQUJCMjYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzJGNkJDNjEzNDBDMTFFRDkyMDdFRkUzNDgyQUJCMjYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5YPJNEAAAa/0lEQVR42rR6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'
+
+EMOJI_BASE64_READING = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjA3RjUzNDBDMzQwQzExRURCRUQ1RUI5NjYxNTQwNzBFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjA3RjUzNDBEMzQwQzExRURCRUQ1RUI5NjYxNTQwNzBFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDdGNTM0MEEzNDBDMTFFREJFRDVFQjk2NjE1NDA3MEUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDdGNTM0MEIzNDBDMTFFREJFRDVFQjk2NjE1NDA3MEUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7w5cDgAAARpElEQVR42uxa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'
+
+EMOJI_BASE64_SANTA = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjQ0ODdCM0Y5MzQwQjExRUQ5M0NERjlEMzk2Q0RBNDlFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjQ0ODdCM0ZBMzQwQjExRUQ5M0NERjlEMzk2Q0RBNDlFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NDQ4N0IzRjczNDBCMTFFRDkzQ0RGOUQzOTZDREE0OUUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NDQ4N0IzRjgzNDBCMTFFRDkzQ0RGOUQzOTZDREE0OUUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6dQR9sAAATTklEQVR42sxa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'
+
+EMOJI_BASE64_SEARCH = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkJDNDI1OTlGMzQwQzExRUQ5QjBFQjEzMjUwNkNBQ0QwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkJDNDI1OUEwMzQwQzExRUQ5QjBFQjEzMjUwNkNBQ0QwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QkM0MjU5OUQzNDBDMTFFRDlCMEVCMTMyNTA2Q0FDRDAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QkM0MjU5OUUzNDBDMTFFRDlCMEVCMTMyNTA2Q0FDRDAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6a40hqAAAatklEQVR42sR6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'
+
+EMOJI_BASE64_WAVE = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkRGNTgwMkZBMzQwQTExRURBNkNDQkZERTBEOEZGMDRFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkRGNTgwMkZCMzQwQTExRURBNkNDQkZERTBEOEZGMDRFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6REY1ODAyRjgzNDBBMTFFREE2Q0NCRkRFMEQ4RkYwNEUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6REY1ODAyRjkzNDBBMTFFREE2Q0NCRkRFMEQ4RkYwNEUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5C42NVAAAXfklEQVR42txa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'
+
+EMOJI_BASE64_DEPRESSED = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1Njo0NiswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1Njo0NiswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDBCRDY1RDgzQTE5MTFFREEzQUVCMkM5Q0FGMjBGQkQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDBCRDY1RDkzQTE5MTFFREEzQUVCMkM5Q0FGMjBGQkQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+
+EMOJI_BASE64_GOLD_STAR =  b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjAwNzJEQTBGM0VENzExRUQ4MTVGRDVBOTkzQTU1RkNBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjAwNzJEQTEwM0VENzExRUQ4MTVGRDVBOTkzQTU1RkNBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDA3MkRBMEQzRUQ3MTFFRDgxNUZENUE5OTNBNTVGQ0EiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDA3MkRBMEUzRUQ3MTFFRDgxNUZENUE5OTNBNTVGQ0EiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6kluKgAAAWMElEQVR42txa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'
+
+EMOJI_BASE64_HONEST = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1NToxMCswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1NToxMCswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTcxODg4QkEzQTE5MTFFREI5NzBDNjdEOTlGMzkxMzYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTcxODg4QkIzQTE5MTFFREI5NzBDNjdEOTlGMzkxMzYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_ILL = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1NTo0NSswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1NTo0NSswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUM0Q0M3NzQzQTE5MTFFRDk4OTc5NDZCQjZGRkVFNkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUM0Q0M3NzUzQTE5MTFFRDk4OTc5NDZCQjZGRkVFNkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_ILL2 = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjg3Rjc1MzhFMzk1RjExRURCNDE5OUIwMTlERDQxNDQ0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjg3Rjc1MzhGMzk1RjExRURCNDE5OUIwMTlERDQxNDQ0Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdGNzUzOEMzOTVGMTFFREI0MTk5QjAxOURENDE0NDQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6ODdGNzUzOEQzOTVGMTFFREI0MTk5QjAxOURENDE0NDQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5KgkPlAAATKUlEQVR42rxa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'
+
+EMOJI_BASE64_KEY = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTI0VDA4OjE1OjA5KzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yNFQxMjowNToxMSswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yNFQxMjowNToxMSswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Nzc2Rjg5REQzQkM2MTFFREI1NERBRUFBN0E2RjE4QTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Nzc2Rjg5REUzQkM2MTFFREI1NERBRUFBN0E2RjE4QTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_MASK = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkEwREMzM0YzMzk1RjExRUQ4QTI1Q0I5Mjg1NTQzM0JDIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkEwREMzM0Y0Mzk1RjExRUQ4QTI1Q0I5Mjg1NTQzM0JDIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTBEQzMzRjEzOTVGMTFFRDhBMjVDQjkyODU1NDMzQkMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTBEQzMzRjIzOTVGMTFFRDhBMjVDQjkyODU1NDMzQkMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz72uRrEAAAUlUlEQVR42sRa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'
+
+EMOJI_BASE64_SALUTE = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTI0VDA4OjE1OjA5KzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yNFQxMjowOTowMSswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yNFQxMjowOTowMSswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDBFQjc1QTUzQkM3MTFFREJBMzhGMzA3RkNBN0M3QUIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDBFQjc1QTYzQkM3MTFFREJBMzhGMzA3RkNBN0M3QUIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_SCREAM = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1NDozMiswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1NDozMiswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODBFNDg4M0IzQTE5MTFFREI5MDlCRjk1RjI3MDhCODIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODBFNDg4M0MzQTE5MTFFREI5MDlCRjk1RjI3MDhCODIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_SMIRKING = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkIyMEM4ODY3Mzk1RjExRURCQ0VERkNGNDZDRTc2QURBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkIyMEM4ODY4Mzk1RjExRURCQ0VERkNGNDZDRTc2QURBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QjIwQzg4NjUzOTVGMTFFREJDRURGQ0Y0NkNFNzZBREEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QjIwQzg4NjYzOTVGMTFFREJDRURGQ0Y0NkNFNzZBREEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz64K2SuAAATvElEQVR42sRa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'
+
+EMOJI_BASE64_WARNING2 = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1NDoxMiswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1NDoxMiswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzRFNzk4NjMzQTE5MTFFREFCNTRBMDE4Q0NEQTM2OTciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzRFNzk4NjQzQTE5MTFFREFCNTRBMDE4Q0NEQTM2OTciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_WARNING = b'iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+tpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTA5LTIyVDA4OjEwOjQzKzA3OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wOS0yMlQwODo1Mzo1MyswNzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wOS0yMlQwODo1Mzo1MyswNzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Njk5N0ZDN0QzQTE5MTFFREEyRTJFOTM2QUFEMzdENzMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Njk5N0ZDN0UzQTE5MTFFREEyRTJFOTM2QUFEMzdENzMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RS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'
+
+EMOJI_BASE64_HAPPY_LIST = [EMOJI_BASE64_HAPPY_STARE, EMOJI_BASE64_BLANK_STARE, EMOJI_BASE64_HAPPY_LAUGH, EMOJI_BASE64_HAPPY_JOY, EMOJI_BASE64_HAPPY_IDEA, EMOJI_BASE64_HAPPY_GASP, EMOJI_BASE64_HAPPY_RELIEF, EMOJI_BASE64_HAPPY_WINK, EMOJI_BASE64_HAPPY_THUMBS_UP, EMOJI_BASE64_HAPPY_HEARTS, EMOJI_BASE64_HAPPY_CONTENT, EMOJI_BASE64_HAPPY_BIG_SMILE, EMOJI_BASE64_PRAY, EMOJI_BASE64_GUESS, EMOJI_BASE64_FINGERS_CROSSED, EMOJI_BASE64_CLAP, EMOJI_BASE64_COOL, EMOJI_BASE64_UPSIDE_DOWN, EMOJI_BASE64_OK, EMOJI_BASE64_COOL, EMOJI_BASE64_GLASSES, EMOJI_BASE64_HEAD_EXPLODE, EMOJI_BASE64_GLASSES, EMOJI_BASE64_LAPTOP, EMOJI_BASE64_PARTY, EMOJI_BASE64_READING, EMOJI_BASE64_SANTA, EMOJI_BASE64_SEARCH, EMOJI_BASE64_WAVE, EMOJI_BASE64_KEY, EMOJI_BASE64_SALUTE, EMOJI_BASE64_HONEST, EMOJI_BASE64_GOLD_STAR, EMOJI_BASE64_SMIRKING]
+
+EMOJI_BASE64_SAD_LIST = [EMOJI_BASE64_YIKES, EMOJI_BASE64_WEARY, EMOJI_BASE64_DREAMING, EMOJI_BASE64_SLEEPING, EMOJI_BASE64_THINK, EMOJI_BASE64_SKEPTIC, EMOJI_BASE64_SKEPTICAL, EMOJI_BASE64_FACEPALM, EMOJI_BASE64_FRUSTRATED, EMOJI_BASE64_PONDER, EMOJI_BASE64_NOTUNDERSTANDING, EMOJI_BASE64_QUESTION, EMOJI_BASE64_CRY, EMOJI_BASE64_TEAR, EMOJI_BASE64_DEAD, EMOJI_BASE64_ZIPPED_SHUT, EMOJI_BASE64_NO_HEAR, EMOJI_BASE64_NO_SEE, EMOJI_BASE64_NO_SPEAK, EMOJI_BASE64_EYE_ROLL, EMOJI_BASE64_CRAZY, EMOJI_BASE64_RAINEDON, EMOJI_BASE64_DEPRESSED, EMOJI_BASE64_ILL, EMOJI_BASE64_ILL2, EMOJI_BASE64_MASK, EMOJI_BASE64_WARNING, EMOJI_BASE64_WARNING2, EMOJI_BASE64_SCREAM]
 EMOJI_BASE64_LIST = EMOJI_BASE64_HAPPY_LIST + EMOJI_BASE64_SAD_LIST
 
+EMOJI_BASE64_JASON = EMOJI_BASE64_WIZARD
 
 def _random_error_emoji():
     c = random.choice(EMOJI_BASE64_SAD_LIST)
@@ -23181,196 +24207,6 @@ PYTHON_COLORED_HEARTS_BASE64 = b'iVBORw0KGgoAAAANSUhEUgAAAFoAAABJCAYAAAC96jE3AAA
 RED_X_BASE64 = b'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'
 
 GREEN_CHECK_BASE64 = b'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'
-
-
-
-'''
-M""MMMMM""M                                           dP          
-M  MMMMM  M                                           88          
-M  MMMMM  M 88d888b. .d8888b. 88d888b. .d8888b. .d888b88 .d8888b. 
-M  MMMMM  M 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88ooood8 
-M  `MMM'  M 88.  .88 88.  .88 88       88.  .88 88.  .88 88.  ... 
-Mb       dM 88Y888P' `8888P88 dP       `88888P8 `88888P8 `88888P' 
-MMMMMMMMMMM 88            .88                                     
-            dP        d8888P                                      
-MP""""""`MM                            oo                   
-M  mmmmm..M                                                 
-M.      `YM .d8888b. 88d888b. dP   .dP dP .d8888b. .d8888b. 
-MMMMMMM.  M 88ooood8 88'  `88 88   d8' 88 88'  `"" 88ooood8 
-M. .MMM'  M 88.  ... 88       88 .88'  88 88.  ... 88.  ... 
-Mb.     .dM `88888P' dP       8888P'   dP `88888P' `88888P' 
-MMMMMMMMMMM
-'''
-
-__upgrade_server_ip = 'upgradeapi.PySimpleGUI.com'
-__upgrade_server_port = '5353'
-
-
-def __send_dict(ip, port, dict_to_send):
-    """
-    Send a dictionary to the upgrade server and get back a dictionary in response
-    :param ip:           ip address of the upgrade server
-    :type ip:            str
-    :param port:         port number
-    :type port:          int | str
-    :param dict_to_send: dictionary of items to send
-    :type dict_to_send:  dict
-    :return:             dictionary that is the reply
-    :rtype:              dict
-    """
-
-    # print(f'sending dictionary to ip {ip} port {port}')
-    try:
-        # Create a socket object
-        s = socket.socket()
-
-        s.settimeout(5.0)       # set a 5 second timeout
-
-        # connect to the server on local computer
-        s.connect((ip , int(port)))
-        # send a python dictionary
-        s.send(json.dumps(dict_to_send).encode())
-
-        # receive data from the server
-        reply_data = s.recv(1024).decode()
-        # close the connection
-        s.close()
-    except Exception as e:
-        # print(f'Error sending to server:', e)
-        # print(f'payload:\n', dict_to_send)
-        reply_data = e
-    try:
-        data_dict = json.loads(reply_data)
-    except Exception as e:
-        # print(f'UPGRADE THREAD - Error decoding reply {reply_data} as a dictionary. Error = {e}')
-        data_dict = {}
-    return data_dict
-
-def __show_previous_upgrade_information():
-    """
-    Shows information about upgrades if upgrade information is waiting to be shown
-
-    :return:
-    """
-
-    # if nothing to show, then just return
-    if pysimplegui_user_settings.get('-upgrade info seen-', True) and not pysimplegui_user_settings.get('-upgrade info available-', False):
-        return
-    if pysimplegui_user_settings.get('-upgrade show only critical-', False) and pysimplegui_user_settings.get('-severity level-', '') != 'Critical':
-        return
-
-    message1 = pysimplegui_user_settings.get('-upgrade message 1-', '')
-    message2 = pysimplegui_user_settings.get('-upgrade message 2-', '')
-    recommended_version = pysimplegui_user_settings.get('-upgrade recommendation-', '')
-    severity_level = pysimplegui_user_settings.get('-severity level-', '')
-
-    message2 = r'https://www.PySimpleGUI.org'
-
-    layout = [[Image(EMOJI_BASE64_HAPPY_THUMBS_UP), T('An upgrade is available & recommended', font='_ 14')],
-              [T('It is recommended you upgrade to version {}'.format(recommended_version))],
-              [T(message1, enable_events=True, k='-MESSAGE 1-')],
-              [T(message2, enable_events=True, k='-MESSAGE 2-')],
-              [CB('Do not show this message again in the future', default=True, k='-SKIP IN FUTURE-')],
-              [B('Close'), T('This window auto-closes in'), T('30', k='-CLOSE TXT-', text_color='white', background_color='red'), T('seconds')]]
-
-    window = Window('PySimpleGUI Intelligent Upgrade', layout, finalize=True)
-    if 'http' in message1:
-        window['-MESSAGE 1-'].set_cursor('hand1')
-    if 'http' in message2:
-        window['-MESSAGE 2-'].set_cursor('hand1')
-
-    seconds_left=30
-    while True:
-        event, values = window.read(timeout=1000)
-        if event in ('Close', WIN_CLOSED) or seconds_left < 1:
-            break
-        if values['-SKIP IN FUTURE-']:
-            pysimplegui_user_settings['-upgrade info available-'] = False
-            pysimplegui_user_settings['-upgrade info seen-'] = True
-        if event == '-MESSAGE 1-' and 'http' in message1 and webbrowser_available:
-            webbrowser.open_new_tab(message1)
-        elif event == '-MESSAGE 2-' and 'http' in message2 and webbrowser_available:
-            webbrowser.open_new_tab(message2)
-        window['-CLOSE TXT-'].update(seconds_left)
-        seconds_left -= 1
-
-    window.close()
-
-
-def __get_linux_distribution():
-    with open('/etc/os-release') as f:
-        data = f.read()
-    lines = data.split('\n')
-    for line in lines:
-        if line.startswith('PRETTY_NAME'):
-            line_split = line.split('=')[1].strip('"')
-            line_tuple = tuple(line_split.split(' '))
-            return line_tuple
-    return ('Linux Distro', 'Unknown','No lines Found in //etc//os-release')
-
-
-def __perform_upgrade_check_thread():
-    # print(f'Upgrade thread...seen = {pysimplegui_user_settings.get("-upgrade info seen-", False)}')
-    try:
-        if running_trinket():
-            os_name = 'Trinket'
-            os_ver = __get_linux_distribution()
-        elif running_replit():
-            os_name = 'REPL.IT'
-            os_ver = __get_linux_distribution()
-        elif running_windows():
-            os_name = 'Windows'
-            os_ver = platform.win32_ver()
-        elif running_linux():
-            os_name = 'Linux'
-            os_ver = __get_linux_distribution()
-        elif running_mac():
-            os_name = 'Mac'
-            os_ver = platform.mac_ver()
-        else:
-            os_name = 'Other'
-            os_ver = ''
-
-        psg_ver = version
-        framework_ver = framework_version
-        python_ver = sys.version
-
-        upgrade_dict = {
-            'OSName' : str(os_name),
-            'OSVersion' : str(os_ver),
-            'PythonVersion' : str(python_ver),
-            'PSGVersion' : str(psg_ver),
-            'FrameworkName' : 'tkinter',
-            'FrameworkVersion' : str(framework_ver),
-        }
-        reply_data = __send_dict(__upgrade_server_ip, __upgrade_server_port, upgrade_dict)
-
-        recommended_version = reply_data.get('SuggestedVersion', '')
-        message1 = reply_data.get('Message1', '')
-        message2 = reply_data.get('Message2', '')
-        severity_level = reply_data.get('SeverityLevel', '')
-        # If any part of the reply has changed from the last reply, overwrite the data and set flags so user will be informed
-        if (message1 or message2) and not running_trinket():
-            if pysimplegui_user_settings.get('-upgrade message 1-', '') != message1 or \
-               pysimplegui_user_settings.get('-upgrade message 2-', '') != message2 or \
-               pysimplegui_user_settings.get('-upgrade recommendation-', '') != recommended_version or \
-               pysimplegui_user_settings.get('-severity level-', '') != severity_level:
-                # Save the data to the settings file
-                pysimplegui_user_settings['-upgrade info seen-'] = False
-                pysimplegui_user_settings['-upgrade info available-'] = True
-                pysimplegui_user_settings['-upgrade message 1-'] = message1
-                pysimplegui_user_settings['-upgrade message 2-'] = message2
-                pysimplegui_user_settings['-upgrade recommendation-'] = recommended_version
-                pysimplegui_user_settings['-severity level-'] = severity_level
-    except Exception as e:
-        reply_data = {}
-        # print('Upgrade server error', e)
-    # print(f'Upgrade Reply = {reply_data}')
-
-def __perform_upgrade_check():
-    # For now, do not show data returned. Still testing and do not want to "SPAM" users with any popups
-    # __show_previous_upgrade_information()
-    threading.Thread(target=lambda: __perform_upgrade_check_thread(), daemon=True).start()
 
 
 # =========================================================================#
@@ -23795,6 +24631,8 @@ def main_open_github_issue():
 
     window = Window('Open A GitHub Issue', layout, finalize=True, resizable=True, enable_close_attempted_event=True, margins=(0, 0))
 
+
+
     # for i in range(len(checklist)):
     [window['-T{}-'.format(i)].set_cursor('hand1') for i in range(len(checklist))]
     # window['-TABGROUP-'].expand(True, True, True)
@@ -24024,10 +24862,10 @@ def _copy_files_from_github():
         python_command = python_command.replace('pythonw', 'python')
 
     layout = [[Text('Pip Upgrade Progress')],
-              [Multiline(s=(90,15), k='-MLINE-', reroute_cprint=True, write_only=True)],
-              [Button('Downloading...', k='-EXIT-')]]
+              [Multiline(s=(90,15), k='-MLINE-', reroute_cprint=True, write_only=True, expand_x=True, expand_y=True)],
+              [Button('Downloading...', k='-EXIT-'), Sizegrip()]]
 
-    window = Window('Pip Upgrade', layout, finalize=True, keep_on_top=True, modal=True, disable_close=True)
+    window = Window('Pip Upgrade', layout, finalize=True, keep_on_top=True, modal=True, disable_close=True, resizable=True)
 
     window.disable_debugger()
 
@@ -24155,13 +24993,7 @@ def main_get_debug_data(suppress_popup=False):
     :returns:              String containing the information to place into the GitHub Issue
     :rtype:                (str)
     """
-    message = \
-        """Python version: {}
-        port: tkinter
-        tkinter version: {}
-        PySimpleGUI version: {}
-        PySimpleGUI filename: {}""".format(sys.version, tclversion_detailed, ver, __file__)
-
+    message = get_versions()
     clipboard_set(message)
 
     if not suppress_popup:
@@ -24345,7 +25177,12 @@ def main_global_pysimplegui_settings():
                Combo([''] + theme_list(), settings.get('-theme-', None), readonly=True, k='-THEME-', tooltip=tooltip_theme), Checkbox('Always use custom Titlebar', default=pysimplegui_user_settings.get('-custom titlebar-',False), k='-CUSTOM TITLEBAR-')]],
                         font='_ 16', expand_x=True)
 
-    settings_tab_group = TabGroup([[theme_tab, ttk_tab, interpreter_tab, explorer_tab, editor_tab, snapshots_tab ]])
+    # ------------------------- Security Tab -------------------------
+    security_tab = Tab('Security',
+                [[T('PySimpleGUI hashcode')], [T(scheck_hh())]],
+                       expand_x=True)
+
+    settings_tab_group = TabGroup([[theme_tab, ttk_tab, interpreter_tab, explorer_tab, editor_tab, snapshots_tab, security_tab ]])
     layout += [[settings_tab_group]]
               # [T('Buttons (Leave Unchecked To Use Default) NOT YET IMPLEMENTED!',  font='_ 16')],
               #      [Checkbox('Always use TTK buttons'), CBox('Always use TK Buttons')],
@@ -24357,7 +25194,7 @@ def main_global_pysimplegui_settings():
     ttk_theme_list = ttk.Style().theme_names()
 
     window['-TTK THEME-'].update(value=DEFAULT_TTK_THEME, values=ttk_theme_list)
-    
+
     while True:
         event, values = window.read()
         if event in ('Cancel', WIN_CLOSED):
@@ -24536,7 +25373,8 @@ def main_sdk_help():
                         [T(size=(80, 1), font='Courier 10 underline', k='-DOC LINK-', enable_events=True)]], pad=(0, 0), expand_x=True, expand_y=True, vertical_alignment='t')
     layout = [[button_col, mline_col]]
     layout += [[CBox('Summary Only', enable_events=True, k='-SUMMARY-'), CBox('Display Only PEP8 Functions', default=True, k='-PEP8-')]]
-    # layout += [[Button('Exit', size=(15, 1))]]
+    # layout = [[Column(layout, scrollable=True, p=0, expand_x=True, expand_y=True, vertical_alignment='t'), Sizegrip()]]
+    layout += [[Button('Exit', size=(15, 1)), Sizegrip()]]
 
     window = Window('SDK API Call Reference', layout, resizable=True, use_default_focus=False, keep_on_top=True, icon=EMOJI_BASE64_THINK, finalize=True, right_click_menu=MENU_RIGHT_CLICK_EDITME_EXIT)
     window['-DOC LINK-'].set_cursor('hand1')
@@ -24619,7 +25457,6 @@ def main_sdk_help():
     except Exception as e:
         _error_popup_with_traceback('Exception in SDK reference', e)
     window.close()
-
 
 #                     oo
 #
@@ -24719,11 +25556,11 @@ def _create_main_window():
         # [ProgressBar(100, bar_color=('red', 'green'), orientation='h')],
 
         [Listbox(['Listbox 1', 'Listbox 2', 'Listbox 3'], select_mode=SELECT_MODE_EXTENDED, size=(20, 5), no_scrollbar=True),
-         Spin([1, 2, 3, 'a', 'b', 'c'], initial_value='a', size=(4, 3))],
+         Spin([1, 2, 3, 'a', 'b', 'c'], initial_value='a', size=(4, 3), wrap=True)],
         [Combo(['Combo item %s' % i for i in range(5)], size=(20, 3), default_value='Combo item 2', key='-COMBO1-', )],
         [Combo(['Combo item %s' % i for i in range(5)], size=(20, 3), font='Courier 14', default_value='Combo item 2', key='-COMBO2-', )],
         # [Combo(['Combo item 1', 2,3,4], size=(20, 3), readonly=False, text_color='blue', background_color='red', key='-COMBO2-')],
-        
+
     ]
 
     frame3 = [
@@ -24764,22 +25601,13 @@ def _create_main_window():
 
     frame6 = [[VPush()],[graph_elem]]
 
+    global_settings_tab_layout = [[T('Settings Filename:'), T(pysimplegui_user_settings.full_filename, s=(50,2))],
+                                  [T('Settings Dictionary:'), MLine(pysimplegui_user_settings, size=(50,8), write_only=True)],
+                                  ]
+
     themes_tab_layout = [[T('You can see a preview of the themes, the color swatches, or switch themes for this window')],
                          [T('If you want to change the default theme for PySimpleGUI, use the Global Settings')],
                          [B('Themes'), B('Theme Swatches'), B('Switch Themes')]]
-
-
-    upgrade_recommendation_tab_layout = [[T('Latest Recommendation and Announcements For You', font='_ 14')],
-                                         [T('Severity Level of Update:'), T(pysimplegui_user_settings.get('-severity level-',''))],
-                                         [T('Recommended Version To Upgrade To:'), T(pysimplegui_user_settings.get('-upgrade recommendation-',''))],
-                                         [T(pysimplegui_user_settings.get('-upgrade message 1-',''))],
-                                         [T(pysimplegui_user_settings.get('-upgrade message 2-',''))],
-                                         [Checkbox('Show Only Critical Messages', default=pysimplegui_user_settings.get('-upgrade show only critical-', False), key='-UPGRADE SHOW ONLY CRITICAL-', enable_events=True)],
-                                         [Button('Show Notification Again'), B('Upgrade from GitHub', button_color='white on red', key='-UPGRADE FROM GITHUB-'),
-],
-                                         ]
-    tab_upgrade = Tab('Upgrade\n',upgrade_recommendation_tab_layout,  expand_x=True)
-
 
     tab1 = Tab('Graph\n', frame6, tooltip='Graph is in here', title_color='red')
     tab2 = Tab('CB, Radio\nList, Combo',
@@ -24792,6 +25620,7 @@ def _create_main_window():
     tab6 = Tab('Course or\nSponsor', frame7, k='-TAB SPONSOR-')
     tab7 = Tab('Popups\n', pop_test_tab_layout, k='-TAB POPUP-')
     tab8 = Tab('Themes\n', themes_tab_layout, k='-TAB THEMES-')
+    tab9 = Tab('Global\nSettings', global_settings_tab_layout, k='-TAB GlOBAL SETTINGS-')
 
     def VerLine(version, description, justification='r', size=(40, 1)):
         return [T(version, justification=justification, font='Any 12', text_color='yellow', size=size, pad=(0,0)), T(description, font='Any 12', pad=(0,0))]
@@ -24810,7 +25639,7 @@ def _create_main_window():
 
     layout_bottom = [
         [B(SYMBOL_DOWN, pad=(0, 0), k='-HIDE TABS-'),
-         pin(Col([[TabGroup([[tab1, tab2, tab3, tab6, tab4, tab5, tab7, tab8, tab_upgrade]], key='-TAB_GROUP-')]], k='-TAB GROUP COL-'))],
+         pin(Col([[TabGroup([[tab1, tab2, tab3, tab6, tab4, tab5, tab7, tab8, tab9]], key='-TAB_GROUP-')]], k='-TAB GROUP COL-'))],
         [B('Button', highlight_colors=('yellow', 'red'),pad=(1, 0)),
          B('ttk Button', use_ttk_buttons=True, tooltip='This is a TTK Button',pad=(1, 0)),
          B('See-through Mode', tooltip='Make the background transparent',pad=(1, 0)),
@@ -24820,7 +25649,7 @@ def _create_main_window():
         # [B(image_data=ICON_BUY_ME_A_COFFEE,pad=(1, 0), key='-COFFEE-'),
         [B(image_data=UDEMY_ICON,pad=(1, 0), key='-UDEMY-'),
          B('SDK Reference', pad=(1, 0)), B('Open GitHub Issue',pad=(1, 0)), B('Versions for GitHub',pad=(1, 0)),
-         ButtonMenu('ButtonMenu', button_menu_def, pad=(1, 0),key='-BMENU-', tearoff=True)
+         ButtonMenu('ButtonMenu', button_menu_def, pad=(1, 0),key='-BMENU-', tearoff=True,  disabled_text_color='yellow')
          ]]
 
     layout = [[]]
@@ -24837,7 +25666,7 @@ def _create_main_window():
     window = Window('PySimpleGUI Main Test Harness', layout,
                     # font=('Helvetica', 18),
                     # background_color='black',
-                    right_click_menu=['&Right', ['Right', '!&Click', '&Menu', 'E&xit', 'Properties']],
+                    right_click_menu=['&Right', ['Right', 'Edit Me', '!&Click', '&Menu', 'E&xit', 'Properties']],
                     # transparent_color= '#9FB8AD',
                     resizable=True,
                     keep_on_top=False,
@@ -24913,7 +25742,7 @@ def main():
         elif event.startswith('See'):
             window._see_through = not window._see_through
             window.set_transparent_color(theme_background_color() if window._see_through else '')
-        elif event == '-INSTALL-' or event == '-UPGRADE FROM GITHUB-':
+        elif event == '-INSTALL-':
             _upgrade_gui()
         elif event == 'Popup':
             popup('This is your basic popup', keep_on_top=True)
@@ -24926,16 +25755,15 @@ def main():
         elif event == 'Get Text':
             popup_scrolled('Returned:', popup_get_text('Enter some text', keep_on_top=True))
         elif event.startswith('-UDEMY-'):
-                webbrowser.open_new_tab(r'https://udemy.com/PySimpleGUI')
+                webbrowser.open_new_tab(r'https://www.udemy.com/course/pysimplegui/?couponCode=346BC463A0F8759BEF1B')
         elif event.startswith('-SPONSOR-'):
             if webbrowser_available:
                 webbrowser.open_new_tab(r'https://www.paypal.me/pythongui')
         elif event == '-COFFEE-':
             if webbrowser_available:
-                # webbrowser.open_new_tab(r'https://udemy.com/PySimpleGUI')
                 webbrowser.open_new_tab(r'https://www.buymeacoffee.com/PySimpleGUI')
         elif event in  ('-EMOJI-HEARTS-', '-HEART-', '-PYTHON HEARTS-'):
-            popup_scrolled("Oh look!  It's a Udemy discount coupon!", '4FD91A459D56B1029FF8',
+            popup_scrolled("Oh look!  It's a Udemy discount coupon!", '346BC463A0F8759BEF1B',
                            'A personal message from Mike -- thank you so very much for supporting PySimpleGUI!', title='Udemy Coupon', image=EMOJI_BASE64_MIKE, keep_on_top=True)
 
         elif event == 'Themes':
@@ -24972,24 +25800,19 @@ def main():
                 set_options(force_modal_windows=False)
                 popup('Normal Popup - Not Modal', 'You can interact with main window menubar ',
                       'but will have no effect immediately', 'button clicks will happen after you close this popup', modal=False, keep_on_top=True)
-                set_options(force_modal_windows=True)
+                set_options(force_modal_windows=forced_modal)
             elif event == 'P NoBlock':
                 popup_non_blocking('Non-blocking', 'The background window should still be running', keep_on_top=True)
             elif event == 'P AutoClose':
                 popup_auto_close('Will autoclose in 3 seconds', auto_close_duration=3, keep_on_top=True)
         elif event == 'Versions for GitHub':
             main_get_debug_data()
+        elif event == 'Edit Me':
+            execute_editor(__file__)
         elif event == 'Open GitHub Issue':
             window.minimize()
             main_open_github_issue()
             window.normal()
-        elif event == 'Show Notification Again':
-            pysimplegui_user_settings.set('-upgrade info seen-', False)
-            __show_previous_upgrade_information()
-        elif event == '-UPGRADE SHOW ONLY CRITICAL-':
-            pysimplegui_user_settings.set('-upgrade show only critical-', values['-UPGRADE SHOW ONLY CRITICAL-'])
-
-
         i += 1
         # _refresh_debugger()
     print('event = ', event)
@@ -25079,7 +25902,7 @@ if running_windows():
 _read_mac_global_settings()
 
 if _mac_should_set_alpha_to_99():
-    # Applyting Mac OS 12.3+ Alpha Channel fix.  Sets the default Alpha Channel to 0.99
+    print('Applyting Mac OS 12.3+ Alpha Channel fix.  Your default Alpha Channel is now 0.99')
     set_options(alpha_channel=0.99)
 # if running_mac():
 #     print('Your Mac patches are:')
@@ -25087,9 +25910,6 @@ if _mac_should_set_alpha_to_99():
 #     print('No titlebar patch:', ENABLE_MAC_NOTITLEBAR_PATCH)
 #     print('No grab anywhere allowed with titlebar:', ENABLE_MAC_DISABLE_GRAB_ANYWHERE_WITH_TITLEBAR)
 #     print('Currently the no titlebar patch ' + ('WILL' if _mac_should_apply_notitlebar_patch() else 'WILL NOT') + ' be applied')
-
-
-__perform_upgrade_check()
 
 
 # -------------------------------- ENTRY POINT IF RUN STANDALONE -------------------------------- #
@@ -25104,3 +25924,4 @@ if __name__ == '__main__':
         exit(0)
     main()
     exit(0)
+#4b69e0fd34da758fb15c791f3d610a00c0c5ab9ff31cfca9226747bf8a4f7bdfd6db4757d7c7074fe48fa5a26642f74ba41afcc0a37e67f6294ae76eaf275f50b34d24cd425c610b6212095ceda78ec1af74e136e6327371afaa3f691a219d0b0c533efd185e2c10f8ecd36c9ad354e4449ed59186dcb9b30e0f0dc2092a33f1a32b33ca250aa70bd862b6f3f90079faaaa0d19c5e40a1e4cfccd5347d62fe23749394eae17d004c9e61cc11829916f513a9804ac137dba7f44cd284c621e8cb5d96c9f5e171c158d93a49eb8cd831311cb901cc1b2665520dad3a45388c57141e7b4e32325d63c3bce243a369bd64b01956032b3927504ed7a01a6163ce516283dc79195c8ed2d4f986351f8b784b097a543069ee1c45f4b9eafa3e72e0bcef4acf1db4fbc291521a0744a44439ef601ece09f9eaa107b00c25d5c36786169a9c303d775884b56461bd380f519b240290900727f34761ed32d5db2b7b4e504be9f58eb63362bf91387d770fe133299bb6efd2b65173fa302e6e8bf44dd11770758c121bb5f47ae16e8bb0f1efef9c90f9f27b61fcaae65137917dedb3784f3a37bd2139bab5483c8615ab3e42bca4e8e104f8ed17fa0eea5efd901301a273383fc50bdb4af54ccf409026b075b5e1c4a7ff8543e5725dda7d917dd26842f263ed901ff3d2f1dc969843eb54e6dc6b7401507af02d466f10a6e46d2bf97bfb8c

@@ -22,7 +22,7 @@ def load_image_for_display(filepath: str, size: Tuple[int, int]) -> bool | Tuple
         img_size[0] = min(432, math.floor(size[0] / 2))
         img_size[1] = min(240, math.floor(size[1] / 2))
 
-        img.thumbnail((img_size[0], img_size[1]), Image.ANTIALIAS)
+        img.thumbnail((img_size[0], img_size[1]), Image.Resampling.LANCZOS)
         b_io = io.BytesIO()
         img.save(b_io, format="PNG")
         return [width, height], b_io

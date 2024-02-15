@@ -2,7 +2,7 @@ from ui_manager import PySimpleGUI as sg
 import textwrap
 
 
-def get_image_tab():
+def get_image_tab(window_size:list[int]):
     # The attributes you can select for an image
     ITS_img_attributes = sg.Column([
         [
@@ -80,7 +80,7 @@ def get_image_tab():
                     sg.Text("Blocks List", visible=False, key="-Img_Any_Listing_Text-")
                 ],
                 [
-                    sg.Multiline(key="-Img_Any_Listing-", size=(10, 8), visible=False)
+                    sg.Multiline(key="-Img_Any_Listing-", size=(20, 8), visible=False)
                 ]
             ]),
         ],
@@ -117,7 +117,7 @@ def get_image_tab():
         [
             sg.Text("May not be what you see when the image is rendered", size=(40, 10))
         ]
-    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(500, 500))
+    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(int(window_size[0]/1.4), int(window_size[1]/1.4)))
 
     # The area to load the image
     ITS_imageloader = sg.Column([
@@ -127,7 +127,7 @@ def get_image_tab():
         [sg.Text('Filename')],
         [
             sg.Input(enable_events=True, key="-Text Entered-"),
-            sg.FileBrowse(tooltip="Browse for an Image", file_types=(("Image Files", "*.png;*.jpg;*.jpeg"),))
+            sg.FileBrowse(tooltip="Browse for an Image", file_types=(("Image Files", "*.png;*.jpg;*.jpeg;*.bmp"),))
         ],
         [sg.Button("Load", disabled=True, key="-Submit_ITS-")],
         [sg.Image(key="-LOADED_IMAGE-", visible=False)]

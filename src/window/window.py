@@ -18,8 +18,19 @@ sg.theme('DecentGrey')
 
 
 def make_window():
+    # Making sure the window size is alright
+    # sg.Window.get_screen_size returns the actual screen size
+    window_size = [1280, 720]
+    if window_size[0] > sg.Window.get_screen_size()[0]:
+        window_size[0] = sg.Window.get_screen_size()[0]
+
+    if window_size[1] > sg.Window.get_screen_size()[1]:
+        window_size[1] = sg.Window.get_screen_size()[1]
+
+
+
     # The layout for the Image Tab
-    ITS_layout = imagetab.get_image_tab()
+    ITS_layout = imagetab.get_image_tab(window_size)
     # Layout for Video Tab
     VTS_layout = videotab.get_video_tab()
     # Layout for Audio Tab
@@ -36,6 +47,8 @@ def make_window():
     # Joining all the layouts to one Layout
     layout = [
         [sg.Titlebar(title="IVAS-Maker", background_color="#2E2E2E", icon="../assets/icon/IVASMaker_Icon_Tiny.png")],
+        # [sg.Col([[sg.Text("IVAS-Maker", text_color="#FFFFFF", background_color="#2E2E2E", grab=True)]],
+        #         pad=(0, 0), background_color="#2e2e2e")],
         [
             sg.TabGroup([[
                 sg.Tab('Image Stuff', ITS_layout),
@@ -48,18 +61,17 @@ def make_window():
         ]
     ]
 
-    # Making sure the window size is alright
-    # sg.Window.get_screen_size returns the actual screen size
-    window_size = [854, 480]
-    if window_size[0] > sg.Window.get_screen_size()[0]:
-        window_size[0] = sg.Window.get_screen_size()[0]
 
-    if window_size[1] > sg.Window.get_screen_size()[1]:
-        window_size[1] = sg.Window.get_screen_size()[1]
 
     # Loading the cool icon
     with open("../assets/icon/icon_base64.txt", "rb") as f:
         icon_base64 = f.read()
+
+
+    # Note, i hav commented out a few lines in PySimpleGUI.py
+    # To make the icon stuff appear on taskbar
+    # Find wm_overrideredirect there ig
+
 
     # Instantiating the window
     main_window = sg.Window(
