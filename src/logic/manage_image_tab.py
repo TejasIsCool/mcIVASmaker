@@ -6,6 +6,9 @@ from logic.fileio.file_verifier import check_file_exists
 from logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
 from logic.image_logic.image_manager import manipulate_image
 from io import BytesIO
+from path_manager.pather import resource_path
+import logging
+logger = logging.getLogger(__name__)
 
 img_info = {"path": "", "bytes": BytesIO(), "size": [0, 0], "img_size": [0, 0]}
 
@@ -193,21 +196,28 @@ def manage_img_tab(window, event, values):
         details['side'] = values['-Img_Any_Side-'].lower()
         # Setting the correct output path if unspecified
         if values['-Output_Path-'] == "":
-            scriptDir = os.path.dirname(__file__)
             if "Schematic" in img_type:
                 file_end = ".schem"
             else:
                 file_end = ".png"
-            output = os.path.join(
-                scriptDir,
-                f"../../outputs/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}{file_end}"
-            )
-            output = os.path.normpath(output)
+            if not os.path.exists("./mcIVASMAKER_output"):
+                os.makedirs("./mcIVASMAKER_output")
+            output = f"./mcIVASMAKER_output/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}{file_end}"
         else:
             output = values['-Output_Path-']
 
         details['brightness'] = values['-Image_Brightness-']
         details['place_redstone_blocks'] = values['-Img_Lamps_Schem_Check-']
+
+        logger.info("Image Conversion")
+        logger.debug("Video Details:")
+        logger.debug("FilePath: " + img_info['path'])
+        logger.debug("Output Path: " + output)
+        logger.debug("Manupilations: " + img_type)
+        logger.debug(f"Crop: {all_crop}")
+        logger.debug(f"Scale: {scale}")
+        logger.debug(f"Details: {details}")
+
 
         iteration = 0
         progress_size = 0
@@ -234,6 +244,7 @@ def manage_img_tab(window, event, values):
                     "Saving..", 1, 1, no_button=True, no_titlebar=True, orientation='horizontal',
                 )
                 sg.popup_auto_close("Done!", "Done!", auto_close_duration=4)
+                logger.info("Done Image!")
                 continue
             iteration += 1
             sg.one_line_progress_meter(
