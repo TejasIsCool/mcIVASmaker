@@ -2,6 +2,9 @@
 #### Video Demo:  https://www.youtube.com/watch?v=XHlJewmWWvU
 #### Description:
 mcIVASmaker is a program aimed to convert images, videos or audio(still unfinished) into minecraft blocks.
+<div align="center">
+<img src="assets/icon/IVASMaker_Icon.png" height="200">
+</div>
 <hr>
 
 ### Pre-requisites
@@ -28,6 +31,10 @@ mcIVASmaker is a program aimed to convert images, videos or audio(still unfinish
 <br><br>
 
 On opening the program, you are greeted with three tabs, each for image/video/audio conversion to minecraft equivalent.
+<div align="center">
+<img src="https://i.ibb.co/NpPyrzz/image-2024-02-16-195746084.png" height="400" alt="Image Of The Program's GUI">
+</div>
+
 <br><br>
 #### Image Tab
 The image tab allows you to convert your selected image, into either
