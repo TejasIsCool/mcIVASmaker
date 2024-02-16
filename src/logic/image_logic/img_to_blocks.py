@@ -6,12 +6,14 @@ import functools
 import numpy as np
 from logic.image_logic.block_parser import block_parser
 from PIL import Image, ImageFile
+from path_manager.pather import resource_path
+import os
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # Loading the pre-generated blocks color
-path = "../assets/blocks/all_blocks_textures/"
-with open("../assets/blocks/img_generator_code/out.json", "r") as f:
+path = resource_path("./assets/blocks/all_blocks_textures/")
+with open(resource_path("./assets/blocks/img_generator_code/out.json"), "r") as f:
     blocks_data: List = list(json.load(f).items())
 
 # Storing all the images in memory (as numpy arrays)
@@ -21,7 +23,7 @@ for block in blocks_data:
         if block_side == "extra":
             pass
         else:
-            img = Image.open(path + block[1][block_side]['file']).convert("RGBA")
+            img = Image.open(os.path.join(path, block[1][block_side]['file'])).convert("RGBA")
             # noinspection PyTypeChecker
             blocks_img_np[block[0] + block_side] = np.array(img)
 

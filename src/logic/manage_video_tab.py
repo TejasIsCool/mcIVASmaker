@@ -8,12 +8,13 @@ import ui_manager.PySimpleGUI as sg
 from logic.fileio.file_verifier import check_file_exists
 from logic.vid_logic.ffmpeg_manager import get_resolution, get_frame_count
 from logic.vid_logic.vid_manager import vid_manager
+from path_manager.pather import resource_path
 
 # Loads up the progress animation
 IMAGES = []
 frame_count = 0
 for i in range(60):
-    img = Image.open(f"../assets/gifs/vid_progress/{i}.png")
+    img = Image.open(resource_path(f"./assets/gifs/vid_progress/{i}.png"))
     img = img.resize((50, 50))
     with BytesIO() as out:
         img.save(out, format="PNG")
@@ -166,11 +167,9 @@ def manage_vid_tab(window, event, values):
             filepath = vid_info['path']
             # Setting the correct output location
             if values['-Vid_Output_Path-'] == "":
-                scriptDir = os.path.dirname(__file__)
-                output = os.path.join(scriptDir,
-                                      f"../../outputs/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}.mp4"
-                                      )
-                output = os.path.normpath(output)
+                if not os.path.exists("./mcIVASMAKER_output"):
+                    os.makedirs("./mcIVASMAKER_output")
+                output = f"./mcIVASMAKER_output/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}.mp4"
             else:
                 output = values['-Vid_Output_Path-']
 
@@ -195,6 +194,8 @@ def manage_vid_tab(window, event, values):
         # Update the progress meter
         if event[1] == '-Image_Count-':
             img_count = values[event]
+        if event[1] == '-Reset_Images_Done-':
+            images_done = 0
         if event[1] == "-Image_Done-":
             images_done += 1
             progress = images_done / img_count * 100

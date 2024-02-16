@@ -2,21 +2,17 @@ import math
 import os
 import subprocess
 from typing import Tuple
-
+from path_manager.pather import resource_path
 import ffmpeg
 
-scriptDir = os.path.dirname(__file__)
-assets_path = os.path.join(scriptDir,
-                           f"../../../assets/cache/"
-                           )
-assets_path = os.path.normpath(assets_path)
+assets_path = resource_path(f"./assets/cache/")
 
 # The cache folders
-vid_cache_folder_jpg = assets_path + "\\img_cache_jpg\\"
-vid_cache_folder_png = assets_path + "\\img_cache_png\\"
-vid_cache_folder_mp3 = assets_path + "\\audio_cache\\"
+vid_cache_folder_jpg = os.path.normpath(os.path.join(assets_path, "./img_cache_jpg/"))
+vid_cache_folder_png = os.path.normpath(os.path.join(assets_path, "./img_cache_png/"))
+vid_cache_folder_m4a = os.path.normpath(os.path.join(assets_path, "./audio_cache/"))
 
-vid_processed_folder = assets_path + "\\img_process_cache\\"
+vid_processed_folder = os.path.normpath(os.path.join(assets_path, "./img_process_cache./"))
 
 
 # Runs ffmpeg in a subprocess
@@ -47,7 +43,7 @@ def vid_to_img(vid_path: str, frame_rate: int, cache_folder: str):
         extension = "jpg"
     else:
         extension = "png"
-    return ffmpeg_runner(f'-i "{vid_path}" -r {frame_rate} "{cache_folder}file%01d.{extension}"')
+    return ffmpeg_runner(f'-i "{vid_path}" -r {frame_rate} "{os.path.join(cache_folder,"file%01d."+extension)}"')
 
 
 # Vid to images: Unused
@@ -59,8 +55,9 @@ def vid_to_img_single(vid_path: str, frame_rate: int, cache_folder: str):
     number_of_frames = get_frame_count(vid_path, frame_rate)
     for frame_number in range(number_of_frames):
         frame_time = frame_number * 1 / frame_rate
-        ffmpeg_runner(f'-ss {frame_time} -i "{vid_path}" -vframes 1 {cache_folder}file{frame_number}.{extension}')
+        ffmpeg_runner(f'-ss {frame_time} -i "{vid_path}" '
+                      f'-vframes 1 {os.path.join(cache_folder,"file"+str(frame_number)+"."+extension)}')
 
 
 def vid_to_audio(vid_path: str):
-    out = ffmpeg_runner(f'-i "{vid_path}" -q:a 0 -map a "{vid_cache_folder_mp3}audio.m4a"')
+    out = ffmpeg_runner(f'-i "{vid_path}" -q:a 0 -map a "{os.path.join(vid_cache_folder_m4a,"audio.m4a")}"')

@@ -3,6 +3,8 @@ from logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_b
 from typing import List, Dict
 import os
 import mcschematic
+import logging
+logger = logging.getLogger(__name__)
 
 
 # Convert an image, to what the user specified
