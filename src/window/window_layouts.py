@@ -32,10 +32,20 @@ def make_window():
     # Layout for Video Tab
     VTS_layout = videotab.get_video_tab()
     # Layout for Audio Tab
-    # TODO
+    # TODO: AUDIO
     ATS_layout = [
         [
             sg.Text(text="ATS!")
+        ],
+        [
+            sg.Text(text="This is unfinished!")
+        ]
+    ]
+
+    #TODO: SCHEMATIC RENDERER
+    SCHEM_layout = [
+        [
+            sg.Text(text="Schematic Renderer")
         ],
         [
             sg.Text(text="This is unfinished!")
@@ -55,7 +65,8 @@ def make_window():
             sg.TabGroup([[
                 sg.Tab('Image Stuff', ITS_layout),
                 sg.Tab('Video Stuff', VTS_layout),
-                sg.Tab('Audio Stuff', ATS_layout)
+                sg.Tab('Audio Stuff', ATS_layout),
+                sg.Tab('Schematic Stuff', SCHEM_layout)
             ]])
         ],
         [
