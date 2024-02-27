@@ -124,7 +124,7 @@ def manage_vid_tab(window, event, values):
                 window['-Vid_Any_Side-'](visible=True)
                 window["-Vid_Brightness-"](visible=False)
                 window["-Vid_Any_Listing_Text-"](visible=True)
-                window["-Vid_Any_Listing-"](visible=True)
+                window["-Vid_Any_Listing_List-"](visible=True)
             else:
                 window['-Vid_List_Text-']("Brightness Required")
                 window['-Vid_Any_Options-'](visible=False)
@@ -132,7 +132,7 @@ def manage_vid_tab(window, event, values):
                 window['-Vid_Any_Side-'](visible=False)
                 window["-Vid_Brightness-"](visible=True)
                 window["-Vid_Any_Listing_Text-"](visible=False)
-                window["-Vid_Any_Listing-"](visible=False)
+                window["-Vid_Any_Listing_List-"](visible=False)
 
         # Showing/hiding advance options, on clicking the advance options text
         if event == "-Advance_Dropdown-":
@@ -144,10 +144,14 @@ def manage_vid_tab(window, event, values):
                 window['-Advance_Options-'](visible=True)
             advance_state = not advance_state
 
+        # Deselecting the ListBox
+        if event == "Deselect All":
+            window['-Vid_Any_Listing_List-'](set_to_index=[])
+
         # On clicking the run button
         if event == "-Vid_Run-":
             frame_rate = values["-Vid_Frame_Rate-"]
-            details = {'blocklist': values['-Vid_Any_Listing-'], 'mode': values['-Vid_Any_Options-'],
+            details = {'blocklist': values['-Vid_Any_Listing_List-'], 'mode': values['-Vid_Any_Options-'],
                        'quality': values['-Vid_Quality-'], 'frame_rate': frame_rate}
 
             # Validating the process count
