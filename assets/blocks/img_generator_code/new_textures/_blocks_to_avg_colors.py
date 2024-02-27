@@ -11,10 +11,12 @@
 # Though i wouldn't recommend it. It is painful
 
 
+import json
+import os
 
 from PIL import Image
+
 import _img_to_rgb_average
-import os, json
 
 if __name__ == "__main__":
     data = {}
@@ -64,5 +66,3 @@ if __name__ == "__main__":
 
     with open("outx.json", "w") as f:
         json.dump(data, f, indent=4)
-
-

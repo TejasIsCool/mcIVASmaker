@@ -2,7 +2,6 @@ import os
 import time
 from multiprocessing.pool import ThreadPool, Pool
 from multiprocessing import Queue, Manager
-from typing import Dict
 import ui_manager.PySimpleGUI as sg
 
 from logic.image_logic.image_manager import manipulate_image
@@ -38,15 +37,15 @@ if not os.path.exists(vid_processed_folder):
 THREAD_KEY = '-Vid_Thread-'
 
 
-def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str, scale: str, details: Dict):
+def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str, scale: str, details: dict):
     # Cleaning cache folders, incase a previous run failed to do so
     cleanup_folders()
     logger.info("Cleaned Previous Cache")
     logger.debug("Video Details:")
-    logger.debug("FilePath: "+filepath)
-    logger.debug("Output Path: "+output)
-    logger.debug("Manupilations: "+manipulation)
-    logger.debug("Scale: "+scale)
+    logger.debug("FilePath: " + filepath)
+    logger.debug("Output Path: " + output)
+    logger.debug("Manupilations: " + manipulation)
+    logger.debug("Scale: " + scale)
     logger.debug(f"Details: {details}")
 
     # Instantiating the process/thread related objects
@@ -215,7 +214,7 @@ def cleanup_folders():
 
 
 # Running this for every single frame
-def manage_single_image(event_queue: Queue, filename: str, output: str, manipulation: str, scale: str, details: Dict):
+def manage_single_image(event_queue: Queue, filename: str, output: str, manipulation: str, scale: str, details: dict):
     manipulation = manipulation.replace("Video", "Image")
     iteration = 0
     image_size = 1
@@ -227,7 +226,7 @@ def manage_single_image(event_queue: Queue, filename: str, output: str, manipula
         iteration += 1
         # Updating the progress every certain amount of iterations
         if iteration % round(image_size / updates) == 0:
-            if type(values) == str:
+            if isinstance(values, str):
                 pass
             else:
                 event_queue.put(['-Single_Frame-', values / image_size * 100])

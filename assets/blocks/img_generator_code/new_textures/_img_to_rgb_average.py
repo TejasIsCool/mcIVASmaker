@@ -20,6 +20,6 @@ def img_to_avg_colour(img: Image.Image) -> List[int]:
 
 
 if __name__ == "__main__":
-    img = Image.open("../../all_blocks_textures/blue_stained_glass.png")
-    img = img.convert("RGBA")
-    col = img_to_avg_colour(img)
+    imag = Image.open("../../all_blocks_textures/blue_stained_glass.png")
+    imag = imag.convert("RGBA")
+    col = img_to_avg_colour(imag)

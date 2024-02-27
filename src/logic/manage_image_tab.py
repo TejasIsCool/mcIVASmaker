@@ -6,7 +6,6 @@ from logic.fileio.file_verifier import check_file_exists
 from logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
 from logic.image_logic.image_manager import manipulate_image
 from io import BytesIO
-from path_manager.pather import resource_path
 import logging
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,7 @@ def manage_img_tab(window, event, values):
             img_info['bytes'],
             manipulation=values["-Img_Type-"],
             brightness=127,
-            blocklist=values['-Img_Any_Listing-'],
+            blocklist=values['-Img_Any_Listing_List-'],
             mode=values['-Img_Any_Options-'],
             side=values['-Img_Any_Side-'].lower()
         )
@@ -100,7 +99,7 @@ def manage_img_tab(window, event, values):
             window['-Img_Any_Side-'](visible=True)
             window["-Image_Brightness-"](visible=False)
             window["-Img_Any_Listing_Text-"](visible=True)
-            window["-Img_Any_Listing-"](visible=True)
+            window['-Img_Any_Listing_List-'](visible=True)
         else:
             window['-Img_List_Text-']("Brightness Required")
             window['-Img_Any_Options-'](visible=False)
@@ -108,7 +107,7 @@ def manage_img_tab(window, event, values):
             window['-Img_Any_Side-'](visible=False)
             window["-Image_Brightness-"](visible=True)
             window["-Img_Any_Listing_Text-"](visible=False)
-            window["-Img_Any_Listing-"](visible=False)
+            window['-Img_Any_Listing_List-'](visible=False)
 
         if values['-Img_Type-'] == "Image To Redstone Lamps Schematic":
             window['-Img_Lamps_Schem_Check-'](visible=True)
@@ -188,8 +187,10 @@ def manage_img_tab(window, event, values):
             sg.popup("Error!", "Invalid values in crop! Only integers accepted!(Or max for the bottom coordinates)")
             return
 
+        # TODO: Show options to list all blocks in whitelist/blacklist menu
+
         img_type = values['-Img_Type-']
-        details = {'blocklist': values['-Img_Any_Listing-'], 'mode': values['-Img_Any_Options-']}
+        details = {'blocklist': values['-Img_Any_Listing_List-'], 'mode': values['-Img_Any_Options-']}
 
         scale = values['-Img_Scale-']
 
@@ -217,7 +218,6 @@ def manage_img_tab(window, event, values):
         logger.debug(f"Crop: {all_crop}")
         logger.debug(f"Scale: {scale}")
         logger.debug(f"Details: {details}")
-
 
         iteration = 0
         progress_size = 0
@@ -251,14 +251,19 @@ def manage_img_tab(window, event, values):
                 "Working...", progress, progress_size, no_button=True, orientation='horizontal'
             )
 
+    # Deselecting the ListBox
+    if event == "Deselect All":
+        window['-Img_Any_Listing_List-'](set_to_index=[])
+
     # Updating the preview image if any options change
-    if event in ["-Image_Brightness-", "-Img_Any_Side-", "-Img_Any_Options-", "-Img_Type-"] and \
-            values['-Update_Preview-']:
+    if event in [
+        "-Image_Brightness-", "-Img_Any_Side-", "-Img_Any_Options-", "-Img_Type-", "-Img_Any_Listing_List-"
+    ] and values['-Update_Preview-']:
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
             manipulation=values["-Img_Type-"],
             brightness=values['-Image_Brightness-'],
-            blocklist=values['-Img_Any_Listing-'],
+            blocklist=values['-Img_Any_Listing_List-'],
             mode=values['-Img_Any_Options-'],
             side=values['-Img_Any_Side-'].lower()
         )

@@ -3,12 +3,11 @@ from logic.image_logic import image_to_redstone_lamps, img_to_blocks
 import PIL
 from PIL import Image
 import io
-from typing import Tuple, List
 import math
 
 
 # Loads the image for displaying in the preview
-def load_image_for_display(filepath: str, size: Tuple[int, int]) -> bool | Tuple[List[int], io.BytesIO] | None:
+def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple[list[int], io.BytesIO] | None:
     if image_handler.check_file_exists(filepath):
         try:
             img = Image.open(filepath)
@@ -32,14 +31,14 @@ def load_image_for_display(filepath: str, size: Tuple[int, int]) -> bool | Tuple
 
 # Converts the loaded image, to put it to preview
 def load_image_for_preview(
-        image_bytes: io.BytesIO, manipulation: str, brightness: int, blocklist: str, mode: str, side
+        image_bytes: io.BytesIO, manipulation: str, brightness: int, blocklist: list, mode: str, side
 ):
     img = Image.open(image_bytes)
     img.thumbnail((img.width // 2, img.height // 2))
     out_img = None
     if "Lamps" in manipulation:
         for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
-            if type(value) == Image.Image:
+            if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
         # Saving the image in a bytes format, so it can be used without storing as a file
@@ -49,8 +48,8 @@ def load_image_for_preview(
     elif "Any" in manipulation:
         img = img.convert("RGBA")
         img.thumbnail((img.width // 2, img.height // 2))
-        for value in img_to_blocks.img_to_blocks(img, side, blocklist.split("\n"), mode):
-            if type(value) == Image.Image:
+        for value in img_to_blocks.img_to_blocks(img, side, blocklist, mode):
+            if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
         b_io = io.BytesIO()

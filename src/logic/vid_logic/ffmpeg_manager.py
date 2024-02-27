@@ -1,7 +1,6 @@
 import math
 import os
 import subprocess
-from typing import Tuple
 from path_manager.pather import resource_path
 import ffmpeg
 
@@ -31,7 +30,7 @@ def get_frame_count(vid_path: str, frame_rate: float) -> int:
     return math.ceil(number_of_frames)
 
 
-def get_resolution(vid_path: str) -> Tuple[int, int]:
+def get_resolution(vid_path: str) -> tuple[int, int]:
     data = ffmpeg.probe(vid_path)
     dimensions = data['streams'][0]['width'], data['streams'][0]['height']
     return dimensions
@@ -60,4 +59,4 @@ def vid_to_img_single(vid_path: str, frame_rate: int, cache_folder: str):
 
 
 def vid_to_audio(vid_path: str):
-    out = ffmpeg_runner(f'-i "{vid_path}" -q:a 0 -map a "{os.path.join(vid_cache_folder_m4a,"audio.m4a")}"')
+    ffmpeg_runner(f'-i "{vid_path}" -q:a 0 -map a "{os.path.join(vid_cache_folder_m4a,"audio.m4a")}"')

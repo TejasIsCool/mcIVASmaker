@@ -44,7 +44,11 @@ def make_window():
 
     # Joining all the layouts to one Layout
     layout = [
-        [sg.Titlebar(title="IVAS-Maker", background_color="#2E2E2E", icon=resource_path("./assets/icon/IVASMaker_Icon_Tiny.png"))],
+        [sg.Titlebar(
+            title="IVAS-Maker",
+            background_color="#2E2E2E",
+            icon=resource_path("./assets/icon/IVASMaker_Icon_Tiny.png")
+        )],
         # [sg.Col([[sg.Text("IVAS-Maker", text_color="#FFFFFF", background_color="#2E2E2E", grab=True)]],
         #         pad=(0, 0), background_color="#2e2e2e")],
         [

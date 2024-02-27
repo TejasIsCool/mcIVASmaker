@@ -8,12 +8,13 @@ if __name__ == "__main__":
         for sides in blocks_data[block].keys():
             if sides != "extra":
                 r, g, b, a = blocks_data[block][sides]['color']
-                r = r/255
-                g = g/255
-                b = b/255
-                cmax = max(r,g,b)
-                cmin = min(r,g,b)
-                d = cmax-cmin
+                r = r / 255
+                g = g / 255
+                b = b / 255
+                cmax = max(r, g, b)
+                cmin = min(r, g, b)
+                d = cmax - cmin
+                h = 0
 
                 # if cmax and cmax are equal then h = 0
                 if d == 0:
@@ -39,8 +40,7 @@ if __name__ == "__main__":
 
                 # compute v
                 v = cmax * 100
-                blocks_data[block][sides]['color'] = [h,s,v,a]
-
+                blocks_data[block][sides]['color'] = [h, s, v, a]
 
     with open("out2.json", "w") as f:
-        json.dump(blocks_data,f,indent=4)
+        json.dump(blocks_data, f, indent=4)

@@ -5,6 +5,8 @@ from path_manager.pather import resource_path
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+# TODO: Allow all textures as binary options
+
 lit_lamp = Image.open(resource_path("./assets/blocks/redstone_lamp_on.png"))
 # noinspection PyTypeChecker
 lit_lamp_np = np.array(lit_lamp.convert("RGB"))

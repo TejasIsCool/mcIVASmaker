@@ -1,8 +1,18 @@
 from ui_manager import PySimpleGUI as sg
 import textwrap
+from path_manager.pather import resource_path
+import json
+
+# TODO: Black/white list will be all blocks name in a list, and clicking them changes colour to indicate its been
+#  selected
+path = resource_path("./assets/blocks/all_blocks_textures/")
+with open(resource_path("./assets/blocks/img_generator_code/out.json"), "r") as f:
+    blocks_data: list = list(json.load(f).items())
+    block_name_list = [x[0] for x in blocks_data]
+    block_name_list.sort()
 
 
-def get_image_tab(window_size:list[int]):
+def get_image_tab(window_size: list[int]):
     # The attributes you can select for an image
     ITS_img_attributes = sg.Column([
         [
@@ -80,7 +90,16 @@ def get_image_tab(window_size:list[int]):
                     sg.Text("Blocks List", visible=False, key="-Img_Any_Listing_Text-")
                 ],
                 [
-                    sg.Multiline(key="-Img_Any_Listing-", size=(20, 8), visible=False)
+                    sg.Listbox(
+                        values=block_name_list,
+                        select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
+                        key="-Img_Any_Listing_List-",
+                        visible=False,
+                        size=(20, 10),
+                        highlight_background_color="#00FF00",
+                        enable_events=True,
+                        right_click_menu=['&Right', ['Deselect All']]
+                    ),
                 ]
             ]),
         ],
@@ -117,7 +136,7 @@ def get_image_tab(window_size:list[int]):
         [
             sg.Text("May not be what you see when the image is rendered", size=(40, 10))
         ]
-    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(int(window_size[0]/1.4), int(window_size[1]/1.4)))
+    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(int(window_size[0] / 1.4), int(window_size[1] / 1.4)))
 
     # The area to load the image
     ITS_imageloader = sg.Column([

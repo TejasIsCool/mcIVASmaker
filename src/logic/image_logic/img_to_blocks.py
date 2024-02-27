@@ -1,7 +1,6 @@
 import math
 import mcschematic
 import json
-from typing import List, Tuple
 import functools
 import numpy as np
 from logic.image_logic.block_parser import block_parser
@@ -14,7 +13,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 # Loading the pre-generated blocks color
 path = resource_path("./assets/blocks/all_blocks_textures/")
 with open(resource_path("./assets/blocks/img_generator_code/out.json"), "r") as f:
-    blocks_data: List = list(json.load(f).items())
+    blocks_data: list = list(json.load(f).items())
 
 # Storing all the images in memory (as numpy arrays)
 blocks_img_np = {}
@@ -28,7 +27,7 @@ for block in blocks_data:
             blocks_img_np[block[0] + block_side] = np.array(img)
 
 
-def img_to_blocks(image: Image.Image, side: str, blocked_list: List, mode: str):
+def img_to_blocks(image: Image.Image, side: str, blocked_list: list, mode: str):
     # Storing the pixels data in numpy array as it is faster
     np_new_image = np.zeros(shape=(image.height * 16, image.width * 16, 4), dtype=np.uint8)
 
@@ -74,7 +73,7 @@ def img_to_blocks(image: Image.Image, side: str, blocked_list: List, mode: str):
     return
 
 
-def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: List, mode: str):
+def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: list, mode: str):
     schem = mcschematic.MCSchematic()
 
     # Filtering out the blocks, depending on how the user configured the options
@@ -118,7 +117,7 @@ def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: List, mode:
 
 
 # Finds the difference in color between a pixel, and a block average colour
-def value_difference(x: Tuple, y: List) -> float:
+def value_difference(x: tuple, y: list) -> float:
     total_diff = 0
     for val1, val2 in zip(x, y):
         total_diff += abs(val1 - val2)

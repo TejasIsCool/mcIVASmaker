@@ -1,15 +1,15 @@
 from PIL import Image
 from logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
-from typing import List, Dict
 import os
 import mcschematic
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 # Convert an image, to what the user specified
 def manipulate_image(
-        filepath: str, output: str, manipulation: str, crop: List, scale: str, details: Dict
+        filepath: str, output: str, manipulation: str, crop: list | None, scale: str, details: dict
 ):
     img = Image.open(filepath)
     # Validating the cropping
@@ -71,10 +71,10 @@ def manipulate_image(
     pass
 
 
-def img_to_lamps(img: Image.Image, output: str, details: Dict):
+def img_to_lamps(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
     for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
-        if type(value) == Image.Image:
+        if isinstance(value, Image.Image):
             img = value
         else:
             yield value
@@ -85,13 +85,13 @@ def img_to_lamps(img: Image.Image, output: str, details: Dict):
     return
 
 
-def img_to_lamps_schem(img: Image.Image, output: str, details: Dict):
+def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
     place_redstone_blocks = details['place_redstone_blocks']
 
     schem: mcschematic.MCSchematic = ...
     for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(img, brightness, place_redstone_blocks):
-        if type(value) == mcschematic.MCSchematic:
+        if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
             yield value
@@ -103,13 +103,12 @@ def img_to_lamps_schem(img: Image.Image, output: str, details: Dict):
     return
 
 
-def img_to_blocks(img: Image.Image, output: str, details: Dict):
-    blocklist = details['blocklist']
+def img_to_blocks(img: Image.Image, output: str, details: dict):
+    block_list = details['blocklist']
     mode = details['mode']
     side = details['side']
-    block_list = blocklist.split("\n")
     for value in img_to_block_img.img_to_blocks(img, side, block_list, mode):
-        if type(value) == Image.Image:
+        if isinstance(value, Image.Image):
             img = value
         else:
             yield value
@@ -120,14 +119,13 @@ def img_to_blocks(img: Image.Image, output: str, details: Dict):
     return
 
 
-def img_to_blocks_schem(img: Image.Image, output: str, details: Dict):
-    blocklist = details['blocklist']
+def img_to_blocks_schem(img: Image.Image, output: str, details: dict):
+    block_list = details['blocklist']
     mode = details['mode']
     side = details['side']
-    block_list = blocklist.split("\n")
     schem: mcschematic.MCSchematic = ...
     for value in img_to_block_img.img_to_blocks_schem(img, side, block_list, mode):
-        if type(value) == mcschematic.MCSchematic:
+        if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
             yield value
