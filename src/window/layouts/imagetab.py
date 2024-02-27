@@ -82,6 +82,24 @@ def get_image_tab(window_size: list[int]):
                         background_color="#00000000",
                         enable_events=True
                     )
+                ],
+                [
+                    sg.Checkbox(
+                        "Dithering",
+                        tooltip="Dithering is useful in preserving details, but makes things look faded"
+                                "\nIt disables the brightness slider and alternate renderer checkbox",
+                        key="-Img_Dithering-",
+                        enable_events=True
+                    )
+                ],
+                [
+                    sg.Checkbox(
+                        "Alternate Renderer",
+                        tooltip="This one uses Pillow to convert to greyscale, "
+                                "\nthen filter out the dark and bright pixels",
+                        key="-Img_Lamps_Alternate-",
+                        enable_events=True
+                    )
                 ]
             ]
             ),

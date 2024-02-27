@@ -73,7 +73,9 @@ def manipulate_image(
 
 def img_to_lamps(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
-    for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
+    dither = details['dither']
+    alternate = details['alternate']
+    for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness, dither, alternate):
         if isinstance(value, Image.Image):
             img = value
         else:

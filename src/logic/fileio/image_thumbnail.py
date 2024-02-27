@@ -31,13 +31,20 @@ def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple
 
 # Converts the loaded image, to put it to preview
 def load_image_for_preview(
-        image_bytes: io.BytesIO, manipulation: str, brightness: int, blocklist: list, mode: str, side
+        image_bytes: io.BytesIO,
+        manipulation: str,
+        brightness: int,
+        blocklist: list,
+        mode: str,
+        side,
+        dither: bool,
+        alternate: bool
 ):
     img = Image.open(image_bytes)
     img.thumbnail((img.width // 2, img.height // 2))
     out_img = None
     if "Lamps" in manipulation:
-        for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
+        for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness, dither, alternate):
             if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))

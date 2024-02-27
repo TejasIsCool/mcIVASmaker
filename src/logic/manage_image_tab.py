@@ -35,7 +35,9 @@ def manage_img_tab(window, event, values):
             brightness=127,
             blocklist=values['-Img_Any_Listing_List-'],
             mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower()
+            side=values['-Img_Any_Side-'].lower(),
+            dither=values['-Img_Dithering-'],
+            alternate=values['-Img_Lamps_Alternate-']
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 
@@ -98,6 +100,8 @@ def manage_img_tab(window, event, values):
             window['-Img_Any_Side_Text-'](visible=True)
             window['-Img_Any_Side-'](visible=True)
             window["-Image_Brightness-"](visible=False)
+            window["-Img_Dithering-"](visible=False)
+            window['-Img_Lamps_Alternate-'](visible=False)
             window["-Img_Any_Listing_Text-"](visible=True)
             window['-Img_Any_Listing_List-'](visible=True)
         else:
@@ -106,6 +110,8 @@ def manage_img_tab(window, event, values):
             window['-Img_Any_Side_Text-'](visible=False)
             window['-Img_Any_Side-'](visible=False)
             window["-Image_Brightness-"](visible=True)
+            window["-Img_Dithering-"](visible=True)
+            window["-Img_Lamps_Alternate-"](visible=False)
             window["-Img_Any_Listing_Text-"](visible=False)
             window['-Img_Any_Listing_List-'](visible=False)
 
@@ -187,10 +193,13 @@ def manage_img_tab(window, event, values):
             sg.popup("Error!", "Invalid values in crop! Only integers accepted!(Or max for the bottom coordinates)")
             return
 
-        # TODO: Show options to list all blocks in whitelist/blacklist menu
-
         img_type = values['-Img_Type-']
-        details = {'blocklist': values['-Img_Any_Listing_List-'], 'mode': values['-Img_Any_Options-']}
+        details = {
+            'blocklist': values['-Img_Any_Listing_List-'],
+            'mode': values['-Img_Any_Options-'],
+            'dither': values['-Img_Dithering-'],
+            'alternate': values['-Img_Lamps_Alternate-']
+        }
 
         scale = values['-Img_Scale-']
 
@@ -257,7 +266,13 @@ def manage_img_tab(window, event, values):
 
     # Updating the preview image if any options change
     if event in [
-        "-Image_Brightness-", "-Img_Any_Side-", "-Img_Any_Options-", "-Img_Type-", "-Img_Any_Listing_List-"
+        "-Image_Brightness-",
+        "-Img_Any_Side-",
+        "-Img_Any_Options-",
+        "-Img_Type-",
+        "-Img_Any_Listing_List-",
+        "-Img_Lamps_Alternate-",
+        "-Img_Dithering-"
     ] and values['-Update_Preview-']:
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
@@ -265,7 +280,9 @@ def manage_img_tab(window, event, values):
             brightness=values['-Image_Brightness-'],
             blocklist=values['-Img_Any_Listing_List-'],
             mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower()
+            side=values['-Img_Any_Side-'].lower(),
+            dither=values['-Img_Dithering-'],
+            alternate=values['-Img_Lamps_Alternate-']
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 
