@@ -51,78 +51,123 @@ def get_image_tab(window_size: list[int]):
             )
         ],
         [
-            sg.Column([
-                [
-                    sg.Text("Brightness Required", key="-Img_List_Text-"),
-                    sg.Combo(
-                        ["None", "Whitelist", "Blacklist"],
-                        key="-Img_Any_Options-",
-                        default_value="None",
-                        visible=False,
-                        readonly=True,
-                        background_color="#00000000",
-                        enable_events=True
-                    ),
-                    sg.Slider(
-                        range=(0, 255),
-                        default_value=127,
-                        orientation="horizontal",
-                        key="-Image_Brightness-",
-                        enable_events=True
-                    )
-                ],
-                [
-                    sg.Text("Blocks side", key="-Img_Any_Side_Text-", visible=False),
-                    sg.Combo(
-                        ["Top", "Bottom", "Front", "Back", "Side"],
-                        key="-Img_Any_Side-",
-                        default_value="Top",
-                        visible=False,
-                        readonly=True,
-                        background_color="#00000000",
-                        enable_events=True
-                    )
-                ],
-                [
-                    sg.Checkbox(
-                        "Dithering",
-                        tooltip="Dithering is useful in preserving details, but makes things look faded"
-                                "\nIt disables the brightness slider and alternate renderer checkbox",
-                        key="-Img_Dithering-",
-                        enable_events=True
-                    )
-                ],
-                [
-                    sg.Checkbox(
-                        "Alternate Renderer",
-                        tooltip="This one uses Pillow to convert to greyscale, "
-                                "\nthen filter out the dark and bright pixels",
-                        key="-Img_Lamps_Alternate-",
-                        enable_events=True
-                    )
+            sg.Frame(
+                title="Redstone Lamps Options",
+                key="-Redstone_Lamps_Key-",
+                layout=[
+                    [
+                        sg.Text("Brightness Required"),
+                        sg.Slider(
+                            range=(0, 255),
+                            default_value=127,
+                            orientation="horizontal",
+                            key="-Image_Brightness-",
+                            enable_events=True
+                        )
+                    ],
+                    [
+                        sg.Checkbox(
+                            "Dithering",
+                            tooltip="Dithering is useful in preserving details, but makes things look faded"
+                                    "\nIt disables the brightness slider and alternate renderer checkbox",
+                            key="-Img_Dithering-",
+                            enable_events=True
+                        )
+                    ],
+                    [
+                        sg.Checkbox(
+                            "Alternate Renderer",
+                            tooltip="This one uses Pillow to convert to greyscale, "
+                                    "\nthen filter out the dark and bright pixels",
+                            key="-Img_Lamps_Alternate-",
+                            enable_events=True
+                        )
+                    ],
+                    [
+                        sg.Checkbox("With power sources?", default=False, visible=False, key="-Img_Lamps_Schem_Check-")
+                    ]
                 ]
-            ]
             ),
-            sg.Column([
-                [
-                    sg.Text("Blocks List", visible=False, key="-Img_Any_Listing_Text-")
-                ],
-                [
-                    sg.Listbox(
-                        values=block_name_list,
-                        select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
-                        key="-Img_Any_Listing_List-",
-                        visible=False,
-                        size=(20, 10),
-                        highlight_background_color="#00FF00",
-                        enable_events=True,
-                        right_click_menu=['&Right', ['Deselect All']]
-                    ),
+            sg.Frame(
+                title="Any Block Image Attributes",
+                key="-Any_Block_Key-",
+                visible=False,
+                layout=[
+                    [
+                        sg.Text("Blocks Blacklist/Whitelist"),
+                        sg.Combo(
+                            ["None", "Whitelist", "Blacklist"],
+                            key="-Img_Any_Options-",
+                            default_value="None",
+                            readonly=True,
+                            background_color="#00000000",
+                            enable_events=True
+                        ),
+                    ],
+                    [
+                        sg.Text("Blocks side"),
+                        sg.Combo(
+                            ["Top", "Bottom", "Front", "Back", "Side"],
+                            key="-Img_Any_Side-",
+                            default_value="Top",
+                            readonly=True,
+                            background_color="#00000000",
+                            enable_events=True
+                        )
+                    ],
+                    [
+                        sg.Text("Blocks List To Whitelist/Blacklist"),
+                        sg.Listbox(
+                            pad=(12, 2),
+                            values=block_name_list,
+                            select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
+                            key="-Img_Any_Listing_List-",
+                            size=(30, 10),
+                            highlight_background_color="#00FF00",
+                            enable_events=True,
+                            right_click_menu=['&Right', ['Deselect All']]
+                        ),
+                    ],
+                    [sg.Frame(title="Color Settings", layout=[
+                        [
+                            sg.Text(
+                                "Average Color set (?)",
+                                tooltip="These are the pre-computed color averages of each minecraft block, "
+                                        "calculated in different ways",
+                                text_color="#AAAAFF",
+                                key="-Average_Colour_Popup-",
+                                enable_events=True
+                            ),
+                            sg.Listbox([
+                                "Linear Average",
+                                "Root Mean Square Average",
+                                "HSL Average",
+                                "HSV Average",
+                                "LAB Average",
+                                "Dominant Color"
+                            ], default_values=["Linear Average"], size=(20, 4), enable_events=True, key="-Color_Set-")
+                        ],
+                        [
+                            sg.Text(
+                                "Color Comparison Algorithm (?)",
+                                tooltip="Changes how each individual pixel's rgb value is compared to "
+                                        "each block's average color",
+                                text_color="#AAAAFF",
+                                key="-Color_Difference_Popup-",
+                                enable_events=True
+                            ),
+                            sg.Listbox([
+                                "Absolute Difference",
+                                "Euclidean Difference",
+                                "Weighted Euclidean",
+                                "Redmean Difference",
+                                "CIE76 DelE"
+                            ], default_values=["Absolute Difference"], size=(20, 4), enable_events=True,
+                                key="-Comparison_Method-")
+                        ]
+                    ])]
                 ]
-            ]),
-        ],
-        [
-            sg.Checkbox("With power sources?", default=False, visible=False, key="-Img_Lamps_Schem_Check-")
+            )
         ],
         [
             sg.Text("Output: "),
@@ -154,7 +199,7 @@ def get_image_tab(window_size: list[int]):
         [
             sg.Text("May not be what you see when the image is rendered", size=(40, 10))
         ]
-    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(int(window_size[0] / 1.4), int(window_size[1] / 1.4)))
+    ], key="-Img_Attrs-", visible=False, scrollable=True, size=(int(window_size[0] / 1.4), int(window_size[1] / 1.2)))
 
     # The area to load the image
     ITS_imageloader = sg.Column([
@@ -176,3 +221,5 @@ def get_image_tab(window_size: list[int]):
     ]]
 
     return ITS_layout
+
+

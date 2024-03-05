@@ -106,10 +106,16 @@ def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
 
 
 def img_to_blocks(img: Image.Image, output: str, details: dict):
-    block_list = details['blocklist']
-    mode = details['mode']
-    side = details['side']
-    for value in img_to_block_img.img_to_blocks(img, side, block_list, mode):
+    for value in img_to_block_img.img_to_blocks(
+            img,
+            {
+                'side': details['side'],
+                'blocked_list': details['blocklist'],
+                'mode': details['mode'],
+                'color_set': details['color_set'][0],
+                'color_compare': details['color_compare'][0]
+            }
+    ):
         if isinstance(value, Image.Image):
             img = value
         else:

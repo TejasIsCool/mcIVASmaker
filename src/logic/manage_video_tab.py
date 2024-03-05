@@ -118,21 +118,15 @@ def manage_vid_tab(window, event, values):
         # Show certain elements, depending on which modes are enabled
         if event == "-Vid_Type-":
             if "Any" in values['-Vid_Type-']:
-                window['-Vid_List_Text-']("Blocks Whitelist/Blacklist")
-                window['-Vid_Any_Options-'](visible=True)
-                window['-Vid_Any_Side_Text-'](visible=True)
-                window['-Vid_Any_Side-'](visible=True)
-                window["-Vid_Brightness-"](visible=False)
-                window["-Vid_Any_Listing_Text-"](visible=True)
-                window["-Vid_Any_Listing_List-"](visible=True)
+                window['-Vid_Redstone_Lamps_Key-'](visible=False)
+                window['-Vid_Any_Block_Key-'](visible=True)
+                window.refresh()
+                window['-Vid_Attrs-'].contents_changed()
             else:
-                window['-Vid_List_Text-']("Brightness Required")
-                window['-Vid_Any_Options-'](visible=False)
-                window['-Vid_Any_Side_Text-'](visible=False)
-                window['-Vid_Any_Side-'](visible=False)
-                window["-Vid_Brightness-"](visible=True)
-                window["-Vid_Any_Listing_Text-"](visible=False)
-                window["-Vid_Any_Listing_List-"](visible=False)
+                window['-Vid_Any_Block_Key-'](visible=False)
+                window['-Vid_Redstone_Lamps_Key-'](visible=True)
+                window.refresh()
+                window['-Vid_Attrs-'].contents_changed()
 
         # Showing/hiding advance options, on clicking the advance options text
         if event == "-Advance_Dropdown-":
@@ -151,8 +145,16 @@ def manage_vid_tab(window, event, values):
         # On clicking the run button
         if event == "-Vid_Run-":
             frame_rate = values["-Vid_Frame_Rate-"]
-            details = {'blocklist': values['-Vid_Any_Listing_List-'], 'mode': values['-Vid_Any_Options-'],
-                       'quality': values['-Vid_Quality-'], 'frame_rate': frame_rate}
+            details = {
+                'blocklist': values['-Vid_Any_Listing_List-'],
+                'mode': values['-Vid_Any_Options-'],
+                'quality': values['-Vid_Quality-'],
+                'frame_rate': frame_rate,
+                'dither': values['-Vid_Dithering-'],
+                'alternate': values['-Vid_Lamps_Alternate-'],
+                'color_set': values['-Vid_Color_Set-'],
+                'color_compare': values['-Vid_Comparison_Method-']
+            }
 
             # Validating the process count
             process_count = values['-Process_Count-']
@@ -200,6 +202,8 @@ def manage_vid_tab(window, event, values):
             img_count = values[event]
         if event[1] == '-Reset_Images_Done-':
             images_done = 0
+        if event[1] == "-Set_Images_Done-":
+            images_done = values[event]
         if event[1] == "-Image_Done-":
             images_done += 1
             progress = images_done / img_count * 100

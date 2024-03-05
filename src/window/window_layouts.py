@@ -42,7 +42,7 @@ def make_window():
         ]
     ]
 
-    #TODO: SCHEMATIC RENDERER
+    # TODO: SCHEMATIC RENDERER
     SCHEM_layout = [
         [
             sg.Text(text="Schematic Renderer")

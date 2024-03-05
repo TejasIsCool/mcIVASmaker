@@ -13,6 +13,9 @@ img_info = {"path": "", "bytes": BytesIO(), "size": [0, 0], "img_size": [0, 0]}
 
 
 def manage_img_tab(window, event, values):
+
+
+
     # Loads a preview of the selected image
     if event == "-Submit_ITS-":
         img_info['path'] = values['-Text Entered-']
@@ -31,13 +34,17 @@ def manage_img_tab(window, event, values):
         window['-Img_Attrs-'](visible=True)
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
-            manipulation=values["-Img_Type-"],
-            brightness=127,
-            blocklist=values['-Img_Any_Listing_List-'],
-            mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower(),
-            dither=values['-Img_Dithering-'],
-            alternate=values['-Img_Lamps_Alternate-']
+            {
+                'manipulation': values["-Img_Type-"],
+                'brightness': 127,
+                'blocklist': values['-Img_Any_Listing_List-'],
+                'mode': values['-Img_Any_Options-'],
+                'side': values['-Img_Any_Side-'].lower(),
+                'dither': values['-Img_Dithering-'],
+                'alternate': values['-Img_Lamps_Alternate-'],
+                'color_set': values['-Color_Set-'],
+                'color_compare': values['-Comparison_Method-']
+            }
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 
@@ -95,25 +102,15 @@ def manage_img_tab(window, event, values):
     # Enabling or disabling the view to certain elements, if they are not associated with the selected mode(-Img_Type-)
     if event == "-Img_Type-":
         if "Any" in values['-Img_Type-']:
-            window['-Img_List_Text-']("Blocks Whitelist/Blacklist")
-            window['-Img_Any_Options-'](visible=True)
-            window['-Img_Any_Side_Text-'](visible=True)
-            window['-Img_Any_Side-'](visible=True)
-            window["-Image_Brightness-"](visible=False)
-            window["-Img_Dithering-"](visible=False)
-            window['-Img_Lamps_Alternate-'](visible=False)
-            window["-Img_Any_Listing_Text-"](visible=True)
-            window['-Img_Any_Listing_List-'](visible=True)
+            window['-Redstone_Lamps_Key-'](visible=False)
+            window['-Any_Block_Key-'](visible=True)
+            window.refresh()
+            window['-Img_Attrs-'].contents_changed()
         else:
-            window['-Img_List_Text-']("Brightness Required")
-            window['-Img_Any_Options-'](visible=False)
-            window['-Img_Any_Side_Text-'](visible=False)
-            window['-Img_Any_Side-'](visible=False)
-            window["-Image_Brightness-"](visible=True)
-            window["-Img_Dithering-"](visible=True)
-            window["-Img_Lamps_Alternate-"](visible=False)
-            window["-Img_Any_Listing_Text-"](visible=False)
-            window['-Img_Any_Listing_List-'](visible=False)
+            window['-Any_Block_Key-'](visible=False)
+            window['-Redstone_Lamps_Key-'](visible=True)
+            window.refresh()
+            window['-Img_Attrs-'].contents_changed()
 
         if values['-Img_Type-'] == "Image To Redstone Lamps Schematic":
             window['-Img_Lamps_Schem_Check-'](visible=True)
@@ -198,7 +195,9 @@ def manage_img_tab(window, event, values):
             'blocklist': values['-Img_Any_Listing_List-'],
             'mode': values['-Img_Any_Options-'],
             'dither': values['-Img_Dithering-'],
-            'alternate': values['-Img_Lamps_Alternate-']
+            'alternate': values['-Img_Lamps_Alternate-'],
+            'color_set': values['-Color_Set-'],
+            'color_compare': values['-Comparison_Method-']
         }
 
         scale = values['-Img_Scale-']
@@ -272,17 +271,23 @@ def manage_img_tab(window, event, values):
         "-Img_Type-",
         "-Img_Any_Listing_List-",
         "-Img_Lamps_Alternate-",
-        "-Img_Dithering-"
+        "-Img_Dithering-",
+        "-Color_Set-",
+        "-Comparison_Method-"
     ] and values['-Update_Preview-']:
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
-            manipulation=values["-Img_Type-"],
-            brightness=values['-Image_Brightness-'],
-            blocklist=values['-Img_Any_Listing_List-'],
-            mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower(),
-            dither=values['-Img_Dithering-'],
-            alternate=values['-Img_Lamps_Alternate-']
+            {
+                'manipulation': values["-Img_Type-"],
+                'brightness': values['-Image_Brightness-'],
+                'blocklist': values['-Img_Any_Listing_List-'],
+                'mode': values['-Img_Any_Options-'],
+                'side': values['-Img_Any_Side-'].lower(),
+                'dither': values['-Img_Dithering-'],
+                'alternate': values['-Img_Lamps_Alternate-'],
+                'color_set': values['-Color_Set-'],
+                'color_compare': values['-Comparison_Method-']
+            }
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 

@@ -108,6 +108,8 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
         img_count += 1
 
+    # Update images done
+    window.write_event_value((THREAD_KEY, '-Set_Images_Done-'), img_count)
     # Video has now been converted to images and audio
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 1)
     logger.debug("Completed partial processing")
@@ -136,7 +138,9 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
 
     process_pool.close()
     # Reset the image counts done, because we over count in the below section otherwise
-    window.write_event_value((THREAD_KEY, '-Reset_Images_Done-'), None)
+    # Nope, its better to overcount hre cause user experience or smth
+    # window.write_event_value((THREAD_KEY, '-Reset_Images_Done-'), None)
+    iter_count = 0
     while True:
         # Updating the progress meters, till the all the processing has been done
         data = event_queue.get()
@@ -149,6 +153,8 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
 
         if all([proc.ready() for proc in image_processes]):
             break
+
+        iter_count += 1
 
         if any([not proc.successful() for proc in image_processes if proc.ready()]):
             logger.error("ERROR!")

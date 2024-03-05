@@ -4,6 +4,19 @@ import PIL
 from PIL import Image
 import io
 import math
+from typing import TypedDict
+
+
+class DetailsType(TypedDict):
+    manipulation: str
+    brightness: int
+    dither: bool
+    alternate: bool
+    blocklist: list[str]
+    mode: str
+    side: str
+    color_set: str
+    color_compare: str
 
 
 # Loads the image for displaying in the preview
@@ -32,19 +45,15 @@ def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple
 # Converts the loaded image, to put it to preview
 def load_image_for_preview(
         image_bytes: io.BytesIO,
-        manipulation: str,
-        brightness: int,
-        blocklist: list,
-        mode: str,
-        side,
-        dither: bool,
-        alternate: bool
+        details: DetailsType
 ):
     img = Image.open(image_bytes)
     img.thumbnail((img.width // 2, img.height // 2))
     out_img = None
-    if "Lamps" in manipulation:
-        for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness, dither, alternate):
+    if "Lamps" in details['manipulation']:
+        for value in image_to_redstone_lamps.img_to_redstone_lamps(
+                img, details['brightness'], details['dither'], details['alternate']
+        ):
             if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
@@ -52,10 +61,18 @@ def load_image_for_preview(
         b_io = io.BytesIO()
         out_img.save(b_io, format="PNG")
         return b_io
-    elif "Any" in manipulation:
+    elif "Any" in details['manipulation']:
         img = img.convert("RGBA")
         img.thumbnail((img.width // 2, img.height // 2))
-        for value in img_to_blocks.img_to_blocks(img, side, blocklist, mode):
+        for value in img_to_blocks.img_to_blocks(
+                img, {
+                    'side': details['side'],
+                    'blocked_list': details['blocklist'],
+                    'mode': details['mode'],
+                    'color_set': details['color_set'][0],
+                    'color_compare': details['color_compare'][0]
+                }
+        ):
             if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
