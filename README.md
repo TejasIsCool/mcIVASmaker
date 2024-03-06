@@ -41,7 +41,7 @@ The image tab allows you to convert your selected image, into either
 - Another image, where the pixels are the textures of minecraft blocks
 - A schematic file, which can be opened by a schematic mod, to place the image, in the form of minecraft blocks, in your own world
 <br><br>
-You can convert your image to all possible minecraft blocks upto version 1.20, or you can restrict your selection, to only a certain blocks.
+You can convert your image to all possible minecraft blocks up to version 1.20, or you can restrict your selection, to only a certain blocks.
 <br>
 You can also convert your image to a redstone lamps display, again in either image, or schematic form
 
@@ -66,7 +66,7 @@ You may access a decent palette of blocks to be whitelisted in `assets/blocks/bl
 <br><br>If you wish to add new textures, its painful<br>
 
 - Go to `assets/blocks/img_generator_code/new_textures`, create a folder called `textures` in there, and put your textures there (In same name format as in the files of `assets/blocks/all_blocks_textures` folder)<br>
-- Run `_blocks_to_avg_colors.py`, and then painfully correct the newly outputted `outx.json`. Then copy the corrected contents of the new json file, and paste it correctly into the `assets/blocks/img_generator_code/names_list.json`, so that it is like one continous javascript object.
+- Run `_blocks_to_avg_colors.py`, and then painfully correct the newly outputted `outx.json`. Then copy the corrected contents of the new json file, and paste it correctly into the `assets/blocks/img_generator_code/names_list.json`, so that it is like one continuous javascript object.
 - Move the new textures into `assets/blocks/all_blocks_textures` folder
 - Run `out_generator.py`, which precomputes the averages for all blocks. 
 
