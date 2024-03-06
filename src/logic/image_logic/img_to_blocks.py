@@ -253,7 +253,7 @@ def rgb2lab(input_color: tuple | list) -> list[int]:
     for value in XYZ:
 
         if value > 0.008856:
-            value = value ** (0.3333333333333333)
+            value = value ** 0.3333333333333333
         else:
             value = (7.787 * value) + (16 / 116)
 

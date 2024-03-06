@@ -10,6 +10,7 @@ with open(resource_path("./assets/blocks/img_generator_code/names_list.json"), "
     blocks_data: list = list(json.load(f).keys())
     blocks_data.sort()
 
+
 def get_image_tab(window_size: list[int]):
     # The attributes you can select for an image
     ITS_img_attributes = sg.Column([
@@ -219,5 +220,3 @@ def get_image_tab(window_size: list[int]):
     ]]
 
     return ITS_layout
-
-

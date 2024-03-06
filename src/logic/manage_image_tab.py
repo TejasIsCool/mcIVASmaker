@@ -13,9 +13,6 @@ img_info = {"path": "", "bytes": BytesIO(), "size": [0, 0], "img_size": [0, 0]}
 
 
 def manage_img_tab(window, event, values):
-
-
-
     # Loads a preview of the selected image
     if event == "-Submit_ITS-":
         img_info['path'] = values['-Text Entered-']

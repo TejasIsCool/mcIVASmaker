@@ -39,7 +39,7 @@ def manage_audio_tab(window, event, values):
                 anger_level += 1
                 currently_angry = True
                 window['-Audio_Easter_Egg-'](disabled=True)
-                window['-Audio_Easter_Egg-'](button_color="#404040")#button_color, #button_style
+                window['-Audio_Easter_Egg-'](button_color="#404040")
                 window['-Audio_Easter_Egg-'].Widget.configure(disabledforeground='#9e9e9e')
                 wait_time = 0
             window['-Audio_Easter_Egg-'](text=text_to_show)
