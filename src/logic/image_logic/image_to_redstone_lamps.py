@@ -65,24 +65,60 @@ def img_to_redstone_lamps(
     return
 
 
-def img_to_redstone_lamps_schem(img: Image.Image, brightness: int, place_redstone_blocks: bool):
+def img_to_redstone_lamps_schem(
+        img: Image.Image, brightness: int, place_redstone_blocks: bool,
+        dither: bool = False, alternate_mode: bool = False
+):
     schem = mcschematic.MCSchematic()
+    bw = [[]]
+    if dither:
+        bw = img.convert('1')
+    if alternate_mode and not dither:
+        gray = img.convert('L')
+        # Let numpy do the heavy lifting for converting pixels to pure black or white
+        bw = np.asarray(gray).copy()
+
+        bw[bw < brightness] = 0  # Black
+        bw[bw >= brightness] = 255  # White
+
     for x in range(0, img.width):
         for y in range(0, img.height):
-            pixel = img.getpixel((x, y))
-            avg_brightness = (pixel[0] + pixel[1] + pixel[2]) / 3
-
-            # Use lit redstone lap
-            if avg_brightness >= brightness:
-                # new_img.paste(lit_lamp, (x * 16, y * 16))
-                if place_redstone_blocks:
-                    schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
-                    schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
+            if dither:
+                pixel = bw.getpixel((x, y))
+                if pixel == 255:
+                    if place_redstone_blocks:
+                        schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
+                        schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
+                    else:
+                        schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
                 else:
-                    schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
-            # Use unlit redstone lamp
+                    schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
             else:
-                schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
+                if alternate_mode:
+                    pixel = bw[y][x]
+                    if pixel == 255:
+                        if place_redstone_blocks:
+                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
+                            schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
+                        else:
+                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
+                    else:
+                        schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
+                else:
+                    pixel = img.getpixel((x, y))
+                    avg_brightness = (pixel[0] + pixel[1] + pixel[2]) / 3
+
+                    # Use lit redstone lap
+                    if avg_brightness >= brightness:
+                        # new_img.paste(lit_lamp, (x * 16, y * 16))
+                        if place_redstone_blocks:
+                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
+                            schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
+                        else:
+                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
+                    # Use unlit redstone lamp
+                    else:
+                        schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
         yield x
 
     yield schem

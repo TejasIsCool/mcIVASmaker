@@ -94,7 +94,12 @@ def img_to_blocks(image: Image.Image, details: DetailsDict):
     return
 
 
-def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: list, mode: str):
+def img_to_blocks_schem(image: Image.Image, details: DetailsDict):
+    side: str = details['side']
+    blocked_list: list = details['blocked_list']
+    mode: str = details['mode']
+    color_set: str = details['color_set']
+    color_compare: str = details['color_compare']
     schem = mcschematic.MCSchematic()
 
     # Filtering out the blocks, depending on how the user configured the options
@@ -111,14 +116,16 @@ def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: list, mode:
         return
 
     # Caching, for speed
-    @functools.lru_cache(maxsize=100000)
-    def pix_to_block(pix):
+    def pix_to_block(pix, distance_function: callable, avg_color_set: str):
+        # The below statement becomes a list, with all the differences between the current pixel, and all the blocks
         all_differences = [
-            (abs_value_difference(pix, block_val[1][side]['color']) if (
-                    side in block_val[1]
-            ) else math.inf)
-            for block_val in new_blocks_list
+            (
+                (
+                    distance_function(pix, block_val[1][side]['color'][avg_color_set])
+                ) if (side in block_val[1]) else math.inf
+            ) for block_val in new_blocks_list
         ]
+        # Getting the lowest different block
         block_index = all_differences.index(min(all_differences))
         block_data = block_parser(new_blocks_list[block_index][0])
         return block_data
@@ -126,7 +133,7 @@ def img_to_blocks_schem(image: Image.Image, side: str, blocked_list: list, mode:
     for x in range(0, image.width):
         for y in range(0, image.height):
             pixel = image.getpixel((x, y))
-            block_name = pix_to_block(pixel)
+            block_name = pix_to_block(pixel, color_compare_to_function(color_compare), color_set)
             if side == "top" or side == "bottom":
                 schem.setBlock((-x, 0, -y), block_name)
             else:

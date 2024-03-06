@@ -2,6 +2,7 @@ import ui_manager.PySimpleGUI as sg
 
 from logic.manage_image_tab import manage_img_tab
 from logic.manage_video_tab import manage_vid_tab
+from logic.manage_audio_tab import manage_audio_tab
 from logic.popup_manager import manage_popups
 
 
@@ -19,3 +20,6 @@ def manage_events(window: sg.Window):
         manage_img_tab(window, event, values)
         # Manage video events
         manage_vid_tab(window, event, values)
+        # Manage audio events
+        manage_audio_tab(window, event, values)
+

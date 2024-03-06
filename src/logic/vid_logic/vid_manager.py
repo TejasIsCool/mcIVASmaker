@@ -146,15 +146,22 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         data = event_queue.get()
         if data[0] == "-Single_Frame-":
             window['-Single_Frame-'](data[1])
-        elif data[0] == "-Image_Done-":
-            window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
-            img_count += 1
-            logger.debug("Processed: " + data[1])
+        # elif data[0] == "-Image_Done-":
+        #     window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
+        #     img_count += 1
+        #     logger.debug("Processed: " + data[1])
 
         if all([proc.ready() for proc in image_processes]):
             break
 
         iter_count += 1
+
+        # Update the images done progress bar, as event-based is too slow
+        if iter_count % 10 == 0:
+            processed_file_count = len(os.listdir(vid_processed_folder))
+            progress = processed_file_count / file_count * 100
+            window['-Number_Of_Frames-'](progress)
+            window['-Number_Of_Frames_Text-'](f"{processed_file_count}/{file_count}")
 
         if any([not proc.successful() for proc in image_processes if proc.ready()]):
             logger.error("ERROR!")

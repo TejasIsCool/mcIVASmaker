@@ -6,11 +6,9 @@ import json
 # TODO: Black/white list will be all blocks name in a list, and clicking them changes colour to indicate its been
 #  selected
 path = resource_path("./assets/blocks/all_blocks_textures/")
-with open(resource_path("./assets/blocks/img_generator_code/out.json"), "r") as f:
-    blocks_data: list = list(json.load(f).items())
-    block_name_list = [x[0] for x in blocks_data]
-    block_name_list.sort()
-
+with open(resource_path("./assets/blocks/img_generator_code/names_list.json"), "r") as f:
+    blocks_data: list = list(json.load(f).keys())
+    blocks_data.sort()
 
 def get_image_tab(window_size: list[int]):
     # The attributes you can select for an image
@@ -119,7 +117,7 @@ def get_image_tab(window_size: list[int]):
                         sg.Text("Blocks List To Whitelist/Blacklist"),
                         sg.Listbox(
                             pad=(12, 2),
-                            values=block_name_list,
+                            values=blocks_data,
                             select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
                             key="-Img_Any_Listing_List-",
                             size=(30, 10),

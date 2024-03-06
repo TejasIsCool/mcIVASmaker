@@ -7,7 +7,8 @@
 #   into the textures folder in this folder
 # - Ig run this file after that, and you'll get a new output file outx.json
 # - Do a LOT of editing in that outx file, to make the names and stuff correct
-# - Paste the new djson data into the out.json (Carefully)
+# - Paste the new json data into the names_list.json (Carefully)
+# - Make a backup of out_all_colour.json, and then run out_generator
 # Though i wouldn't recommend it. It is painful
 
 
@@ -15,9 +16,6 @@ import json
 import os
 
 from PIL import Image
-
-import _img_to_rgb_average
-
 if __name__ == "__main__":
     data = {}
     all_files = os.listdir("../new_textures/textures")
@@ -29,12 +27,6 @@ if __name__ == "__main__":
         block_name = block_name.replace("_front", "")
         block_name = block_name.replace("_back", "")
         block_name = block_name.replace("_side", "")
-
-        block_img = Image.open(f"../new_textures/textures/{filenamepng}")
-        block_img = block_img.convert("RGBA")
-        avg_color = _img_to_rgb_average.img_to_avg_colour(block_img)
-        block_img.close()
-
         if block_name in data:
             selection = ""
             if "top" in filename:
@@ -54,12 +46,11 @@ if __name__ == "__main__":
                 data[block_name]['extra'].append({"file": filenamepng, "color": avg_color})
         else:
             block_data = {
-                "top": {"file": filenamepng, "color": avg_color},
-                "bottom": {"file": filenamepng, "color": avg_color},
-                "front": {"file": filenamepng, "color": avg_color},
-                "back": {"file": filenamepng, "color": avg_color},
-                "side": {"file": filenamepng, "color": avg_color},
-                "extra": []
+                "top": filenamepng,
+                "bottom": filenamepng,
+                "front": filenamepng,
+                "back": filenamepng,
+                "side": filenamepng
             }
             data[block_name] = block_data
         print(filenamepng, " done!")

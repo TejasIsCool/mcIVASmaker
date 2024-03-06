@@ -89,10 +89,14 @@ def img_to_lamps(img: Image.Image, output: str, details: dict):
 
 def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
+    dither = details['dither']
+    alternate = details['alternate']
     place_redstone_blocks = details['place_redstone_blocks']
 
     schem: mcschematic.MCSchematic = ...
-    for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(img, brightness, place_redstone_blocks):
+    for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(
+            img, brightness, place_redstone_blocks, dither, alternate
+    ):
         if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
@@ -100,7 +104,7 @@ def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
     yield "Done Processing!"
     head, tail = os.path.split(output)
     tail = tail.split(".")[0]
-    schem.save(head, tail, mcschematic.Version.JE_1_19_2)
+    schem.save(head, tail, mcschematic.Version.JE_1_20_1)
     yield "Done!"
     return
 
@@ -128,11 +132,17 @@ def img_to_blocks(img: Image.Image, output: str, details: dict):
 
 
 def img_to_blocks_schem(img: Image.Image, output: str, details: dict):
-    block_list = details['blocklist']
-    mode = details['mode']
-    side = details['side']
     schem: mcschematic.MCSchematic = ...
-    for value in img_to_block_img.img_to_blocks_schem(img, side, block_list, mode):
+    for value in img_to_block_img.img_to_blocks_schem(
+            img,
+            {
+                'side': details['side'],
+                'blocked_list': details['blocklist'],
+                'mode': details['mode'],
+                'color_set': details['color_set'][0],
+                'color_compare': details['color_compare'][0]
+            }
+    ):
         if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
@@ -140,6 +150,6 @@ def img_to_blocks_schem(img: Image.Image, output: str, details: dict):
     yield "Done Processing!"
     head, tail = os.path.split(output)
     tail = tail.split(".")[0]
-    schem.save(head, tail, mcschematic.Version.JE_1_19_2)
+    schem.save(head, tail, mcschematic.Version.JE_1_20_1)
     yield "Done!"
     return

@@ -4,10 +4,9 @@ from path_manager.pather import resource_path
 import json
 
 path = resource_path("./assets/blocks/all_blocks_textures/")
-with open(resource_path("./assets/blocks/img_generator_code/out.json"), "r") as f:
-    blocks_data: list = list(json.load(f).items())
-    block_name_list = [x[0] for x in blocks_data]
-    block_name_list.sort()
+with open(resource_path("./assets/blocks/img_generator_code/names_list.json"), "r") as f:
+    blocks_data: list = list(json.load(f).keys())
+    blocks_data.sort()
 
 
 def get_video_tab():
@@ -108,7 +107,7 @@ def get_video_tab():
                 [
                     sg.Text("Blocks List"),
                     sg.Listbox(
-                        values=block_name_list,
+                        values=blocks_data,
                         pad=(12, 2),
                         select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
                         key="-Vid_Any_Listing_List-",

@@ -1,5 +1,5 @@
 from ui_manager import PySimpleGUI as sg
-from window.layouts import imagetab, videotab
+from window.layouts import imagetab, videotab, audiotab
 from path_manager.pather import resource_path
 
 # A custom decent theme
@@ -33,14 +33,7 @@ def make_window():
     VTS_layout = videotab.get_video_tab()
     # Layout for Audio Tab
     # TODO: AUDIO
-    ATS_layout = [
-        [
-            sg.Text(text="ATS!")
-        ],
-        [
-            sg.Text(text="This is unfinished!")
-        ]
-    ]
+    ATS_layout = audiotab.get_audio_tab()
 
     # TODO: SCHEMATIC RENDERER
     SCHEM_layout = [
@@ -65,7 +58,7 @@ def make_window():
             sg.TabGroup([[
                 sg.Tab('Image Stuff', ITS_layout),
                 sg.Tab('Video Stuff', VTS_layout),
-                sg.Tab('Audio Stuff', ATS_layout),
+                sg.Tab('Audio Stuff', ATS_layout, key="-Audio_Tab-"),
                 sg.Tab('Schematic Stuff', SCHEM_layout)
             ]])
         ],
