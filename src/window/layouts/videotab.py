@@ -1,6 +1,6 @@
-from ui_manager import PySimpleGUI as sg
+from src.ui_manager import PySimpleGUI as sg
 import textwrap
-from path_manager.pather import resource_path
+from src.path_manager.pather import resource_path
 import json
 
 path = resource_path("./assets/blocks/all_blocks_textures/")

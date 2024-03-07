@@ -1,9 +1,9 @@
-import ui_manager.PySimpleGUI as sg
+import src.ui_manager.PySimpleGUI as sg
 
-from logic.manage_image_tab import manage_img_tab
-from logic.manage_video_tab import manage_vid_tab
-from logic.manage_audio_tab import manage_audio_tab
-from logic.popup_manager import manage_popups
+from src.logic.manage_image_tab import manage_img_tab
+from src.logic.manage_video_tab import manage_vid_tab
+from src.logic.manage_audio_tab import manage_audio_tab
+from src.logic.popup_manager import manage_popups
 
 
 def manage_events(window: sg.Window):

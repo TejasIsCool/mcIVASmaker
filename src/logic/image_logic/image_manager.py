@@ -1,5 +1,5 @@
 from PIL import Image
-from logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
+from src.logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
 import os
 import mcschematic
 import logging

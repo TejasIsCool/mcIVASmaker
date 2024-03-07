@@ -1,10 +1,10 @@
 import os
 import time
 
-import ui_manager.PySimpleGUI as sg
-from logic.fileio.file_verifier import check_file_exists
-from logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
-from logic.image_logic.image_manager import manipulate_image
+import src.ui_manager.PySimpleGUI as sg
+from src.logic.fileio.file_verifier import check_file_exists
+from src.logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
+from src.logic.image_logic.image_manager import manipulate_image
 from io import BytesIO
 import logging
 logger = logging.getLogger(__name__)

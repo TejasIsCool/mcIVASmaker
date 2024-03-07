@@ -1,4 +1,4 @@
-from ui_manager import PySimpleGUI as sg
+from src.ui_manager import PySimpleGUI as sg
 
 
 def get_audio_tab() -> list:

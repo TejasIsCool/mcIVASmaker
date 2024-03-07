@@ -4,11 +4,11 @@ from io import BytesIO
 
 from PIL import Image
 
-import ui_manager.PySimpleGUI as sg
-from logic.fileio.file_verifier import check_file_exists
-from logic.vid_logic.ffmpeg_manager import get_resolution, get_frame_count
-from logic.vid_logic.vid_manager import vid_manager
-from path_manager.pather import resource_path
+import src.ui_manager.PySimpleGUI as sg
+from src.logic.fileio.file_verifier import check_file_exists
+from src.logic.vid_logic.ffmpeg_manager import get_resolution, get_frame_count
+from src.logic.vid_logic.vid_manager import vid_manager
+from src.path_manager.pather import resource_path
 
 # Loads up the progress animation
 IMAGES = []

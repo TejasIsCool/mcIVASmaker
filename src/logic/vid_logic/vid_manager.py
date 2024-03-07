@@ -2,12 +2,12 @@ import os
 import time
 from multiprocessing.pool import ThreadPool, Pool
 from multiprocessing import Queue, Manager
-import ui_manager.PySimpleGUI as sg
+import src.ui_manager.PySimpleGUI as sg
 
-from logic.image_logic.image_manager import manipulate_image
+from src.logic.image_logic.image_manager import manipulate_image
 
-from logic.vid_logic import ffmpeg_manager
-from path_manager.pather import resource_path
+from src.logic.vid_logic import ffmpeg_manager
+from src.path_manager.pather import resource_path
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ vid_cache_folder_m4a = os.path.normpath(os.path.join(assets_path, "./audio_cache
 
 vid_processed_folder = os.path.normpath(os.path.join(assets_path, "./img_process_cache/"))
 
-# Create the paths if they don't exist (Git doesnot recognize empty folders)
+# Create the paths if they don't exist (Git does not recognize empty folders)
 if not os.path.exists(vid_cache_folder_jpg):
     os.makedirs(vid_cache_folder_jpg)
 
@@ -88,7 +88,7 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         # Starting the processing of images to blocks, while ffmpeg is generating those images, to save time
         if file_count > current_image:
             img_file_path = os.path.join(cache_folder, files[current_image])
-            # Remove the first 4 and last 4 chracter, to get just the number
+            # Remove the first 4 and last 4 characters, to get just the number
             file_number = os.path.split(img_file_path)[1][4:-4]
             processed_path = os.path.join(vid_processed_folder, file_number + ".png")
             image_processes.append(process_pool.apply_async(
@@ -137,9 +137,6 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         current_image += 1
 
     process_pool.close()
-    # Reset the image counts done, because we over count in the below section otherwise
-    # Nope, its better to overcount hre cause user experience or smth
-    # window.write_event_value((THREAD_KEY, '-Reset_Images_Done-'), None)
     iter_count = 0
     while True:
         # Updating the progress meters, till the all the processing has been done

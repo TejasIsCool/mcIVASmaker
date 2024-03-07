@@ -1,6 +1,6 @@
-from ui_manager import PySimpleGUI as sg
+from src.ui_manager import PySimpleGUI as sg
 import textwrap
-from path_manager.pather import resource_path
+from src.path_manager.pather import resource_path
 import json
 
 # TODO: Black/white list will be all blocks name in a list, and clicking them changes colour to indicate its been

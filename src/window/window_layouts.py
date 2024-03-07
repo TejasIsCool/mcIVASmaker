@@ -1,6 +1,6 @@
-from ui_manager import PySimpleGUI as sg
-from window.layouts import imagetab, videotab, audiotab
-from path_manager.pather import resource_path
+from src.ui_manager import PySimpleGUI as sg
+from src.window.layouts import imagetab, videotab, audiotab
+from src.path_manager.pather import resource_path
 
 # A custom decent theme
 DecentGrey = {
@@ -71,7 +71,7 @@ def make_window():
     with open(resource_path("./assets/icon/icon_base64.txt"), "rb") as f:
         icon_base64 = f.read()
 
-    # Note, i hav commented out a few lines in PySimpleGUI.py
+    # Note, I have commented out a few lines in PySimpleGUI.py
     # To make the icon stuff appear on taskbar
     # Find wm_overrideredirect there ig
 

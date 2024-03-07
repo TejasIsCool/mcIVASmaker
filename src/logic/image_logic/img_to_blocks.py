@@ -3,9 +3,9 @@ import mcschematic
 import json
 import functools
 import numpy as np
-from logic.image_logic.block_parser import block_parser
+from src.logic.image_logic.block_parser import block_parser
 from PIL import Image, ImageFile
-from path_manager.pather import resource_path
+from src.path_manager.pather import resource_path
 import os
 from typing import TypedDict
 

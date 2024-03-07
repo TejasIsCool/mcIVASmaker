@@ -1,7 +1,7 @@
 from PIL import Image, ImageFile
 import mcschematic
 import numpy as np
-from path_manager.pather import resource_path
+from src.path_manager.pather import resource_path
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 

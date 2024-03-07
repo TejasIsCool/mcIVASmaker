@@ -15,7 +15,6 @@
 import json
 import os
 
-from PIL import Image
 if __name__ == "__main__":
     data = {}
     all_files = os.listdir("../new_textures/textures")
@@ -41,9 +40,9 @@ if __name__ == "__main__":
                 selection = "side"
 
             if selection != "":
-                data[block_name][selection] = {"file": filenamepng, "color": avg_color}
+                data[block_name][selection] = filenamepng
             else:
-                data[block_name]['extra'].append({"file": filenamepng, "color": avg_color})
+                data[block_name]['extra'].append(filenamepng)
         else:
             block_data = {
                 "top": filenamepng,

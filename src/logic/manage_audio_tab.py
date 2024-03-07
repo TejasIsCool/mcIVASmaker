@@ -1,5 +1,5 @@
 import random
-import ui_manager.PySimpleGUI as sg
+import src.ui_manager.PySimpleGUI as sg
 # Extra variables
 text_list = [
     'Oi', 'Oii', 'Stop it!',

@@ -1,5 +1,5 @@
-import logic.fileio.file_verifier as image_handler
-from logic.image_logic import image_to_redstone_lamps, img_to_blocks
+import src.logic.fileio.file_verifier as image_handler
+from src.logic.image_logic import image_to_redstone_lamps, img_to_blocks
 import PIL
 from PIL import Image
 import io

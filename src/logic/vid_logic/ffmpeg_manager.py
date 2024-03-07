@@ -1,7 +1,7 @@
 import math
 import os
 import subprocess
-from path_manager.pather import resource_path
+from src.path_manager.pather import resource_path
 import ffmpeg
 
 assets_path = resource_path(f"./assets/cache/")
