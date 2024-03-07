@@ -2,13 +2,12 @@ import os
 import time
 from multiprocessing.pool import ThreadPool, Pool
 from multiprocessing import Queue, Manager
-from typing import Dict
-import ui_manager.PySimpleGUI as sg
+import src.ui_manager.PySimpleGUI as sg
 
-from logic.image_logic.image_manager import manipulate_image
+from src.logic.image_logic.image_manager import manipulate_image
 
-from logic.vid_logic import ffmpeg_manager
-from path_manager.pather import resource_path
+from src.logic.vid_logic import ffmpeg_manager
+from src.path_manager.pather import resource_path
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,7 +21,7 @@ vid_cache_folder_m4a = os.path.normpath(os.path.join(assets_path, "./audio_cache
 
 vid_processed_folder = os.path.normpath(os.path.join(assets_path, "./img_process_cache/"))
 
-# Create the paths if they don't exist (Git doesnot recognize empty folders)
+# Create the paths if they don't exist (Git does not recognize empty folders)
 if not os.path.exists(vid_cache_folder_jpg):
     os.makedirs(vid_cache_folder_jpg)
 
@@ -38,15 +37,15 @@ if not os.path.exists(vid_processed_folder):
 THREAD_KEY = '-Vid_Thread-'
 
 
-def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str, scale: str, details: Dict):
+def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str, scale: str, details: dict):
     # Cleaning cache folders, incase a previous run failed to do so
     cleanup_folders()
     logger.info("Cleaned Previous Cache")
     logger.debug("Video Details:")
-    logger.debug("FilePath: "+filepath)
-    logger.debug("Output Path: "+output)
-    logger.debug("Manupilations: "+manipulation)
-    logger.debug("Scale: "+scale)
+    logger.debug("FilePath: " + filepath)
+    logger.debug("Output Path: " + output)
+    logger.debug("Manupilations: " + manipulation)
+    logger.debug("Scale: " + scale)
     logger.debug(f"Details: {details}")
 
     # Instantiating the process/thread related objects
@@ -89,7 +88,7 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         # Starting the processing of images to blocks, while ffmpeg is generating those images, to save time
         if file_count > current_image:
             img_file_path = os.path.join(cache_folder, files[current_image])
-            # Remove the first 4 and last 4 chracter, to get just the number
+            # Remove the first 4 and last 4 characters, to get just the number
             file_number = os.path.split(img_file_path)[1][4:-4]
             processed_path = os.path.join(vid_processed_folder, file_number + ".png")
             image_processes.append(process_pool.apply_async(
@@ -109,6 +108,8 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
         img_count += 1
 
+    # Update images done
+    window.write_event_value((THREAD_KEY, '-Set_Images_Done-'), img_count)
     # Video has now been converted to images and audio
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 1)
     logger.debug("Completed partial processing")
@@ -136,20 +137,28 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         current_image += 1
 
     process_pool.close()
-    # Reset the image counts done, because we over count in the below section otherwise
-    window.write_event_value((THREAD_KEY, '-Reset_Images_Done-'), None)
+    iter_count = 0
     while True:
         # Updating the progress meters, till the all the processing has been done
         data = event_queue.get()
         if data[0] == "-Single_Frame-":
             window['-Single_Frame-'](data[1])
-        elif data[0] == "-Image_Done-":
-            window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
-            img_count += 1
-            logger.debug("Processed: " + data[1])
+        # elif data[0] == "-Image_Done-":
+        #     window.write_event_value((THREAD_KEY, '-Image_Done-'), None)
+        #     img_count += 1
+        #     logger.debug("Processed: " + data[1])
 
         if all([proc.ready() for proc in image_processes]):
             break
+
+        iter_count += 1
+
+        # Update the images done progress bar, as event-based is too slow
+        if iter_count % 10 == 0:
+            processed_file_count = len(os.listdir(vid_processed_folder))
+            progress = processed_file_count / file_count * 100
+            window['-Number_Of_Frames-'](progress)
+            window['-Number_Of_Frames_Text-'](f"{processed_file_count}/{file_count}")
 
         if any([not proc.successful() for proc in image_processes if proc.ready()]):
             logger.error("ERROR!")
@@ -215,7 +224,7 @@ def cleanup_folders():
 
 
 # Running this for every single frame
-def manage_single_image(event_queue: Queue, filename: str, output: str, manipulation: str, scale: str, details: Dict):
+def manage_single_image(event_queue: Queue, filename: str, output: str, manipulation: str, scale: str, details: dict):
     manipulation = manipulation.replace("Video", "Image")
     iteration = 0
     image_size = 1
@@ -227,7 +236,7 @@ def manage_single_image(event_queue: Queue, filename: str, output: str, manipula
         iteration += 1
         # Updating the progress every certain amount of iterations
         if iteration % round(image_size / updates) == 0:
-            if type(values) == str:
+            if isinstance(values, str):
                 pass
             else:
                 event_queue.put(['-Single_Frame-', values / image_size * 100])

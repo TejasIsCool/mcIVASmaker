@@ -4,11 +4,11 @@ from io import BytesIO
 
 from PIL import Image
 
-import ui_manager.PySimpleGUI as sg
-from logic.fileio.file_verifier import check_file_exists
-from logic.vid_logic.ffmpeg_manager import get_resolution, get_frame_count
-from logic.vid_logic.vid_manager import vid_manager
-from path_manager.pather import resource_path
+import src.ui_manager.PySimpleGUI as sg
+from src.logic.fileio.file_verifier import check_file_exists
+from src.logic.vid_logic.ffmpeg_manager import get_resolution, get_frame_count
+from src.logic.vid_logic.vid_manager import vid_manager
+from src.path_manager.pather import resource_path
 
 # Loads up the progress animation
 IMAGES = []
@@ -118,21 +118,15 @@ def manage_vid_tab(window, event, values):
         # Show certain elements, depending on which modes are enabled
         if event == "-Vid_Type-":
             if "Any" in values['-Vid_Type-']:
-                window['-Vid_List_Text-']("Blocks Whitelist/Blacklist")
-                window['-Vid_Any_Options-'](visible=True)
-                window['-Vid_Any_Side_Text-'](visible=True)
-                window['-Vid_Any_Side-'](visible=True)
-                window["-Vid_Brightness-"](visible=False)
-                window["-Vid_Any_Listing_Text-"](visible=True)
-                window["-Vid_Any_Listing-"](visible=True)
+                window['-Vid_Redstone_Lamps_Key-'](visible=False)
+                window['-Vid_Any_Block_Key-'](visible=True)
+                window.refresh()
+                window['-Vid_Attrs-'].contents_changed()
             else:
-                window['-Vid_List_Text-']("Brightness Required")
-                window['-Vid_Any_Options-'](visible=False)
-                window['-Vid_Any_Side_Text-'](visible=False)
-                window['-Vid_Any_Side-'](visible=False)
-                window["-Vid_Brightness-"](visible=True)
-                window["-Vid_Any_Listing_Text-"](visible=False)
-                window["-Vid_Any_Listing-"](visible=False)
+                window['-Vid_Any_Block_Key-'](visible=False)
+                window['-Vid_Redstone_Lamps_Key-'](visible=True)
+                window.refresh()
+                window['-Vid_Attrs-'].contents_changed()
 
         # Showing/hiding advance options, on clicking the advance options text
         if event == "-Advance_Dropdown-":
@@ -144,11 +138,23 @@ def manage_vid_tab(window, event, values):
                 window['-Advance_Options-'](visible=True)
             advance_state = not advance_state
 
+        # Deselecting the ListBox
+        if event == "Deselect All":
+            window['-Vid_Any_Listing_List-'](set_to_index=[])
+
         # On clicking the run button
         if event == "-Vid_Run-":
             frame_rate = values["-Vid_Frame_Rate-"]
-            details = {'blocklist': values['-Vid_Any_Listing-'], 'mode': values['-Vid_Any_Options-'],
-                       'quality': values['-Vid_Quality-'], 'frame_rate': frame_rate}
+            details = {
+                'blocklist': values['-Vid_Any_Listing_List-'],
+                'mode': values['-Vid_Any_Options-'],
+                'quality': values['-Vid_Quality-'],
+                'frame_rate': frame_rate,
+                'dither': values['-Vid_Dithering-'],
+                'alternate': values['-Vid_Lamps_Alternate-'],
+                'color_set': values['-Vid_Color_Set-'],
+                'color_compare': values['-Vid_Comparison_Method-']
+            }
 
             # Validating the process count
             process_count = values['-Process_Count-']
@@ -196,6 +202,8 @@ def manage_vid_tab(window, event, values):
             img_count = values[event]
         if event[1] == '-Reset_Images_Done-':
             images_done = 0
+        if event[1] == "-Set_Images_Done-":
+            images_done = values[event]
         if event[1] == "-Image_Done-":
             images_done += 1
             progress = images_done / img_count * 100

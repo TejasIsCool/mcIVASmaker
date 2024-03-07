@@ -1,7 +1,9 @@
-import ui_manager.PySimpleGUI as sg
+import src.ui_manager.PySimpleGUI as sg
 
-from logic.manage_image_tab import manage_img_tab
-from logic.manage_video_tab import manage_vid_tab
+from src.logic.manage_image_tab import manage_img_tab
+from src.logic.manage_video_tab import manage_vid_tab
+from src.logic.manage_audio_tab import manage_audio_tab
+from src.logic.popup_manager import manage_popups
 
 
 def manage_events(window: sg.Window):
@@ -12,7 +14,12 @@ def manage_events(window: sg.Window):
         if event in [sg.WINDOW_CLOSED, 'QUIT!']:
             break
 
+        if "Popup" in event:
+            manage_popups(event)
         # Manage image events
         manage_img_tab(window, event, values)
         # Manage video events
         manage_vid_tab(window, event, values)
+        # Manage audio events
+        manage_audio_tab(window, event, values)
+

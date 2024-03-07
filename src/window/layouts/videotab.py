@@ -1,5 +1,12 @@
-from ui_manager import PySimpleGUI as sg
+from src.ui_manager import PySimpleGUI as sg
 import textwrap
+from src.path_manager.pather import resource_path
+import json
+
+path = resource_path("./assets/blocks/all_blocks_textures/")
+with open(resource_path("./assets/blocks/img_generator_code/names_list.json"), "r") as f:
+    blocks_data: list = list(json.load(f).keys())
+    blocks_data.sort()
 
 
 def get_video_tab():
@@ -48,48 +55,105 @@ def get_video_tab():
             )
         ],
         [
-            sg.Column([
+            sg.Frame(title="Redstone Lamps Options", layout=[
                 [
                     sg.Text("Brightness Required", key="-Vid_List_Text-"),
-                    sg.Combo(
-                        ["None", "Whitelist", "Blacklist"],
-                        key="-Vid_Any_Options-",
-                        default_value="None",
-                        visible=False,
-                        readonly=True,
-                        background_color="#00000000",
-                        enable_events=True
-                    ),
                     sg.Slider(
                         range=(0, 255),
                         default_value=127,
                         orientation="horizontal",
-                        key="-Vid_Brightness-",
-                        enable_events=True
+                        key="-Vid_Brightness-"
                     )
                 ],
                 [
-                    sg.Text("Blocks side", key="-Vid_Any_Side_Text-", visible=False),
+                    sg.Checkbox(
+                        "Dithering",
+                        tooltip="Dithering is useful in preserving details, but makes things look faded"
+                                "\nIt disables the brightness slider and alternate renderer checkbox",
+                        key="-Vid_Dithering-"
+                    )
+                ],
+                [
+                    sg.Checkbox(
+                        "Alternate Renderer",
+                        tooltip="This one uses Pillow to convert to greyscale, "
+                                "\nthen filter out the dark and bright pixels",
+                        key="-Vid_Lamps_Alternate-"
+                    )
+                ],
+            ], key="-Vid_Redstone_Lamps_Key-"
+            ),
+            sg.Frame(title="Any Block Image Attributes", layout=[
+                [
+                    sg.Text("Blocks Blacklist/Whitelist"),
+                    sg.Combo(
+                        ["None", "Whitelist", "Blacklist"],
+                        key="-Vid_Any_Options-",
+                        default_value="None",
+                        readonly=True,
+                        background_color="#00000000"
+                    ),
+                ],
+                [
+                    sg.Text("Blocks side"),
                     sg.Combo(
                         ["Top", "Bottom", "Front", "Back", "Side"],
                         key="-Vid_Any_Side-",
                         default_value="Top",
-                        visible=False,
                         readonly=True,
-                        background_color="#00000000",
-                        enable_events=True
+                        background_color="#00000000"
                     )
-                ]
-            ]
-            ),
-            sg.Column([
-                [
-                    sg.Text("Blocks List", visible=False, key="-Vid_Any_Listing_Text-")
                 ],
                 [
-                    sg.Multiline(key="-Vid_Any_Listing-", size=(10, 8), visible=False)
-                ]
-            ]),
+                    sg.Text("Blocks List"),
+                    sg.Listbox(
+                        values=blocks_data,
+                        pad=(12, 2),
+                        select_mode=sg.LISTBOX_SELECT_MODE_MULTIPLE,
+                        key="-Vid_Any_Listing_List-",
+                        size=(30, 10),
+                        highlight_background_color="#00FF00",
+                        right_click_menu=['&Right', ['Deselect All']]
+                    ),
+                ],
+                [sg.Frame(title="Color Settings", layout=[
+                    [
+                        sg.Text(
+                            "Average Color set (?)",
+                            tooltip="These are the pre-computed color averages of each minecraft block, "
+                                    "calculated in different ways",
+                            text_color="#AAAAFF",
+                            key="-Vid_Average_Colour_Popup-",
+                            enable_events=True
+                        ),
+                        sg.Listbox([
+                            "Linear Average",
+                            "Root Mean Square Average",
+                            "HSL Average",
+                            "HSV Average",
+                            "LAB Average",
+                            "Dominant Color"
+                        ], default_values=["Linear Average"], size=(20, 4), key="-Vid_Color_Set-")
+                    ],
+                    [
+                        sg.Text(
+                            "Color Comparison Algorithm (?)",
+                            tooltip="Changes how each individual pixel's rgb value is compared to "
+                                    "each block's average color",
+                            text_color="#AAAAFF",
+                            key="-Vid_Color_Difference_Popup-",
+                            enable_events=True
+                        ),
+                        sg.Listbox([
+                            "Absolute Difference",
+                            "Euclidean Difference",
+                            "Weighted Euclidean",
+                            "Redmean Difference",
+                            "CIE76 DelE"
+                        ], default_values=["Absolute Difference"], size=(20, 4), key="-Vid_Comparison_Method-")
+                    ]
+                ])]
+            ], key="-Vid_Any_Block_Key-", visible=False),
         ],
         [
             sg.Text("Output: "),

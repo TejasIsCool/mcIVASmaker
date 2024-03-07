@@ -1,15 +1,15 @@
 from PIL import Image
-from logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
-from typing import List, Dict
+from src.logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
 import os
 import mcschematic
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 # Convert an image, to what the user specified
 def manipulate_image(
-        filepath: str, output: str, manipulation: str, crop: List, scale: str, details: Dict
+        filepath: str, output: str, manipulation: str, crop: list | None, scale: str, details: dict
 ):
     img = Image.open(filepath)
     # Validating the cropping
@@ -71,10 +71,12 @@ def manipulate_image(
     pass
 
 
-def img_to_lamps(img: Image.Image, output: str, details: Dict):
+def img_to_lamps(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
-    for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
-        if type(value) == Image.Image:
+    dither = details['dither']
+    alternate = details['alternate']
+    for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness, dither, alternate):
+        if isinstance(value, Image.Image):
             img = value
         else:
             yield value
@@ -85,31 +87,40 @@ def img_to_lamps(img: Image.Image, output: str, details: Dict):
     return
 
 
-def img_to_lamps_schem(img: Image.Image, output: str, details: Dict):
+def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
     brightness = details['brightness']
+    dither = details['dither']
+    alternate = details['alternate']
     place_redstone_blocks = details['place_redstone_blocks']
 
     schem: mcschematic.MCSchematic = ...
-    for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(img, brightness, place_redstone_blocks):
-        if type(value) == mcschematic.MCSchematic:
+    for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(
+            img, brightness, place_redstone_blocks, dither, alternate
+    ):
+        if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
             yield value
     yield "Done Processing!"
     head, tail = os.path.split(output)
     tail = tail.split(".")[0]
-    schem.save(head, tail, mcschematic.Version.JE_1_19_2)
+    schem.save(head, tail, mcschematic.Version.JE_1_20_1)
     yield "Done!"
     return
 
 
-def img_to_blocks(img: Image.Image, output: str, details: Dict):
-    blocklist = details['blocklist']
-    mode = details['mode']
-    side = details['side']
-    block_list = blocklist.split("\n")
-    for value in img_to_block_img.img_to_blocks(img, side, block_list, mode):
-        if type(value) == Image.Image:
+def img_to_blocks(img: Image.Image, output: str, details: dict):
+    for value in img_to_block_img.img_to_blocks(
+            img,
+            {
+                'side': details['side'],
+                'blocked_list': details['blocklist'],
+                'mode': details['mode'],
+                'color_set': details['color_set'][0],
+                'color_compare': details['color_compare'][0]
+            }
+    ):
+        if isinstance(value, Image.Image):
             img = value
         else:
             yield value
@@ -120,20 +131,25 @@ def img_to_blocks(img: Image.Image, output: str, details: Dict):
     return
 
 
-def img_to_blocks_schem(img: Image.Image, output: str, details: Dict):
-    blocklist = details['blocklist']
-    mode = details['mode']
-    side = details['side']
-    block_list = blocklist.split("\n")
+def img_to_blocks_schem(img: Image.Image, output: str, details: dict):
     schem: mcschematic.MCSchematic = ...
-    for value in img_to_block_img.img_to_blocks_schem(img, side, block_list, mode):
-        if type(value) == mcschematic.MCSchematic:
+    for value in img_to_block_img.img_to_blocks_schem(
+            img,
+            {
+                'side': details['side'],
+                'blocked_list': details['blocklist'],
+                'mode': details['mode'],
+                'color_set': details['color_set'][0],
+                'color_compare': details['color_compare'][0]
+            }
+    ):
+        if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
         else:
             yield value
     yield "Done Processing!"
     head, tail = os.path.split(output)
     tail = tail.split(".")[0]
-    schem.save(head, tail, mcschematic.Version.JE_1_19_2)
+    schem.save(head, tail, mcschematic.Version.JE_1_20_1)
     yield "Done!"
     return

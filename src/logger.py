@@ -24,4 +24,5 @@ def configure_logging():
     ))
     # add the handler to the root logger
     logging.getLogger('').addHandler(console)
+    logging.getLogger("PIL.PngImagePlugin").setLevel(logging.CRITICAL + 1)
 

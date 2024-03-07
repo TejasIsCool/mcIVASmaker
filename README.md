@@ -30,9 +30,9 @@ mcIVASmaker is a program aimed to convert images, videos or audio(still unfinish
 <hr>
 <br><br>
 
-On opening the program, you are greeted with three tabs, each for image/video/audio conversion to minecraft equivalent.
+On opening the program, you are greeted with four tabs, each for image/video/audio/schematic conversion to minecraft equivalent.
 <div align="center">
-<img src="https://i.ibb.co/NpPyrzz/image-2024-02-16-195746084.png" height="400" alt="Image Of The Program's GUI">
+<img src="assets/showcase/program_look.png" height="400" alt="Image Of The Program's GUI">
 </div>
 
 <br><br>
@@ -41,7 +41,7 @@ The image tab allows you to convert your selected image, into either
 - Another image, where the pixels are the textures of minecraft blocks
 - A schematic file, which can be opened by a schematic mod, to place the image, in the form of minecraft blocks, in your own world
 <br><br>
-You can convert your image to all possible minecraft blocks upto version 1.20, or you can restrict your selection, to only a certain blocks.
+You can convert your image to all possible minecraft blocks up to version 1.20, or you can restrict your selection, to only a certain blocks.
 <br>
 You can also convert your image to a redstone lamps display, again in either image, or schematic form
 
@@ -51,11 +51,11 @@ finds the closest Minecraft block approximate to that pixel, and it a new image,
 <br>
 It does the same thing for the schematic format
 <br><br>
-To find the closest minecraft block, I have stored all minecraft blocks and their average color in the 
-out.json file in the `assets/blocks/img_generator_code` folder. 
+To find the closest minecraft block, I have stored all minecraft blocks and their average color sets in the 
+out_all_colours.json file in the `assets/blocks/img_generator_code` folder. 
 <br>This file stores all the average rgb pixel values for every Minecraft block(except for non-full sized blocks)
 <br><br>
-It compares the average color of every minecraft block to every pixel on the image. Then decides which block is the closest looking, and selects that.
+It compares the average color of every minecraft block to every pixel on the image. Then decides which block is the closest looking via different selectable algorithms, and selects the block via that.
 <br><br>
 I have tried to add a few optimizations too.<br>
 
@@ -66,7 +66,9 @@ You may access a decent palette of blocks to be whitelisted in `assets/blocks/bl
 <br><br>If you wish to add new textures, its painful<br>
 
 - Go to `assets/blocks/img_generator_code/new_textures`, create a folder called `textures` in there, and put your textures there (In same name format as in the files of `assets/blocks/all_blocks_textures` folder)<br>
-- Run `_blocks_to_avg_colors.py`, and then painfully correct the newly outputted `outx.json`. Then copy the corrected contents of the new json file, and paste it correctly into the `assets/blocks/img_generator_code/out.json`, so that it is like one continous javascript object.
+- Run `_blocks_to_avg_colors.py`, and then painfully correct the newly outputted `outx.json`. Then copy the corrected contents of the new json file, and paste it correctly into the `assets/blocks/img_generator_code/names_list.json`, so that it is like one continuous javascript object.
+- Move the new textures into `assets/blocks/all_blocks_textures` folder
+- Run `out_generator.py`, which precomputes the averages for all blocks. 
 
 ### Video Tab
 The video tab allows you to do exactly what the image tab does, but to an entire video(Except for making schematics).

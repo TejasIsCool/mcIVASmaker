@@ -1,12 +1,11 @@
 import os
 import time
 
-import ui_manager.PySimpleGUI as sg
-from logic.fileio.file_verifier import check_file_exists
-from logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
-from logic.image_logic.image_manager import manipulate_image
+import src.ui_manager.PySimpleGUI as sg
+from src.logic.fileio.file_verifier import check_file_exists
+from src.logic.fileio.image_thumbnail import load_image_for_display, load_image_for_preview
+from src.logic.image_logic.image_manager import manipulate_image
 from io import BytesIO
-from path_manager.pather import resource_path
 import logging
 logger = logging.getLogger(__name__)
 
@@ -32,11 +31,17 @@ def manage_img_tab(window, event, values):
         window['-Img_Attrs-'](visible=True)
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
-            manipulation=values["-Img_Type-"],
-            brightness=127,
-            blocklist=values['-Img_Any_Listing-'],
-            mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower()
+            {
+                'manipulation': values["-Img_Type-"],
+                'brightness': 127,
+                'blocklist': values['-Img_Any_Listing_List-'],
+                'mode': values['-Img_Any_Options-'],
+                'side': values['-Img_Any_Side-'].lower(),
+                'dither': values['-Img_Dithering-'],
+                'alternate': values['-Img_Lamps_Alternate-'],
+                'color_set': values['-Color_Set-'],
+                'color_compare': values['-Comparison_Method-']
+            }
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 
@@ -94,21 +99,15 @@ def manage_img_tab(window, event, values):
     # Enabling or disabling the view to certain elements, if they are not associated with the selected mode(-Img_Type-)
     if event == "-Img_Type-":
         if "Any" in values['-Img_Type-']:
-            window['-Img_List_Text-']("Blocks Whitelist/Blacklist")
-            window['-Img_Any_Options-'](visible=True)
-            window['-Img_Any_Side_Text-'](visible=True)
-            window['-Img_Any_Side-'](visible=True)
-            window["-Image_Brightness-"](visible=False)
-            window["-Img_Any_Listing_Text-"](visible=True)
-            window["-Img_Any_Listing-"](visible=True)
+            window['-Redstone_Lamps_Key-'](visible=False)
+            window['-Any_Block_Key-'](visible=True)
+            window.refresh()
+            window['-Img_Attrs-'].contents_changed()
         else:
-            window['-Img_List_Text-']("Brightness Required")
-            window['-Img_Any_Options-'](visible=False)
-            window['-Img_Any_Side_Text-'](visible=False)
-            window['-Img_Any_Side-'](visible=False)
-            window["-Image_Brightness-"](visible=True)
-            window["-Img_Any_Listing_Text-"](visible=False)
-            window["-Img_Any_Listing-"](visible=False)
+            window['-Any_Block_Key-'](visible=False)
+            window['-Redstone_Lamps_Key-'](visible=True)
+            window.refresh()
+            window['-Img_Attrs-'].contents_changed()
 
         if values['-Img_Type-'] == "Image To Redstone Lamps Schematic":
             window['-Img_Lamps_Schem_Check-'](visible=True)
@@ -189,7 +188,14 @@ def manage_img_tab(window, event, values):
             return
 
         img_type = values['-Img_Type-']
-        details = {'blocklist': values['-Img_Any_Listing-'], 'mode': values['-Img_Any_Options-']}
+        details = {
+            'blocklist': values['-Img_Any_Listing_List-'],
+            'mode': values['-Img_Any_Options-'],
+            'dither': values['-Img_Dithering-'],
+            'alternate': values['-Img_Lamps_Alternate-'],
+            'color_set': values['-Color_Set-'],
+            'color_compare': values['-Comparison_Method-']
+        }
 
         scale = values['-Img_Scale-']
 
@@ -217,7 +223,6 @@ def manage_img_tab(window, event, values):
         logger.debug(f"Crop: {all_crop}")
         logger.debug(f"Scale: {scale}")
         logger.debug(f"Details: {details}")
-
 
         iteration = 0
         progress_size = 0
@@ -251,16 +256,35 @@ def manage_img_tab(window, event, values):
                 "Working...", progress, progress_size, no_button=True, orientation='horizontal'
             )
 
+    # Deselecting the ListBox
+    if event == "Deselect All":
+        window['-Img_Any_Listing_List-'](set_to_index=[])
+
     # Updating the preview image if any options change
-    if event in ["-Image_Brightness-", "-Img_Any_Side-", "-Img_Any_Options-", "-Img_Type-"] and \
-            values['-Update_Preview-']:
+    if event in [
+        "-Image_Brightness-",
+        "-Img_Any_Side-",
+        "-Img_Any_Options-",
+        "-Img_Type-",
+        "-Img_Any_Listing_List-",
+        "-Img_Lamps_Alternate-",
+        "-Img_Dithering-",
+        "-Color_Set-",
+        "-Comparison_Method-"
+    ] and values['-Update_Preview-']:
         preview_bytes = load_image_for_preview(
             img_info['bytes'],
-            manipulation=values["-Img_Type-"],
-            brightness=values['-Image_Brightness-'],
-            blocklist=values['-Img_Any_Listing-'],
-            mode=values['-Img_Any_Options-'],
-            side=values['-Img_Any_Side-'].lower()
+            {
+                'manipulation': values["-Img_Type-"],
+                'brightness': values['-Image_Brightness-'],
+                'blocklist': values['-Img_Any_Listing_List-'],
+                'mode': values['-Img_Any_Options-'],
+                'side': values['-Img_Any_Side-'].lower(),
+                'dither': values['-Img_Dithering-'],
+                'alternate': values['-Img_Lamps_Alternate-'],
+                'color_set': values['-Color_Set-'],
+                'color_compare': values['-Comparison_Method-']
+            }
         )
         window['-Preview_Image-'](data=preview_bytes.getvalue())
 

@@ -1,14 +1,26 @@
-import logic.fileio.file_verifier as image_handler
-from logic.image_logic import image_to_redstone_lamps, img_to_blocks
+import src.logic.fileio.file_verifier as image_handler
+from src.logic.image_logic import image_to_redstone_lamps, img_to_blocks
 import PIL
 from PIL import Image
 import io
-from typing import Tuple, List
 import math
+from typing import TypedDict
+
+
+class DetailsType(TypedDict):
+    manipulation: str
+    brightness: int
+    dither: bool
+    alternate: bool
+    blocklist: list[str]
+    mode: str
+    side: str
+    color_set: str
+    color_compare: str
 
 
 # Loads the image for displaying in the preview
-def load_image_for_display(filepath: str, size: Tuple[int, int]) -> bool | Tuple[List[int], io.BytesIO] | None:
+def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple[list[int], io.BytesIO] | None:
     if image_handler.check_file_exists(filepath):
         try:
             img = Image.open(filepath)
@@ -32,25 +44,36 @@ def load_image_for_display(filepath: str, size: Tuple[int, int]) -> bool | Tuple
 
 # Converts the loaded image, to put it to preview
 def load_image_for_preview(
-        image_bytes: io.BytesIO, manipulation: str, brightness: int, blocklist: str, mode: str, side
+        image_bytes: io.BytesIO,
+        details: DetailsType
 ):
     img = Image.open(image_bytes)
     img.thumbnail((img.width // 2, img.height // 2))
     out_img = None
-    if "Lamps" in manipulation:
-        for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness):
-            if type(value) == Image.Image:
+    if "Lamps" in details['manipulation']:
+        for value in image_to_redstone_lamps.img_to_redstone_lamps(
+                img, details['brightness'], details['dither'], details['alternate']
+        ):
+            if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
         # Saving the image in a bytes format, so it can be used without storing as a file
         b_io = io.BytesIO()
         out_img.save(b_io, format="PNG")
         return b_io
-    elif "Any" in manipulation:
+    elif "Any" in details['manipulation']:
         img = img.convert("RGBA")
         img.thumbnail((img.width // 2, img.height // 2))
-        for value in img_to_blocks.img_to_blocks(img, side, blocklist.split("\n"), mode):
-            if type(value) == Image.Image:
+        for value in img_to_blocks.img_to_blocks(
+                img, {
+                    'side': details['side'],
+                    'blocked_list': details['blocklist'],
+                    'mode': details['mode'],
+                    'color_set': details['color_set'][0],
+                    'color_compare': details['color_compare'][0]
+                }
+        ):
+            if isinstance(value, Image.Image):
                 out_img = value
         out_img.thumbnail((350, 240))
         b_io = io.BytesIO()

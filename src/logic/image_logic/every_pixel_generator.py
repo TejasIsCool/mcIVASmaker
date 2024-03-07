@@ -12,7 +12,7 @@ from typing import Tuple, List
 from PIL import Image
 
 # TODO: Allow Pickle file, to speed up the image conversion
-
+# ERROR: DOES NOT WORK
 path = "../../../assets/blocks/all_blocks_textures/"
 with open("../../../assets/blocks/img_generator_code/out.json", "r") as f:
     blocks_data: List = list(json.load(f).items())

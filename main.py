@@ -4,7 +4,7 @@ import os
 import importlib.util
 
 from src.logic import manage_events
-from src.window import window as window_maker
+from src.window import window_layouts
 import multiprocessing
 import logging
 from src.logger import configure_logging
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     logging.debug("Multiprocessing freeze_support enabled")
 
     # Instantiate the window
-    window = window_maker.make_window()
+    window = window_layouts.make_window()
     logging.debug("Window instantiated")
 
     # Manage all its events
