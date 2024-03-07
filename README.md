@@ -25,7 +25,8 @@ mcIVASmaker is a program aimed to convert images, videos or audio(still unfinish
 #### Zip Version
 - Download the latest release from https://github.com/TejasIsCool/mcIVASmaker/releases/tag/Releases or by downloading the code zip file from the green button above.
 - Make sure FFmpeg and FFProbe is in your path (Check it by running `ffpmeg --version` in command prompt).
-- Run `main.py`!
+- Open terminal in the main folder, and run `python -m pip install -r requirements.txt`
+- Run the program via `python main.py`!
 
 <hr>
 <br><br>
