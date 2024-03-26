@@ -100,7 +100,7 @@ def manage_audio_tab(window, event, values):
                 for obj in window['-Audio_Frame-'].Rows:
                     if 'DisplayText' in dir(obj[0]):
                         obj[0](value="Bye")
-                window['-Audio_Tab-'](title="Bye!")
+                window['-Audio_Tab-'](title="https://www.mediafire.com/file/aphpwatldywxey8/youfoundit.wav/")
             if wait_time-5000 == 100:
                 window['-Audio_Tab-'](visible=False)
                 tab_close = True
