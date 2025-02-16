@@ -22,7 +22,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # TODO: ALTERNATE, A BIT DIFFERENT RENDERER
 # TODO: INTERBLOCK PIXEL ACCOUNTER
-
+# TODO: ARBITARY RESOLUTION (BOTH FFMPEG AND PILLOW SUPPORT IT I THINK)
 
 # Loading the pre-generated blocks color
 path = resource_path("./assets/blocks/all_blocks_textures/")
@@ -101,6 +101,7 @@ def img_to_blocks_schem(image: Image.Image, details: DetailsDict):
     color_set: str = details['color_set']
     color_compare: str = details['color_compare']
     schem = mcschematic.MCSchematic()
+    mcschematic.MCSchematic()
 
     # Filtering out the blocks, depending on how the user configured the options
     new_blocks_list = []

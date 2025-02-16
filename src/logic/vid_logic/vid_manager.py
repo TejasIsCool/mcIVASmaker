@@ -8,6 +8,7 @@ from src.logic.image_logic.image_manager import manipulate_image
 
 from src.logic.vid_logic import ffmpeg_manager
 from src.path_manager.pather import resource_path
+from src.logic.vid_logic import schematic_manager
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,7 @@ vid_cache_folder_png = os.path.normpath(os.path.join(assets_path, "./img_cache_p
 vid_cache_folder_m4a = os.path.normpath(os.path.join(assets_path, "./audio_cache/"))
 
 vid_processed_folder = os.path.normpath(os.path.join(assets_path, "./img_process_cache/"))
+
 
 # Create the paths if they don't exist (Git does not recognize empty folders)
 if not os.path.exists(vid_cache_folder_jpg):
@@ -90,7 +92,10 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
             img_file_path = os.path.join(cache_folder, files[current_image])
             # Remove the first 4 and last 4 characters, to get just the number
             file_number = os.path.split(img_file_path)[1][4:-4]
-            processed_path = os.path.join(vid_processed_folder, file_number + ".png")
+            if "Schematic" in manipulation:
+                processed_path = os.path.join(vid_processed_folder, file_number + ".schem")
+            else:
+                processed_path = os.path.join(vid_processed_folder, file_number + ".png")
             image_processes.append(process_pool.apply_async(
                 manage_single_image,
                 (event_queue, img_file_path, processed_path, manipulation, scale, details)
@@ -100,7 +105,10 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
         # Item count checking frequency
         time.sleep(0.1)
     ff_pool.join()
-    logger.info("Converted Video to images")
+    if "Schematic" in manipulation:
+        logger.info("Converted Video to Individual Schematics")
+    else:
+        logger.info("Converted Video to images")
 
     # Run the already processing images and show their status
     for process in image_processes:
@@ -112,14 +120,17 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
     window.write_event_value((THREAD_KEY, '-Set_Images_Done-'), img_count)
     # Video has now been converted to images and audio
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 1)
-    logger.debug("Completed partial processing")
+    logger.debug("Completed partial processing(Video is now images and audio)")
 
     # Getting the correct item count and finding which files we have to process now
     files = os.listdir(cache_folder)
     file_count = len(files)
     completed_files = os.listdir(vid_processed_folder)
     for completed_file in completed_files:
-        file_no = completed_file.replace(".png", "")
+        if "Schematic" in manipulation:
+            file_no = completed_file.replace(".schem", "")
+        else:
+            file_no = completed_file.replace(".png", "")
         name_of_file = "file" + file_no + (".jpg" if cache_folder == vid_cache_folder_jpg else ".png")
         files.remove(name_of_file)
 
@@ -129,7 +140,11 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
     for unprocessed_file in files:
         img_file_path = os.path.join(cache_folder, unprocessed_file)
         file_number = os.path.split(img_file_path)[1][4:-4]
-        processed_path = os.path.join(vid_processed_folder, file_number + ".png")
+        if "Schematic" in manipulation:
+            processed_path = os.path.join(vid_processed_folder, file_number + ".schem")
+        else:
+            processed_path = os.path.join(vid_processed_folder, file_number + ".png")
+
         image_processes.append(process_pool.apply_async(
             manage_single_image,
             (event_queue, img_file_path, processed_path, manipulation, scale, details)
@@ -178,27 +193,32 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
 
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 1.4)
     logger.info("Completed Image Processing")
-    # Creating the ffmpeg run command
-    if len(os.listdir(vid_cache_folder_m4a)) > 0:
-        re_options = (
-            f"-i {os.path.join(vid_cache_folder_m4a, 'audio.m4a')} "
-            f"-r {details['frame_rate']} "
-            f"-i {os.path.join(vid_processed_folder, '%01d.png')} "
-            f"-crf 20 -pix_fmt yuv420p {output}"
-        )
+
+    if "Schematic" in manipulation:
+        schematic_manager.make_final_schematic(vid_processed_folder, output)
     else:
-        re_options = (
-            f"-r {details['frame_rate']} -i {os.path.join(vid_processed_folder, '%01d.png')} "
-            f"-crf 20 -pix_fmt yuv420p {output}"
+
+        # Creating the ffmpeg run command
+        if len(os.listdir(vid_cache_folder_m4a)) > 0:
+            re_options = (
+                f"-i {os.path.join(vid_cache_folder_m4a, 'audio.m4a')} "
+                f"-r {details['frame_rate']} "
+                f"-i {os.path.join(vid_processed_folder, '%01d.png')} "
+                f"-crf 20 -pix_fmt yuv420p {output}"
+            )
+        else:
+            re_options = (
+                f"-r {details['frame_rate']} -i {os.path.join(vid_processed_folder, '%01d.png')} "
+                f"-crf 20 -pix_fmt yuv420p {output}"
+            )
+        logger.debug("The ffmpeg converted join command: " + re_options)
+        ffmpeg_manager.ffmpeg_runner(
+            re_options
         )
-    logger.debug("The ffmpeg converted join command: " + re_options)
-    ffmpeg_manager.ffmpeg_runner(
-        re_options
-    )
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 1.8)
     logger.info("Video Created")
     # Cleaning up the cache folders
-    cleanup_folders()
+    # cleanup_folders()
     logger.info("Cleaning Cache")
     window.write_event_value((THREAD_KEY, '-Img_Conversion-'), 2)
     logger.info("Video Conversion Completed!")

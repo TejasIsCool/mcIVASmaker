@@ -21,6 +21,14 @@ def get_video_tab():
                 (0.1, 150),
                 default_value=60, key="-Vid_Frame_Rate-", orientation="horizontal", resolution=0.1, enable_events=True
             ),
+            sg.DropDown(
+                [20,10,"6.6666....",5,4,2,1],
+                default_value=20,
+                key="-Vid_Frame_Rate_Schem-",
+                readonly=True,
+                enable_events=True,
+                visible=False
+            ),
             sg.Text("Frame Count: ", key='-Frame_Count-')
         ],
         [
@@ -45,7 +53,7 @@ def get_video_tab():
                     "Video To Any Block Video",
                     "Video To Redstone Lamps Video",
                     # These two later
-                    # "Video To Any Block Schematic",
+                    "Video To Any Block Schematic",
                     # "Video To Redstone Lamps Schematic"
                 ], key="-Vid_Type-",
                 enable_events=True,

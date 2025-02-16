@@ -20,7 +20,7 @@ sg.theme('DecentGrey')
 def make_window():
     # Making sure the window size is alright
     # sg.Window.get_screen_size returns the actual screen size
-    window_size = [1280, 720]
+    window_size = [1280, 600]
     if window_size[0] > sg.Window.get_screen_size()[0]:
         window_size[0] = sg.Window.get_screen_size()[0]
 

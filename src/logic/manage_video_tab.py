@@ -48,61 +48,11 @@ def manage_vid_tab(window, event, values):
             window['-Vid_Attrs-'](visible=True)
             window['-Vid_Loaded-'](f"Loaded Video: {vid_info['path']}")
             image_size = get_resolution(vid_info['path'])
-            inp_scale = values['-Vid_Scale-']
-            scale = int(inp_scale[:-1])
-            # If the final resolution is too big, ffmpeg does not work
-            # Also large resolutions might even crash the computer
-            if image_size[0] * scale > 8000 or image_size[1] * scale > 8000:
-                if image_size[0] * scale > 32767 or image_size[1] * scale > 32767:
-                    window['-Vid_Scale_Warning-'](
-                        "ERROR: ffmpeg only allows the max size of the video to be 32767x32767\n"
-                        f"Detected size : ({image_size[0] * scale},{image_size[1] * scale}), Use a smaller scale",
-                        text_color="#FF1111"
-                    )
-                    window['-Vid_Run-'](disabled=True)
-                else:
-                    window['-Vid_Scale_Warning-'](
-                        f"Warning: The resolution is gigantic({image_size[0] * scale},{image_size[1] * scale}).\n"
-                        "This may take a long time to run\n"
-                        "There is a high chance of the program hanging\n"
-                        "and your entire system crashing\n"
-                        "Proceed with Caution",
-                        text_color="#FFFF0F"
-                    )
-            else:
-                window['-Vid_Scale_Warning-'](
-                    f"Output Resolution: ({image_size[0] * scale},{image_size[1] * scale})",
-                    text_color="#FFFFFF"
-                )
+            update_size(window, values)
             window['-Frame_Count-'](f"Frame Count: {get_frame_count(vid_info['path'], values['-Vid_Frame_Rate-'])}")
 
         if event == '-Vid_Scale-':
-            inp_scale = values['-Vid_Scale-']
-            scale = int(inp_scale[:-1])
-            if image_size[0] * scale > 8000 or image_size[1] * scale > 8000:
-                if image_size[0] * scale > 32767 or image_size[1] * scale > 32767:
-                    window['-Vid_Scale_Warning-'](
-                        "ERROR: ffmpeg only allows the max size of the video to be 32767x32767\n"
-                        f"Detected size : ({image_size[0] * scale},{image_size[1] * scale}), Use a smaller scale",
-                        text_color="#FF1111"
-                    )
-                    window['-Vid_Run-'](disabled=True)
-                else:
-                    window['-Vid_Scale_Warning-'](
-                        f"Warning: The resolution is gigantic({image_size[0] * scale},{image_size[1] * scale}).\n"
-                        f"This may take a long time to run\n"
-                        "There is also a chance of it silently failing,\n"
-                        "and your entire system crashing\n"
-                        "Proceed with Caution",
-                        text_color="#FFFF0F"
-                    )
-                    window['-Vid_Run-'](disabled=False)
-            else:
-                window['-Vid_Run-'](disabled=False)
-                window['-Vid_Scale_Warning-'](
-                    f"Output Resolution: ({image_size[0] * scale},{image_size[1] * scale})",
-                    text_color="#FFFFFF"
-                )
+            update_size(window, values)
 
         # Enabled the load button if the path is valid
         if event == "-Vid Text Entered-":
@@ -114,12 +64,30 @@ def manage_vid_tab(window, event, values):
         # Updating the frame count text if the frame rate slider is moved
         if event == "-Vid_Frame_Rate-":
             window['-Frame_Count-'](f"Frame Count: {get_frame_count(vid_info['path'], values['-Vid_Frame_Rate-'])}")
+        if event == "-Vid_Frame_Rate_Schem-":
+            window['-Frame_Count-'](f"Frame Count: {get_frame_count(vid_info['path'], values['-Vid_Frame_Rate_Schem-'])}")
+
 
         # Show certain elements, depending on which modes are enabled
         if event == "-Vid_Type-":
+            update_size(window, values)
             if "Any" in values['-Vid_Type-']:
                 window['-Vid_Redstone_Lamps_Key-'](visible=False)
                 window['-Vid_Any_Block_Key-'](visible=True)
+                if "Schematic" in values['-Vid_Type-']:
+                    window['-Vid_Frame_Rate_Schem-'](visible=True)
+                    window['-Vid_Frame_Rate-'](visible=False)
+                    window['-Frame_Count-'](
+                        f"Frame Count: {get_frame_count(vid_info['path'], values['-Vid_Frame_Rate_Schem-'])}"
+                    )
+
+                else:
+                    window['-Vid_Frame_Rate_Schem-'](visible=False)
+                    window['-Vid_Frame_Rate-'](visible=True)
+                    window['-Frame_Count-'](
+                        f"Frame Count: {get_frame_count(vid_info['path'], values['-Vid_Frame_Rate-'])}"
+                    )
+
                 window.refresh()
                 window['-Vid_Attrs-'].contents_changed()
             else:
@@ -144,7 +112,10 @@ def manage_vid_tab(window, event, values):
 
         # On clicking the run button
         if event == "-Vid_Run-":
-            frame_rate = values["-Vid_Frame_Rate-"]
+            if "Schematic" in values["-Vid_Type-"]:
+                frame_rate = values["-Vid_Frame_Rate_Schem-"]
+            else:
+                frame_rate = values["-Vid_Frame_Rate-"]
             details = {
                 'blocklist': values['-Vid_Any_Listing_List-'],
                 'mode': values['-Vid_Any_Options-'],
@@ -175,7 +146,8 @@ def manage_vid_tab(window, event, values):
             if values['-Vid_Output_Path-'] == "":
                 if not os.path.exists("./mcIVASMAKER_output"):
                     os.makedirs("./mcIVASMAKER_output")
-                output = f"./mcIVASMAKER_output/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}.mp4"
+                output = (f"./mcIVASMAKER_output/output{time.strftime('%y_%m_%d-%H_%M_%S', time.localtime())}"
+                          +(".schem" if "Schematic" in vid_type else ".mp4"))
             else:
                 output = values['-Vid_Output_Path-']
 
@@ -239,3 +211,52 @@ def update_animation(window):
     frame_count += 1
     window['-Progress_Gif-'](data=image)
     pass
+
+
+
+def update_size(window: sg.Window, values):
+    inp_scale = values['-Vid_Scale-']
+    scale = int(inp_scale[:-1])
+
+    if "Schematic" in values['-Vid_Type-']:
+        total_size = (image_size[0] * scale / 16, image_size[1] * scale / 16)
+        if total_size[1] > 384:
+            window['-Vid_Scale_Warning-'](
+                f"Warning: The schematic height is gigantic({total_size[0]},{total_size[1]}) blocks.\n"
+                f"This may take a long time to run\n"
+                "This is also taller than the world height, so you may not be able to put this in your world\n"
+                "Proceed with Caution",
+                text_color="#FFFF0F"
+            )
+        else:
+            window['-Vid_Scale_Warning-'](
+                f"Output Resolution: ({total_size[0]},{total_size[1]}) blocks",
+                text_color="#FFFFFF"
+            )
+
+
+    else:
+        if image_size[0] * scale > 8000 or image_size[1] * scale > 8000:
+            if image_size[0] * scale > 32767 or image_size[1] * scale > 32767:
+                window['-Vid_Scale_Warning-'](
+                    "ERROR: ffmpeg only allows the max size of the video to be 32767x32767\n"
+                    f"Detected size : ({image_size[0] * scale},{image_size[1] * scale}), Use a smaller scale",
+                    text_color="#FF1111"
+                )
+                window['-Vid_Run-'](disabled=True)
+            else:
+                window['-Vid_Scale_Warning-'](
+                    f"Warning: The resolution is gigantic({image_size[0] * scale},{image_size[1] * scale}).\n"
+                    f"This may take a long time to run\n"
+                    "There is also a chance of it silently failing,\n"
+                    "and your entire system crashing\n"
+                    "Proceed with Caution",
+                    text_color="#FFFF0F"
+                )
+                window['-Vid_Run-'](disabled=False)
+        else:
+            window['-Vid_Run-'](disabled=False)
+            window['-Vid_Scale_Warning-'](
+                f"Output Resolution: ({image_size[0] * scale},{image_size[1] * scale})",
+                text_color="#FFFFFF"
+            )

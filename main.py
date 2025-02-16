@@ -35,4 +35,3 @@ if __name__ == "__main__":
     # Finish up by removing from the screen
     window.close()
     logging.warning("The Program has been closed!")
-
