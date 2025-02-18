@@ -195,7 +195,7 @@ def vid_manager(window: sg.Window, filepath: str, output: str, manipulation: str
     logger.info("Completed Image Processing")
 
     if "Schematic" in manipulation:
-        schematic_manager.make_final_schematic(vid_processed_folder, output)
+        schematic_manager.make_final_schematic(vid_processed_folder, output, details)
     else:
 
         # Creating the ffmpeg run command

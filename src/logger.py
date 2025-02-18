@@ -26,3 +26,11 @@ def configure_logging():
     logging.getLogger('').addHandler(console)
     logging.getLogger("PIL.PngImagePlugin").setLevel(logging.CRITICAL + 1)
 
+def configure_logging_only_console():
+    logging.basicConfig(
+        format="{asctime:s}::{name:s}_[{levelname:^8s}] - {message:s}",
+        datefmt='%Y/%m/%d %I:%M:%S%p',
+        style='{',
+        encoding='utf-8',
+        level=logging.DEBUG
+    )
