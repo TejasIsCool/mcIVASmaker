@@ -25,7 +25,7 @@ def manage_popups(event):
             background_color="#2a2b2c",
             title="Average Colour In Detailed",
             text_color="#FFFFFF",
-            size=(130, 30)
+            size=(130, 30),
         )
 
     if event in ["-Color_Difference_Popup-", "-Vid_Color_Difference_Popup-"]:
@@ -51,5 +51,5 @@ def manage_popups(event):
             background_color="#2a2b2c",
             title="Color Difference",
             text_color="#FFFFFF",
-            size=(130, 30)
+            size=(130, 30),
         )

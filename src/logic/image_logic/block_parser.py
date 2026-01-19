@@ -1,4 +1,3 @@
-
 def block_parser(block: str) -> str:
     if block == "bee_nest_honey":
         output = "bee_nest[honey_level=5]"

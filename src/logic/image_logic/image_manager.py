@@ -1,5 +1,8 @@
 from PIL import Image
-from src.logic.image_logic import image_to_redstone_lamps, img_to_blocks as img_to_block_img
+from src.logic.image_logic import (
+    image_to_redstone_lamps,
+    img_to_blocks as img_to_block_img,
+)
 import os
 import mcschematic
 import logging
@@ -9,7 +12,12 @@ logger = logging.getLogger(__name__)
 
 # Convert an image, to what the user specified
 def manipulate_image(
-        filepath: str, output: str, manipulation: str, crop: list | None, scale: str, details: dict
+    filepath: str,
+    output: str,
+    manipulation: str,
+    crop: list | None,
+    scale: str,
+    details: dict,
 ):
     img = Image.open(filepath)
     # Validating the cropping
@@ -72,10 +80,12 @@ def manipulate_image(
 
 
 def img_to_lamps(img: Image.Image, output: str, details: dict):
-    brightness = details['brightness']
-    dither = details['dither']
-    alternate = details['alternate']
-    for value in image_to_redstone_lamps.img_to_redstone_lamps(img, brightness, dither, alternate):
+    brightness = details["brightness"]
+    dither = details["dither"]
+    alternate = details["alternate"]
+    for value in image_to_redstone_lamps.img_to_redstone_lamps(
+        img, brightness, dither, alternate
+    ):
         if isinstance(value, Image.Image):
             img = value
         else:
@@ -88,14 +98,14 @@ def img_to_lamps(img: Image.Image, output: str, details: dict):
 
 
 def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
-    brightness = details['brightness']
-    dither = details['dither']
-    alternate = details['alternate']
-    place_redstone_blocks = details['place_redstone_blocks']
+    brightness = details["brightness"]
+    dither = details["dither"]
+    alternate = details["alternate"]
+    place_redstone_blocks = details["place_redstone_blocks"]
 
     schem: mcschematic.MCSchematic = ...
     for value in image_to_redstone_lamps.img_to_redstone_lamps_schem(
-            img, brightness, place_redstone_blocks, dither, alternate
+        img, brightness, place_redstone_blocks, dither, alternate
     ):
         if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value
@@ -111,14 +121,14 @@ def img_to_lamps_schem(img: Image.Image, output: str, details: dict):
 
 def img_to_blocks(img: Image.Image, output: str, details: dict):
     for value in img_to_block_img.img_to_blocks(
-            img,
-            {
-                'side': details['side'],
-                'blocked_list': details['blocklist'],
-                'mode': details['mode'],
-                'color_set': details['color_set'][0],
-                'color_compare': details['color_compare'][0]
-            }
+        img,
+        {
+            "side": details["side"],
+            "blocked_list": details["blocklist"],
+            "mode": details["mode"],
+            "color_set": details["color_set"][0],
+            "color_compare": details["color_compare"][0],
+        },
     ):
         if isinstance(value, Image.Image):
             img = value
@@ -134,14 +144,14 @@ def img_to_blocks(img: Image.Image, output: str, details: dict):
 def img_to_blocks_schem(img: Image.Image, output: str, details: dict):
     schem: mcschematic.MCSchematic = ...
     for value in img_to_block_img.img_to_blocks_schem(
-            img,
-            {
-                'side': details['side'],
-                'blocked_list': details['blocklist'],
-                'mode': details['mode'],
-                'color_set': details['color_set'][0],
-                'color_compare': details['color_compare'][0]
-            }
+        img,
+        {
+            "side": details["side"],
+            "blocked_list": details["blocklist"],
+            "mode": details["mode"],
+            "color_set": details["color_set"][0],
+            "color_compare": details["color_compare"][0],
+        },
     ):
         if isinstance(value, mcschematic.MCSchematic):
             schem: mcschematic.MCSchematic = value

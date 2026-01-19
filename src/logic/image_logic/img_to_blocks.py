@@ -24,9 +24,13 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 # TODO: INTERBLOCK PIXEL ACCOUNTER
 # TODO: ARBITARY RESOLUTION (BOTH FFMPEG AND PILLOW SUPPORT IT I THINK)
 
+# TODO: SIMD LIKE OPTIMIZATION (Color pickle like map, but closeness based?)
+
 # Loading the pre-generated blocks color
 path = resource_path("./assets/blocks/all_blocks_textures/")
-with open(resource_path("./assets/blocks/img_generator_code/out_all_colours.json"), "r") as f:
+with open(
+    resource_path("./assets/blocks/img_generator_code/out_all_colours.json"), "r"
+) as f:
     blocks_data: list = list(json.load(f).items())
 
 # Storing all the images in memory (as numpy arrays)
@@ -36,26 +40,38 @@ for block in blocks_data:
         if block_side == "extra":
             pass
         else:
-            img = Image.open(os.path.join(path, block[1][block_side]['file'])).convert("RGBA")
+            img = Image.open(os.path.join(path, block[1][block_side]["file"])).convert(
+                "RGBA"
+            )
             # noinspection PyTypeChecker
             blocks_img_np[block[0] + block_side] = np.array(img)
 
 
 def img_to_blocks(image: Image.Image, details: DetailsDict):
-    side: str = details['side']
-    blocked_list: list = details['blocked_list']
-    mode: str = details['mode']
-    color_set: str = details['color_set']
-    color_compare: str = details['color_compare']
+    side: str = details["side"]
+    blocked_list: list = details["blocked_list"]
+    mode: str = details["mode"]
+    color_set: str = details["color_set"]
+    color_compare: str = details["color_compare"]
     # Storing the pixels data in numpy array as it is faster
-    np_new_image = np.zeros(shape=(image.height * 16, image.width * 16, 4), dtype=np.uint8)
+    np_new_image = np.zeros(
+        shape=(image.height * 16, image.width * 16, 4), dtype=np.uint8
+    )
 
     # Filtering out the blocks, depending on how the user configured the options
     new_blocks_list = []
     if mode == "Whitelist":
-        new_blocks_list = [selected_block for selected_block in blocks_data if selected_block[0] in blocked_list]
+        new_blocks_list = [
+            selected_block
+            for selected_block in blocks_data
+            if selected_block[0] in blocked_list
+        ]
     elif mode == "Blacklist":
-        new_blocks_list = [selected_block for selected_block in blocks_data if selected_block[0] not in blocked_list]
+        new_blocks_list = [
+            selected_block
+            for selected_block in blocks_data
+            if selected_block[0] not in blocked_list
+        ]
     else:
         new_blocks_list = blocks_data
 
@@ -70,10 +86,11 @@ def img_to_blocks(image: Image.Image, details: DetailsDict):
         # The below statement becomes a list, with all the differences between the current pixel, and all the blocks
         all_differences = [
             (
-                (
-                    distance_function(pix, block_val[1][side]['color'][avg_color_set])
-                ) if (side in block_val[1]) else math.inf
-            ) for block_val in new_blocks_list
+                (distance_function(pix, block_val[1][side]["color"][avg_color_set]))
+                if (side in block_val[1])
+                else math.inf
+            )
+            for block_val in new_blocks_list
         ]
         # Getting the lowest different block
         block_index = all_differences.index(min(all_differences))
@@ -85,9 +102,11 @@ def img_to_blocks(image: Image.Image, details: DetailsDict):
             pos = (y * 16, x * 16)
             pixel = image.getpixel((x, y))
             if pixel[3] > 10:
-                block_texture = pix_to_block(pixel, color_compare_to_function(color_compare), color_set)
+                block_texture = pix_to_block(
+                    pixel, color_compare_to_function(color_compare), color_set
+                )
                 # Using numpy arrays because they are just faster
-                np_new_image[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = block_texture
+                np_new_image[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = block_texture
         yield x
 
     yield Image.fromarray(np_new_image)
@@ -95,20 +114,28 @@ def img_to_blocks(image: Image.Image, details: DetailsDict):
 
 
 def img_to_blocks_schem(image: Image.Image, details: DetailsDict):
-    side: str = details['side']
-    blocked_list: list = details['blocked_list']
-    mode: str = details['mode']
-    color_set: str = details['color_set']
-    color_compare: str = details['color_compare']
+    side: str = details["side"]
+    blocked_list: list = details["blocked_list"]
+    mode: str = details["mode"]
+    color_set: str = details["color_set"]
+    color_compare: str = details["color_compare"]
     schem = mcschematic.MCSchematic()
     mcschematic.MCSchematic()
 
     # Filtering out the blocks, depending on how the user configured the options
     new_blocks_list = []
     if mode == "Whitelist":
-        new_blocks_list = [selected_block for selected_block in blocks_data if selected_block[0] in blocked_list]
+        new_blocks_list = [
+            selected_block
+            for selected_block in blocks_data
+            if selected_block[0] in blocked_list
+        ]
     elif mode == "Blacklist":
-        new_blocks_list = [selected_block for selected_block in blocks_data if selected_block[0] not in blocked_list]
+        new_blocks_list = [
+            selected_block
+            for selected_block in blocks_data
+            if selected_block[0] not in blocked_list
+        ]
     else:
         new_blocks_list = blocks_data
 
@@ -121,10 +148,11 @@ def img_to_blocks_schem(image: Image.Image, details: DetailsDict):
         # The below statement becomes a list, with all the differences between the current pixel, and all the blocks
         all_differences = [
             (
-                (
-                    distance_function(pix, block_val[1][side]['color'][avg_color_set])
-                ) if (side in block_val[1]) else math.inf
-            ) for block_val in new_blocks_list
+                (distance_function(pix, block_val[1][side]["color"][avg_color_set]))
+                if (side in block_val[1])
+                else math.inf
+            )
+            for block_val in new_blocks_list
         ]
         # Getting the lowest different block
         block_index = all_differences.index(min(all_differences))
@@ -134,7 +162,9 @@ def img_to_blocks_schem(image: Image.Image, details: DetailsDict):
     for x in range(0, image.width):
         for y in range(0, image.height):
             pixel = image.getpixel((x, y))
-            block_name = pix_to_block(pixel, color_compare_to_function(color_compare), color_set)
+            block_name = pix_to_block(
+                pixel, color_compare_to_function(color_compare), color_set
+            )
             if side == "top" or side == "bottom":
                 schem.setBlock((-x, 0, -y), block_name)
             else:
@@ -161,6 +191,7 @@ def color_compare_to_function(color_compare: str) -> callable:
 
 # Why tuple and list input? Laziness and performance
 
+
 # Finds the difference in color between a pixel, and a block average colour
 def abs_value_difference(x: tuple, y: list) -> float:
     total_diff = 0
@@ -186,9 +217,9 @@ def weighted_euclidean_difference(x: tuple, y: list) -> float:
     alpha_diff = x[3] - y[3]
     r_bar = (x[0] + y[0]) / 2.0
     if r_bar < 128:
-        return (2 * (del_r ** 2)) + (4 * (del_g ** 2)) + (3 * (del_b ** 2)) + alpha_diff ** 2
+        return (2 * (del_r**2)) + (4 * (del_g**2)) + (3 * (del_b**2)) + alpha_diff**2
     else:
-        return (3 * (del_r ** 2)) + (4 * (del_g ** 2)) + (2 * (del_b ** 2)) + alpha_diff ** 2
+        return (3 * (del_r**2)) + (4 * (del_g**2)) + (2 * (del_b**2)) + alpha_diff**2
 
 
 def redmean_difference(x: tuple, y: list) -> float:
@@ -197,10 +228,12 @@ def redmean_difference(x: tuple, y: list) -> float:
     del_b = x[2] - y[2]
     r_bar = (x[0] + y[0]) / 2.0
     alpha_diff = x[3] - y[3]
-    return (((2 + r_bar / 256) * (del_r ** 2))
-            + (4 * (del_g ** 2))
-            + ((2 + (255 - r_bar) / 256) * (del_b ** 2))
-            + alpha_diff ** 2)
+    return (
+        ((2 + r_bar / 256) * (del_r**2))
+        + (4 * (del_g**2))
+        + ((2 + (255 - r_bar) / 256) * (del_b**2))
+        + alpha_diff**2
+    )
 
 
 # Doe not account for alpha
@@ -237,7 +270,11 @@ def rgb2lab(input_color: tuple | list) -> list[int]:
         RGB[num] = value * 100
         num = num + 1
 
-    XYZ = [0, 0, 0, ]
+    XYZ = [
+        0,
+        0,
+        0,
+    ]
 
     X = RGB[0] * 0.4124 + RGB[1] * 0.3576 + RGB[2] * 0.1805
     Y = RGB[0] * 0.2126 + RGB[1] * 0.7152 + RGB[2] * 0.0722
@@ -252,9 +289,8 @@ def rgb2lab(input_color: tuple | list) -> list[int]:
 
     num = 0
     for value in XYZ:
-
         if value > 0.008856:
-            value = value ** 0.3333333333333333
+            value = value**0.3333333333333333
         else:
             value = (7.787 * value) + (16 / 116)
 
@@ -272,6 +308,7 @@ def rgb2lab(input_color: tuple | list) -> list[int]:
     Lab[2] = round(b, 4)
 
     return Lab
+
 
 # Maybe TODO: When compressing the image, instead of default compression however its done,
 #        compress according to the color_averager module decided by user

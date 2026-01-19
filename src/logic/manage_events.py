@@ -11,7 +11,7 @@ def manage_events(window: sg.Window):
     while True:
         event, values = window.read(timeout=20)
         # See if user wants to quit or window was closed
-        if event in [sg.WINDOW_CLOSED, 'QUIT!']:
+        if event in [sg.WINDOW_CLOSED, "QUIT!"]:
             break
 
         if "Popup" in event:
@@ -22,4 +22,3 @@ def manage_events(window: sg.Window):
         manage_vid_tab(window, event, values)
         # Manage audio events
         manage_audio_tab(window, event, values)
-

@@ -20,7 +20,9 @@ class DetailsType(TypedDict):
 
 
 # Loads the image for displaying in the preview
-def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple[list[int], io.BytesIO] | None:
+def load_image_for_display(
+    filepath: str, size: tuple[int, int]
+) -> bool | tuple[list[int], io.BytesIO] | None:
     if image_handler.check_file_exists(filepath):
         try:
             img = Image.open(filepath)
@@ -43,16 +45,13 @@ def load_image_for_display(filepath: str, size: tuple[int, int]) -> bool | tuple
 
 
 # Converts the loaded image, to put it to preview
-def load_image_for_preview(
-        image_bytes: io.BytesIO,
-        details: DetailsType
-):
+def load_image_for_preview(image_bytes: io.BytesIO, details: DetailsType):
     img = Image.open(image_bytes)
     img.thumbnail((img.width // 2, img.height // 2))
     out_img = None
-    if "Lamps" in details['manipulation']:
+    if "Lamps" in details["manipulation"]:
         for value in image_to_redstone_lamps.img_to_redstone_lamps(
-                img, details['brightness'], details['dither'], details['alternate']
+            img, details["brightness"], details["dither"], details["alternate"]
         ):
             if isinstance(value, Image.Image):
                 out_img = value
@@ -61,17 +60,18 @@ def load_image_for_preview(
         b_io = io.BytesIO()
         out_img.save(b_io, format="PNG")
         return b_io
-    elif "Any" in details['manipulation']:
+    elif "Any" in details["manipulation"]:
         img = img.convert("RGBA")
         img.thumbnail((img.width // 2, img.height // 2))
         for value in img_to_blocks.img_to_blocks(
-                img, {
-                    'side': details['side'],
-                    'blocked_list': details['blocklist'],
-                    'mode': details['mode'],
-                    'color_set': details['color_set'][0],
-                    'color_compare': details['color_compare'][0]
-                }
+            img,
+            {
+                "side": details["side"],
+                "blocked_list": details["blocklist"],
+                "mode": details["mode"],
+                "color_set": details["color_set"][0],
+                "color_compare": details["color_compare"][0],
+            },
         ):
             if isinstance(value, Image.Image):
                 out_img = value

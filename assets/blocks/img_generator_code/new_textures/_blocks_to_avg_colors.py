@@ -42,14 +42,14 @@ if __name__ == "__main__":
             if selection != "":
                 data[block_name][selection] = filenamepng
             else:
-                data[block_name]['extra'].append(filenamepng)
+                data[block_name]["extra"].append(filenamepng)
         else:
             block_data = {
                 "top": filenamepng,
                 "bottom": filenamepng,
                 "front": filenamepng,
                 "back": filenamepng,
-                "side": filenamepng
+                "side": filenamepng,
             }
             data[block_name] = block_data
         print(filenamepng, " done!")

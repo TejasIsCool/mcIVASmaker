@@ -3,3 +3,4 @@ mcschematic
 numpy
 future
 ffmpeg-python
+psutil

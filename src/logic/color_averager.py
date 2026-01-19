@@ -36,8 +36,12 @@ def rms_rgb_color(image: Image.Image) -> list:
     average_green = average_green / (image.width * image.height)
     average_blue = average_blue / (image.width * image.height)
     average_alpha = average_alpha / (image.width * image.height)
-    return [round(average_red ** 0.5), round(average_green ** 0.5), round(average_blue ** 0.5),
-            round(average_alpha ** 0.5)]
+    return [
+        round(average_red**0.5),
+        round(average_green**0.5),
+        round(average_blue**0.5),
+        round(average_alpha**0.5),
+    ]
 
 
 def average_hsl_colour(image: Image.Image) -> list:
@@ -55,7 +59,9 @@ def average_hsl_colour(image: Image.Image) -> list:
             # x = cosd(theta); % cosine in terms of degrees
             # y = sind(theta); % sine with a degree argument
             # meanangle = atan2(mean(y),mean(x))*180/pi
-            hsl = colorsys.rgb_to_hls(colour[0] / 255.0, colour[1] / 255.0, colour[2] / 255.0)
+            hsl = colorsys.rgb_to_hls(
+                colour[0] / 255.0, colour[1] / 255.0, colour[2] / 255.0
+            )
             # h is given from 0 to 1, to make it radians, it must be from 0 to 2pi
             average_hue_x += math.cos(hsl[0] * 2 * math.pi)
             average_hue_y += math.sin(hsl[0] * 2 * math.pi)
@@ -63,14 +69,23 @@ def average_hsl_colour(image: Image.Image) -> list:
             average_lightness += hsl[2] * 100
             average_alpha += colour[3]
 
-    average_hue = math.atan2(average_hue_y / max_count, average_hue_x / max_count) * 180 / math.pi
+    average_hue = (
+        math.atan2(average_hue_y / max_count, average_hue_x / max_count) * 180 / math.pi
+    )
     average_sat /= max_count
     average_lightness /= max_count
     average_alpha /= max_count
 
     # Back to rgb
-    rgb = colorsys.hls_to_rgb(average_hue / 360, average_sat / 100, average_lightness / 100)
-    return [round(rgb[0] * 255), round(rgb[1] * 255), round(rgb[2] * 255), round(average_alpha)]
+    rgb = colorsys.hls_to_rgb(
+        average_hue / 360, average_sat / 100, average_lightness / 100
+    )
+    return [
+        round(rgb[0] * 255),
+        round(rgb[1] * 255),
+        round(rgb[2] * 255),
+        round(average_alpha),
+    ]
 
 
 def average_hsv_colour(image: Image.Image) -> list:
@@ -88,7 +103,9 @@ def average_hsv_colour(image: Image.Image) -> list:
             # x = cosd(theta); % cosine in terms of degrees
             # y = sind(theta); % sine with a degree argument
             # meanangle = atan2(mean(y),mean(x))*180/pi
-            hsv = colorsys.rgb_to_hsv(colour[0] / 255.0, colour[1] / 255.0, colour[2] / 255.0)
+            hsv = colorsys.rgb_to_hsv(
+                colour[0] / 255.0, colour[1] / 255.0, colour[2] / 255.0
+            )
             # h is given from 0 to 1, to make it radians, it must be from 0 to 2pi
             average_hue_x += math.cos(hsv[0] * 2 * math.pi)
             average_hue_y += math.sin(hsv[0] * 2 * math.pi)
@@ -96,14 +113,21 @@ def average_hsv_colour(image: Image.Image) -> list:
             average_value += hsv[2] * 100
             average_alpha += colour[3]
 
-    average_hue = (math.atan2(average_hue_y / max_count, average_hue_x / max_count) * 180 / math.pi) % 360
+    average_hue = (
+        math.atan2(average_hue_y / max_count, average_hue_x / max_count) * 180 / math.pi
+    ) % 360
     average_sat /= max_count
     average_value /= max_count
     average_alpha /= max_count
 
     # Back to rgb
     rgb = colorsys.hsv_to_rgb(average_hue / 360, average_sat / 100, average_value / 100)
-    return [round(rgb[0] * 255), round(rgb[1] * 255), round(rgb[2] * 255), round(average_alpha)]
+    return [
+        round(rgb[0] * 255),
+        round(rgb[1] * 255),
+        round(rgb[2] * 255),
+        round(average_alpha),
+    ]
 
 
 def average_lab_colour(image: Image.Image) -> list:
@@ -133,7 +157,9 @@ def average_lab_colour(image: Image.Image) -> list:
     temp_img = Image.new("LAB", size=(image.width, image.height))
     for x in range(image.width):
         for y in range(image.height):
-            temp_img.putpixel((x, y), (round(average_l), round(average_a), round(average_b)))
+            temp_img.putpixel(
+                (x, y), (round(average_l), round(average_a), round(average_b))
+            )
 
     lab2rgb = ImageCms.buildTransformFromOpenProfiles(lab_p, srgb_p, "LAB", "RGB")
     back_rgb = ImageCms.applyTransform(temp_img, lab2rgb)
@@ -147,12 +173,12 @@ def average_lab_colour(image: Image.Image) -> list:
             average_alpha += pixel[3] * pixel[3]
 
     average_alpha = average_alpha / max_count
-    return [col[0], col[1], col[2], round(average_alpha ** 0.5)]
+    return [col[0], col[1], col[2], round(average_alpha**0.5)]
 
 
 # https://stackoverflow.com/a/50900143
 def dominant_colour(image: Image.Image) -> list:
-    img_arr = np.asarray(image.convert('RGB'))
+    img_arr = np.asarray(image.convert("RGB"))
     a2D = img_arr.reshape(-1, img_arr.shape[-1])
     col_range = (256, 256, 256)  # generically : a2D.max(0)+1
     a1D = np.ravel_multi_index(a2D.T, col_range)
@@ -167,4 +193,4 @@ def dominant_colour(image: Image.Image) -> list:
 
     average_alpha = average_alpha / (image.width * image.height)
 
-    return [int(rgb[0]), int(rgb[1]), int(rgb[2]), round(average_alpha ** 0.5)]
+    return [int(rgb[0]), int(rgb[1]), int(rgb[2]), round(average_alpha**0.5)]

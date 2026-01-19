@@ -1,6 +1,6 @@
 # This is a test, idk how good hsl is compared to rgb
-import json
-import colorsys
+# import json
+# import colorsys
 
 
 def rgb_to_hsl(color: tuple[float, float, float, float]):
@@ -41,7 +41,6 @@ def rgb_to_hsl(color: tuple[float, float, float, float]):
 
 
 if __name__ == "__main__":
-    print(rgb_to_hsl((155.65223155322894,
-                      89.33633341899588,
-                      56.334034450765195,
-                      255.0)))
+    print(
+        rgb_to_hsl((155.65223155322894, 89.33633341899588, 56.334034450765195, 255.0))
+    )

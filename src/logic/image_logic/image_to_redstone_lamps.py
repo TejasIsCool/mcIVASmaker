@@ -16,16 +16,16 @@ unlit_lamp_np = np.array(unlit_lamp.convert("RGB"))
 
 
 def img_to_redstone_lamps(
-        img: Image.Image,
-        brightness: int,
-        dither: bool = False,
-        alternate_mode: bool = False
+    img: Image.Image,
+    brightness: int,
+    dither: bool = False,
+    alternate_mode: bool = False,
 ):
     bw = [[]]
     if dither:
-        bw = img.convert('1')
+        bw = img.convert("1")
     if alternate_mode and not dither:
-        gray = img.convert('L')
+        gray = img.convert("L")
         # Let numpy do the heavy lifting for converting pixels to pure black or white
         bw = np.asarray(gray).copy()
 
@@ -40,41 +40,56 @@ def img_to_redstone_lamps(
             if dither:
                 pixel = bw.getpixel((x, y))
                 if pixel == 255:
-                    np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = lit_lamp_np
+                    np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                        lit_lamp_np
+                    )
                 else:
-                    np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = unlit_lamp_np
+                    np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                        unlit_lamp_np
+                    )
             else:
                 # Getting the average brightness. If its over threshold, we use the lit redstone lamp
                 if alternate_mode:
                     pixel = bw[y][x]
                     if pixel == 255:
-                        np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = lit_lamp_np
+                        np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                            lit_lamp_np
+                        )
                     else:
-                        np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = unlit_lamp_np
+                        np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                            unlit_lamp_np
+                        )
                 else:
                     pixel = img.getpixel((x, y))
                     avg_brightness = (pixel[0] + pixel[1] + pixel[2]) / 3
                     # Use lit redstone lap
                     if avg_brightness >= brightness:
-                        np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = lit_lamp_np
+                        np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                            lit_lamp_np
+                        )
                     # Use unlit redstone lamp
                     else:
-                        np_arr_test[pos[0]:pos[0] + 16, pos[1]:pos[1] + 16] = unlit_lamp_np
+                        np_arr_test[pos[0] : pos[0] + 16, pos[1] : pos[1] + 16] = (
+                            unlit_lamp_np
+                        )
         yield x
     yield Image.fromarray(np_arr_test)
     return
 
 
 def img_to_redstone_lamps_schem(
-        img: Image.Image, brightness: int, place_redstone_blocks: bool,
-        dither: bool = False, alternate_mode: bool = False
+    img: Image.Image,
+    brightness: int,
+    place_redstone_blocks: bool,
+    dither: bool = False,
+    alternate_mode: bool = False,
 ):
     schem = mcschematic.MCSchematic()
     bw = [[]]
     if dither:
-        bw = img.convert('1')
+        bw = img.convert("1")
     if alternate_mode and not dither:
-        gray = img.convert('L')
+        gray = img.convert("L")
         # Let numpy do the heavy lifting for converting pixels to pure black or white
         bw = np.asarray(gray).copy()
 
@@ -101,7 +116,9 @@ def img_to_redstone_lamps_schem(
                             schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
                             schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
                         else:
-                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
+                            schem.setBlock(
+                                (-x, 0, -y), "minecraft:redstone_lamp[lit=true]"
+                            )
                     else:
                         schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
                 else:
@@ -115,7 +132,9 @@ def img_to_redstone_lamps_schem(
                             schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
                             schem.setBlock((-x, -1, -y), "minecraft:redstone_block")
                         else:
-                            schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp[lit=true]")
+                            schem.setBlock(
+                                (-x, 0, -y), "minecraft:redstone_lamp[lit=true]"
+                            )
                     # Use unlit redstone lamp
                     else:
                         schem.setBlock((-x, 0, -y), "minecraft:redstone_lamp")
