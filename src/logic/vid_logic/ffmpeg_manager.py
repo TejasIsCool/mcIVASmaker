@@ -17,10 +17,13 @@ vid_processed_folder = os.path.normpath(
 
 
 # Runs ffmpeg in a subprocess
-def ffmpeg_runner(options: str):
-    full_command = "ffmpeg -y " + options
-    output = subprocess.call(full_command, shell=True)
-    return output
+def ffmpeg_runner(options: list[str]):
+    # Prevent FFmpeg from hanging on stdin prompts by adding -nostdin
+    command = ["ffmpeg", "-y", "-nostdin"] + options
+    result = subprocess.run(
+        command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE
+    )
+    return result.returncode
 
 
 # Does not give the exact frame count
@@ -40,13 +43,9 @@ def get_resolution(vid_path: str) -> tuple[int, int]:
 
 # Converts a video to sequence of images
 def vid_to_img(vid_path: str, frame_rate: int, cache_folder: str):
-    if cache_folder == vid_cache_folder_jpg:
-        extension = "jpg"
-    else:
-        extension = "png"
-    return ffmpeg_runner(
-        f'-i "{vid_path}" -r {frame_rate} "{os.path.join(cache_folder, "file%01d." + extension)}"'
-    )
+    extension = "jpg" if cache_folder == vid_cache_folder_jpg else "png"
+    out_pattern = os.path.join(cache_folder, f"file%01d.{extension}")
+    return ffmpeg_runner(["-i", vid_path, "-r", str(frame_rate), out_pattern])
 
 
 # Vid to images: Unused
@@ -65,6 +64,5 @@ def vid_to_img_single(vid_path: str, frame_rate: int, cache_folder: str):
 
 
 def vid_to_audio(vid_path: str):
-    ffmpeg_runner(
-        f'-i "{vid_path}" -q:a 0 -map a "{os.path.join(vid_cache_folder_m4a, "audio.m4a")}"'
-    )
+    out_audio = os.path.join(vid_cache_folder_m4a, "audio.m4a")
+    ffmpeg_runner(["-i", vid_path, "-q:a", "0", "-map", "a", out_audio])
