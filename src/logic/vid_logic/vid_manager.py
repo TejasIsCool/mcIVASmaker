@@ -245,20 +245,38 @@ def vid_manager(
         schematic_manager.make_final_schematic(vid_processed_folder, output, details)
     else:
         # Creating the ffmpeg run command
+        audio_file = os.path.join(vid_cache_folder_m4a, "audio.m4a")
+        img_pattern = os.path.join(vid_processed_folder, "%01d.png")
+
         if len(os.listdir(vid_cache_folder_m4a)) > 0:
-            re_options = (
-                f"-i {os.path.join(vid_cache_folder_m4a, 'audio.m4a')} "
-                f"-r {details['frame_rate']} "
-                f"-i {os.path.join(vid_processed_folder, '%01d.png')} "
-                f"-crf 20 -pix_fmt yuv420p {output}"
-            )
+            re_args = [
+                "-i",
+                audio_file,
+                "-r",
+                str(details["frame_rate"]),
+                "-i",
+                img_pattern,
+                "-crf",
+                "20",
+                "-pix_fmt",
+                "yuv420p",
+                output,
+            ]
         else:
-            re_options = (
-                f"-r {details['frame_rate']} -i {os.path.join(vid_processed_folder, '%01d.png')} "
-                f"-crf 20 -pix_fmt yuv420p {output}"
-            )
-        logger.debug("The ffmpeg converted join command: " + re_options)
-        ffmpeg_manager.ffmpeg_runner(re_options)
+            re_args = [
+                "-r",
+                str(details["frame_rate"]),
+                "-i",
+                img_pattern,
+                "-crf",
+                "20",
+                "-pix_fmt",
+                "yuv420p",
+                output,
+            ]
+
+        logger.debug("The ffmpeg converted join command: " + " ".join(re_args))
+        ffmpeg_manager.ffmpeg_runner(re_args)
     window.write_event_value((THREAD_KEY, "-Img_Conversion-"), 1.8)
     logger.info("Video Created")
     if not preserve_cache:
